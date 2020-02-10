@@ -1,0 +1,11 @@
+.add-receipt {
+    width: 100%;
+    height: 250px;
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    font-size: 60px;
+    text-align: center;
+    line-height: 250px;
+    box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.05);
+    color: #868e96
+}
