@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splitsy - Dashboard</title>
+    <script src="https://kit.fontawesome.com/d9b905f9e6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css"/>
+    <link rel="stylesheet" href="css/dashboard.css"/>
+</head>
+<body class="bg-gradient-primary">
+
+    <nav class="navbar navbar-dark">
+        <a class="navbar-brand" href="#">Splitsy</a>
+
+        <ol class="breadcrumb mr-auto">
+            <li class="breadcrumb-item active"><a href="#">Your Dashboard</a></li>
+        </ol>
+
+        <ul class="nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  amandalatkins
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Log Out</a>
+                </div>
+              </li>
+          </ul>
+      </nav>
+
+      <div class="container mt-5 clearfix">
+        <button class="btn text-white bg-orange" type="button" id="dropdownMenuButton" data-toggle="modal" data-target="#addReceiptModal">
+          <i class="fas fa-plus" aria-hidden="true"></i> Add Receipt
+        </button>
+        <div class="dropdown float-right">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Date</a>
+            <a class="dropdown-item" href="#">Amount</a>
+            <a class="dropdown-item" href="#">Progress</a>
+          </div>
+        </div>
+        <div class="dropdown float-right mr-3">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Paid</a>
+            <a class="dropdown-item" href="#">Unpaid</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-5">
+          <div class="row">
+              <div class="d-none d-md-block col-md-6 col-lg-4">
+                  <div class="add-receipt">
+                    <i class="fas fa-plus"></i>
+                  </div>
+              </div>
+              <div class="col-xs-12 col-md-6 col-lg-4">
+                  <div class="receipt-preview">
+                    <h3>Happy Hour<span class="receipt-date">2/19</span></h3>
+                    <hr/>
+                    <p class="receipt-total">$128.50</p>
+                    
+                    <table class="w-100">
+                      <tr>
+                        <td class="align-middle receipt-progress">
+                          <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-orange" role="progressbar" style="width:65%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td class="align-middle receipt-icon text-right text-orange">
+                          <i class="fas fa-times-circle"></i>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+              </div>
+              <div class="col-xs-12 col-md-6 col-lg-4">
+                <div class="receipt-preview">
+                  <h3>Brunch<span class="receipt-date">2/12</span></h3>
+                  <hr/>
+                  <p class="receipt-total">$58.76</p>
+                  <table class="w-100">
+                    <tr>
+                      <td class="align-middle receipt-progress">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-striped bg-orange" role="progressbar" style="width:89%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td class="align-middle receipt-icon text-orange text-right">
+                        <i class="fas fa-times-circle"></i>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <div class="receipt-preview paid">
+                  <h3>Ladies Night<span class="receipt-date">2/10</span></h3>
+                  <hr/>
+                  <p class="receipt-total">$212.32</p>
+
+                  <table class="w-100">
+                    <tr>
+                      <td class="align-middle receipt-progress">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-striped bg-teal" role="progressbar" style="width:100%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td class="align-middle receipt-icon text-teal text-right">
+                        <i class="fas fa-check-circle"></i>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="modal" tabindex="-1" role="dialog" id="addReceiptModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add a Receipt</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group my-2">
+                  <p>Upload a well-lighted photo of your receipt. Make sure the receipt is laying flat on a flat surface and your photo is as straight on as possible.</p>
+                  <input type="file" name="fileToUpload" id="receiptFile"/>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <a href="receipt.html"><button type="button" class="btn btn-primary">Upload File</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="p-3 mt-5">
+        &nbsp;:)
+      </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script> -->
+
+</body>
+</html>

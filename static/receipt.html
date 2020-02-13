@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splitsy - Dashboard</title>
+    <script src="https://kit.fontawesome.com/d9b905f9e6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css"/>
+</head>
+<body class="bg-gradient-primary">
+
+    <nav class="navbar navbar-dark">
+        <a class="navbar-brand" href="#">Splitsy</a>
+
+        <ol class="breadcrumb mr-auto">
+            <li class="breadcrumb-item"><a href="#">Your Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href="#">Happy Hour 2/19</a></li>
+        </ol>
+
+        <ul class="nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  amandalatkins
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Log Out</a>
+                </div>
+              </li>
+          </ul>
+      </nav>
+
+      <div class="container pt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-header w-100 clearfix">
+                    <h3 class="float-left">Happy Hour 2/19</h3>
+                    <h3 class="float-right"> <a href="receipt-edit.html" class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#" class="btn btn-secondary"><i class="fas fa-image"></i></a></h3>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="container">
+          <div class="row">
+              <div class="col-xs-12 col-md-1 col-lg-3 p-0">
+                <ul class="list-group payer-list">
+                    <li class="list-group-item selected" data-payer-id="1"><span class="payer-indicator bg-red"></span>Amanda</li>
+                    <li class="list-group-item" data-payer-id="2"><span class="payer-indicator bg-blue"></span>Billy</li>
+                    <li class="list-group-item" data-payer-id="3"><span class="payer-indicator bg-green"></span>George</li>
+                    <li class="list-group-item" data-payer-id="4"><span class="payer-indicator bg-yellow"></span>Angela</li>
+                    <li class="list-group-item add-payer"><i class="fas fa-plus-square"></i> Add Payer</li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-md-11 col-lg-5 p-0">
+                  <div class="receipt">
+                      
+                    <div class="receipt-body">
+                        <table class="w-100 table">
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">
+                                    <p>Burger</p>
+                                    <span class="badge bg-red text-white">Amanda</span>
+                                </td>
+                                <td class="receipt-item-price text-right">$13.99</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">Salad</td>
+                                <td class="receipt-item-price text-right">$14.99</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">Hot Wings</td>
+                                <td class="receipt-item-price text-right">$8.99</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left"><p>Pint Anchor Steam (3)</p>
+                                <span class="badge bg-red text-white">Amanda</span><span class="badge bg-blue text-white">Billy</span><span class="badge bg-green text-white">George</span></td>
+                                <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">Salad</td>
+                                <td class="receipt-item-price text-right">$14.99</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">Hot Wings</td>
+                                <td class="receipt-item-price text-right">$8.99</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left">Pint Anchor Steam (3)</td>
+                                <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item receipt-subtotal" data-item-id="1">
+                                <td class="receipt-item-label text-right">Subtotal</td>
+                                <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item receipt-tally" data-item-id="1">
+                                <td class="receipt-item-label text-right">Tax (8.5%)</td>
+                                <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item receipt-tally" data-item-id="1">
+                                <td class="receipt-item-label text-right">Tip (20%)</td>
+                                <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item receipt-tally receipt-total" data-item-id="1">
+                                <td class="receipt-item-label text-right">Total</td>
+                                <td class="receipt-item-price text-right">$200.97</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-lg-4">
+                <div class="breakdown h-100">
+                    <h4>Breakdown</h4>
+                    <img src="img/pie.png" class="breakdown-graph mx-auto"/>
+                    <table class="table w-100">
+                        <tr>
+                            <td class="text-left">
+                                Amanda
+                            </td>
+                            <td class='text-right'>
+                                $25.00 <i class="fas fa-times-circle text-red"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                Billy 
+                            </td>
+                            <td class='text-right'>
+                                $25.00 <i class="fas fa-check-circle text-green"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                George
+                            </td>
+                            <td class='text-right'>
+                                $25.00 <i class="fas fa-times-circle text-red"></i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+              </div>
+          </div>
+      </div>
+      
+      <footer class="p-3 mt-5">
+        &nbsp;:)
+      </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script> -->
+
+</body>
+</html>
