@@ -35,14 +35,16 @@
             <div class="col-12">
                 <div class="dashboard-header w-100 clearfix">
                     <h3 class="float-left">Happy Hour 2/19</h3>
-                    <h3 class="float-right"> <a href="receipt-edit.html" class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></a>
+                    <span class="badge bg-danger text-white mt-2 ml-2">Edit Mode</span>
+                    <h3 class="float-right"> <a href="#" class="btn btn-primary"><i class="fas fa-save"></i>
+                        </a>
                         <a href="#" class="btn btn-secondary"><i class="fas fa-image"></i></a></h3>
                 </div>
             </div>
         </div>
       </div>
 
-      <div class="container">
+      <div class="container receipt-edit-mode">
           <div class="row">
               <div class="col-xs-12 col-md-1 col-lg-3 p-0">
                 <ul class="list-group payer-list">
@@ -55,19 +57,35 @@
               </div>
               <div class="col-xs-12 col-md-11 col-lg-5 p-0">
                   <div class="receipt">
+                    <!-- <div class="receipt-header p-3">
+                      <div class="row">
+                          <div class="col-8">
+                            <h3>Happy Hour</h3>
+                          </div>
+                          <div class="col-4">
+                              <h3 class="text-right">2/19</h3>
+                          </div>
+                      </div> -->
+                    <!-- </div> -->
                       
                     <div class="receipt-body">
                         <table class="w-100 table">
                             <tr class="receipt-item" data-item-id="1">
                                 <td class="receipt-item-label text-left">
                                     <p>Burger</p>
-                                    <span class="badge bg-red text-white">Amanda</span>
+                                    <!-- <span class="badge bg-red text-white">Amanda</span> -->
                                 </td>
                                 <td class="receipt-item-price text-right">$13.99</td>
                             </tr>
                             <tr class="receipt-item" data-item-id="1">
-                                <td class="receipt-item-label text-left">Salad</td>
-                                <td class="receipt-item-price text-right">$14.99</td>
+                                <td class="receipt-item-label text-left"><input type="text" class="form-control" value="Salad"/>
+                                    <p class="mt-2">
+                                        <button class="btn btn-secondary btn-sm mr-1">Save</button>
+                                        <button class="btn btn-danger btn-sm">Remove</button>
+                                    </p>
+                                    </td>
+                                <td class="receipt-item-price text-right"><input type="text" class="form-control" value="$14.99"/></td>
+                                
                             </tr>
                             <tr class="receipt-item" data-item-id="1">
                                 <td class="receipt-item-label text-left">Hot Wings</td>
@@ -75,7 +93,7 @@
                             </tr>
                             <tr class="receipt-item" data-item-id="1">
                                 <td class="receipt-item-label text-left"><p>Pint Anchor Steam (3)</p>
-                                <span class="badge bg-red text-white">Amanda</span><span class="badge bg-blue text-white">Billy</span><span class="badge bg-green text-white">George</span></td>
+                            </td>
                                 <td class="receipt-item-price text-right">$20.97</td>
                             </tr>
                             <tr class="receipt-item" data-item-id="1">
@@ -89,6 +107,10 @@
                             <tr class="receipt-item" data-item-id="1">
                                 <td class="receipt-item-label text-left">Pint Anchor Steam (3)</td>
                                 <td class="receipt-item-price text-right">$20.97</td>
+                            </tr>
+                            <tr class="receipt-item" data-item-id="1">
+                                <td class="receipt-item-label text-left"><button class="btn btn-sm btn-secondary">Add Item</button></td>
+                                <td class="receipt-item-price text-right"></td>
                             </tr>
                             <tr class="receipt-item receipt-subtotal" data-item-id="1">
                                 <td class="receipt-item-label text-right">Subtotal</td>

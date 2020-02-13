@@ -64,6 +64,26 @@ body {
     background-color: #ffd43b
 }
 
+.bg-orange {
+    background-color: #FF6444
+}
+
+.border-orange {
+    border-color: #FF6444
+}
+
+.bg-teal {
+    background-color: #00ADA9
+}
+
+.text-teal {
+    color: #00ADA9
+}
+
+.text-orange {
+    color: #FF6444
+}
+
 .text-red {
     color:#fa5252;
 }
@@ -215,6 +235,11 @@ body {
 .receipt .receipt-item p {
     padding-bottom:0;
     margin-bottom: 0;
+}
+
+.receipt-edit-mode .payer-list *,
+.receipt-edit-mode .breakdown {
+    opacity: 0.2
 }
 
 /* BREAKDOWN
