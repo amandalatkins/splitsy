@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     Item.belongsTo(models.Receipt, {
       onDelete: "cascade"
     });
-    Item.belongsToMany(models.Item, {
+    Item.belongsToMany(models.Payer, {
       through: "PayerItem"
     });
   };
