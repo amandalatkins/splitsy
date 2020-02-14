@@ -10,6 +10,18 @@ module.exports = function(app) {
     });
   });
 
+  //get all receipts for a user
+  app.get("/api/receipts/userId/:userId", function(req, res) {
+    db.Receipt.findAll({
+      where: {
+        UserId: req.params.userId
+      },
+      include: [db.Payer, db.Item, db.User]
+    }).then(function(dbReceipt) {
+      res.json(dbReceipt);
+    });
+  });
+
   // get specific Receipt by id
   app.get("/api/receipts/id/:id", function(req, res) {
     db.Receipt.findOne({
@@ -22,11 +34,12 @@ module.exports = function(app) {
     });
   });
 
-  // get specific Receipt by label
-  app.get("/api/receipts/label/:label", function(req, res) {
+  // get specific Receipt of a user by label
+  app.get("/api/receipts/userId/:userId/label/:label", function(req, res) {
     db.Receipt.findOne({
       where: {
-        label: req.params.label
+        label: req.params.label,
+        UserId: req.params.userId
       },
       include: [db.Payer, db.Item, db.User]
     }).then(function(dbReceipt) {

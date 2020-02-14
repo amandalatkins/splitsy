@@ -42,7 +42,7 @@ module.exports = function(app) {
   });
 
   //add a payer to item
-  app.put("/api/payers/:PayerId/item/:itemId", function(req, res) {
+  app.put("/api/payers/:PayerId/add/item/:itemId", function(req, res) {
     let thePayer;
     let theItem;
     db.Payer.findOne({
@@ -65,7 +65,7 @@ module.exports = function(app) {
   });
 
   //remove a Payer from item
-  app.put("/api/payers/:PayerId/item/:itemId", function(req, res) {
+  app.put("/api/payers/:PayerId/remove/item/:itemId", function(req, res) {
     let thePayer;
     let theItem;
     db.Payer.findOne({
