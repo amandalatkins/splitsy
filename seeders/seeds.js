@@ -29,37 +29,30 @@ function userGenerate(users) {
 
 userGenerate(users);
 
-let payers = [{ name: "randomfacts" }, { name: "jokes" }, { name: "planes" }];
-
-function PayerGenerate(payers) {
-  for (var i = 0; i < payers.length; i++) {
-    db.Payer.create(payers[i]);
-  }
-}
-
-PayerGenerate(payers);
-
 let receipts = [
   {
     label: "Sun",
     tax: 6.11,
     tip: 5.2,
     subtotal: 4.2,
-    total: 10
+    total: 10,
+    UserId: 1
   },
   {
     label: "mooon",
     tax: 6,
     tip: 5,
     subtotal: 4,
-    total: 10
+    total: 10,
+    UserId: 2
   },
   {
     label: "cow",
     tax: 6,
     tip: 5,
     subtotal: 4,
-    total: 10
+    total: 10,
+    UserId: 1
   }
 ];
 
@@ -71,10 +64,24 @@ function ReceiptGenerate(receipts) {
 
 ReceiptGenerate(receipts);
 
+let payers = [
+  { name: "randomfacts", ReceiptId: 2 },
+  { name: "jokes", ReceiptId: 3 },
+  { name: "planes" }
+];
+
+function PayerGenerate(payers) {
+  for (var i = 0; i < payers.length; i++) {
+    db.Payer.create(payers[i]);
+  }
+}
+
+PayerGenerate(payers);
+
 let items = [
-  { name: "cheetos", price: 20 },
-  { name: "burger", price: 10 },
-  { name: "pork", price: 20 }
+  { name: "cheetos", price: 20, ReceiptId: 2 },
+  { name: "burger", price: 10, ReceiptId: 3 },
+  { name: "pork", price: 20, ReceiptId: 4 }
 ];
 
 function ItemGenerate(items) {
