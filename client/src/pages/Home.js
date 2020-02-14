@@ -1,6 +1,11 @@
-import React, { useReducer, useRef, useEffect } from "react";
+import React from "react";
 
 const Home = () => {
+  function registerClick() {
+    // prompt model for sign up
+    console.log("register button works");
+  }
+
   return (
     <div>
       <div className="container mt-5 clearfix">
@@ -10,25 +15,27 @@ const Home = () => {
               Welcome to <em>Splitsy</em>
             </h1>
             <p className="lead my-3">
-              Splity does this and this and this. Nullam nulla eros, ultricies
-              sit amet, nonummy id, imperdiet feugiat, pede. <br />
-              Nullam nulla eros, ultricies sit amet, nonummy id.
+              Splity is a web app that allows a user to easily divide up a
+              recipt by uploading an image. <br />
+              Why waste time trying to do complicated math, let us do the work
+              for you!
             </p>
-            <p>
-              <div style="background-color: #777; width: 100%; height: 500px; display:inline-block"></div>
+            <div>
+              <div>HEY</div>
               <button
                 className="btn btn-lg btn-success my-3  bg-orange border-orange"
                 data-toggle="modal"
                 data-target="#loginModal"
+                onClick={() => registerClick()}
               >
                 Register Now!
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="modal" tabindex="-1" role="dialog" id="loginModal">
+      <div className="modal" tabIndex="-1" role="dialog" id="loginModal">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
