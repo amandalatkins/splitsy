@@ -1,9 +1,10 @@
 import React from "react";
 
-function ReciptPreview(props) {
+function ReceiptPreview(props) {
   // add functionality to show percentage of receipt filled
 
   console.log(props);
+
   return (
     <div className="col-xs-12 col-md-6 col-lg-4">
       <div className="receipt-preview">
@@ -40,4 +41,4 @@ function ReciptPreview(props) {
   );
 }
 
-export default ReciptPreview;
+export default ReceiptPreview;

@@ -1,28 +1,29 @@
-import React, { useReducer, useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 // import API from "../../utils/API";
-import { useStoreContext } from "../utils/ReceiptState";
+import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
-import ReceiptPreview from "../components/ReceiptPreview/index";
-
-import "./Dashboard.css";
-// import "./Custom.css";
+import ReceiptPreview from "../components/ReceiptPreview";
 
 const Dashboard = () => {
-  function receiptClick() {
-    console.log("receipt button works");
-  }
-  function newReceiptClick() {
-    console.log("newreceipt button works");
-  }
+
+  const [receiptState, dispatchReceiptState] = useReceiptContext();
+  
+  // function receiptClick() {
+  //   console.log("receipt button works");
+  // }
+  // function newReceiptClick() {
+  //   console.log("newreceipt button works");
+  // }
 
   useEffect(() => {
-    loadReceipts([]);
+    loadReceipts();
   }, []);
 
   // get user id from user state i believe, "2" is placeholder
   function loadReceipts() {
-    API.getReceiptById(2).then(results => {
-      dispatch({ type: "loadReceipts", receipts: results });
+    API.getReceiptsForUser(1).then(results => {
+      console.log(results);
+      dispatchReceiptState({ type: "loadReceipts", receipts: results.data });
     });
   }
 
@@ -90,8 +91,8 @@ const Dashboard = () => {
               <i className="fas fa-plus"></i>
             </div>
           </div>
-          {state.receipts.map(receipt => (
-            <ReceiptPreview value={receipt}></ReceiptPreview>
+          {receiptState.receipts.map(receipt => (
+            <ReceiptPreview key={receipt.id} value={receipt}></ReceiptPreview>
           ))}
         </div>
       </div>
