@@ -1,30 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useReceiptContext } from "../utils/ReceiptState";
+import API from "../utils/API";
+import PayersList from "../components/PayersList";
+import ReceiptItem from "../components/ReceiptItem";
+import Breakdown from "../components/Breakdown";
 
 function Receipt(props) {
 
-    const [state, dispatch] = useReceiptContext();
-
+    const [receiptState, receiptStateDispatch] = useReceiptContext();
     const receiptId = props.match.params.id;
 
     useEffect(() => {
+        console.log('use effect');
         loadReceipt();
-        loadPayers();
     }, []);
 
     function loadReceipt() {
         API.getReceiptById(receiptId)
-        then(receipt => dispatch({ type: "loadReceipts", receipts: receipt.data, isEditMode: false }))
+        .then(receipt => {
+            receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data], isEditMode: false })
+        })
         .catch(err => console.log(err));
     }
 
     function toggleEditState() {
-        dispatch({ type: "toggleEditState" });
+        receiptStateDispatch({ type: "toggleEditState" });
     }
 
     function savePayer(e) {
         const { name, value } = e.target;
-        API.addPayer({ [name]: value, receiptId })
+        API.createPayer({ [name]: value, receiptId })
         .then(_ => loadReceipt())
         .catch(err => console.log(err));
     }
@@ -36,11 +41,11 @@ function Receipt(props) {
                     <div className="col-12">
                         <div className="dashboard-header w-100 clearfix">
                             <h3 className="float-left">
-                                {state.receipts[0].name + " " + state.receipts[0].date}
-                                { editState ? <span class="badge bg-danger text-white mt-2 ml-2">Edit Mode</span> : ""}
+                                {receiptState.receipts.length ? receiptState.receipts[0].label + " " + receiptState.receipts[0].date : ""}
+                                { receiptState.isEditMode ? <span className="badge bg-danger text-white mt-2 ml-2">Edit Mode</span> : ""}
                             </h3>
                             <h3 className="float-right"> 
-                                { state.isEditMode ? 
+                                { receiptState.isEditMode ? 
                                     <button className="btn btn-primary" onClick={() => toggleEditState()}>
                                         <i className="fas fa-save"></i>
                                     </button>
@@ -55,48 +60,55 @@ function Receipt(props) {
                 </div>
             </div>
 
-            <div class={ state.isEditMode ? "container receipt-edit-mode" : "container" }>
-                <div class="row">
-                    <div class="col-xs-12 col-md-1 col-lg-3 p-0">
+             <div className={ receiptState.isEditMode ? "container receipt-edit-mode" : "container" }>
+                <div className="row">
+                    <div className="col-xs-12 col-md-1 col-lg-3 p-0">
                         <PayersList savePayer={savePayer}/>
                     </div>
-                    <div class="col-xs-12 col-md-11 col-lg-5 p-0">
-                        <div class="receipt">
-                        <div class="receipt-body">
-                            <table class="w-100 table">
+                    <div className="col-xs-12 col-md-11 col-lg-5 p-0">
+                        <div className="receipt">
+                        <div className="receipt-body">
+                            <table className="w-100 table">
                                 <tbody>
-                                    {state.receipts[0].Items.map(item => {
-                                        <ReceiptItem key={item.id} isEditMode={state.isEditMode} item={item} isTotalItem={false}  />
-                                    })}
+                                    {receiptState.receipts.length ? receiptState.receipts[0].Items.map(item => {
+                                        return <ReceiptItem key={item.id} isEditMode={receiptState.isEditMode} item={item} isTotalItem={false}  />
+                                    }) : ""}
                                     
-                                    <ReceiptItem 
-                                        isEditMode={state.isEditMode} 
-                                        item={{ name: "Subtotal",  price: state.receipts[0].total, receiptId: state.receipts[0].id }}
-                                        isTotalItem={true} 
-                                    />
-                                    <ReceiptItem 
-                                        isEditMode={state.isEditMode} 
-                                        item={{ name: "Tax", price: state.receipts[0].tax, id=item.id }}
-                                        isTotalItem={true} 
-                                    />
-                                    <ReceiptItem 
-                                        isEditMode={state.isEditMode} 
-                                        item={{ name: "Tip", price: state.receipts[0].total, id=item.id }} 
-                                        isTotalItem={true} 
-                                    />
-
-                                    <ReceiptItem 
-                                        isEditMode={state.isEditMode} 
-                                        item={{ name: "Total", price: state.receipts[0].total, id=item.id }} 
-                                        isTotalItem={true} 
-                                    />
+                                    {receiptState.receipts.length ? 
+                                        <ReceiptItem 
+                                            isEditMode={receiptState.isEditMode} 
+                                            item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
+                                            isTotalItem={true} 
+                                        />
+                                    : ""}
+                                    {receiptState.receipts.length ? 
+                                        <ReceiptItem 
+                                            isEditMode={receiptState.isEditMode} 
+                                            item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
+                                            isTotalItem={true} 
+                                        />
+                                    : ""}
+                                    {receiptState.receipts.length ? 
+                                        <ReceiptItem 
+                                            isEditMode={receiptState.isEditMode} 
+                                            item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                            isTotalItem={true} 
+                                        />
+                                    : ""}
+                                    {receiptState.receipts.length ? 
+                                        <ReceiptItem 
+                                            isEditMode={receiptState.isEditMode} 
+                                            item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                            isTotalItem={true} 
+                                        />
+                                    : "<tr><td></td></tr>" }
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     </div>
-                    <div class="col-xs-12 col-lg-4">
-                        <Breakdown receipt={state.receipts[0]} />
+                    <div className="col-xs-12 col-lg-4">
+                        <Breakdown receipt={receiptState.receipts[0]} />
                     </div>
                 </div>
             </div>
