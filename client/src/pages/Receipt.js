@@ -12,10 +12,10 @@ function Receipt(props) {
 
     useEffect(() => {
         console.log('use effect');
-        loadReceipt();
+        loadReceipt(receiptId);
     }, []);
 
-    function loadReceipt() {
+    function loadReceipt(receiptId) {
         API.getReceiptById(receiptId)
         .then(receipt => {
             receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data], isEditMode: false })
@@ -25,13 +25,6 @@ function Receipt(props) {
 
     function toggleEditState() {
         receiptStateDispatch({ type: "toggleEditState" });
-    }
-
-    function savePayer(e) {
-        const { name, value } = e.target;
-        API.createPayer({ [name]: value, receiptId })
-        .then(_ => loadReceipt())
-        .catch(err => console.log(err));
     }
 
     return (
@@ -63,7 +56,7 @@ function Receipt(props) {
              <div className={ receiptState.isEditMode ? "container receipt-edit-mode" : "container" }>
                 <div className="row">
                     <div className="col-xs-12 col-md-1 col-lg-3 p-0">
-                        <PayersList savePayer={savePayer}/>
+                        <PayersList receiptId={receiptId} loadReceipt={loadReceipt} />
                     </div>
                     <div className="col-xs-12 col-md-11 col-lg-5 p-0">
                         <div className="receipt">

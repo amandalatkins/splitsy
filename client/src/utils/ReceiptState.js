@@ -10,6 +10,11 @@ const reducer = (state, action) => {
               ...state,
               receipts: action.receipts
           }
+        case "loadSingleReceipt":
+            return {
+                ...state,
+                receipts: action.receipts
+            }
         case "toggleEditState":
             if (!state.isEditMode) {
                 return {
@@ -21,6 +26,11 @@ const reducer = (state, action) => {
                     ...state,
                     isEditMode: !state.isEditMode
                 }
+            }
+        case "setCurrentPayer":
+            return {
+                ...state,
+                currentPayer: action.payerId
             }
         default:
           throw new Error(`Invalid action type: ${action.type}`);

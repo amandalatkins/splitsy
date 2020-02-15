@@ -109,6 +109,7 @@ body {
   z-index: 100;
   border-color: #dee2e6;
   margin-left: 1em;
+  cursor: pointer;
 }
 .payer-list .list-group-item:first-child,
 .payer-list .list-group-item:last-child {
@@ -198,6 +199,10 @@ body {
   /* border-top-style: dotted; */
 }
 
+.receipt .receipt-item {
+  cursor: pointer
+}
+
 .receipt .receipt-item:first-of-type td {
   padding-top: 0;
 }
@@ -222,6 +227,10 @@ body {
   border-top-style: dashed;
 }
 
+.receipt .receipt-item.receipt-tally.first td {
+  border-top: 2px solid #495057;
+}
+
 .receipt .receipt-item.receipt-total {
   font-size: 1.25rem;
   font-weight: bold;
@@ -239,6 +248,10 @@ body {
 .receipt-edit-mode .payer-list *,
 .receipt-edit-mode .breakdown {
   opacity: 0.2;
+}
+
+.receipt-item.receipt-tally .receipt-item-label {
+  text-align: right;
 }
 
 /* BREAKDOWN

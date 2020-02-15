@@ -6,7 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Receipt from "./pages/Receipt";
 import NoMatch from "./pages/NoMatch";
 
-// import Nav from "./components/Nav";
+import NavBar from "./components/NavBar";
 // import Footer from "./components/Footer";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     <ReceiptProvider >
       <Router>
         <div>
-          {/* <Nav /> */}
+          <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />
