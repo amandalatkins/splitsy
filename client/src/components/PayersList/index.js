@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API"
 
@@ -7,6 +7,8 @@ function PayerList(props) {
     const [receiptState, receiptStateDispatch] = useReceiptContext();
 
     const [addPayer, setAddPayer] = useState(false);
+
+    const nameInput = useRef();
 
     function toggleAddPayer() {
         setAddPayer(!addPayer);
@@ -22,9 +24,12 @@ function PayerList(props) {
     }
 
     function savePayer(e) {
-        const { name, value } = e.target;
-        API.createPayer({ [name]: value, receiptId: props.receiptId })
-        .then(_ => props.loadReceipt(props.receiptId))
+        e.preventDefault();
+        API.createPayer({ name: nameInput.current.value, ReceiptId: props.receiptId })
+        .then(newPayer => {
+            console.log(newPayer);
+            receiptStateDispatch({ type: "loadSingleReceipt", receipts: receiptState.receipts })
+        })
         .catch(err => console.log(err));
     }
 
@@ -45,7 +50,7 @@ function PayerList(props) {
             {addPayer ?
                 <li className="list-group-item">
                     <form onSubmit={savePayer}>
-                        <input type="text" name="name" className="form-control" placeholder="Payer Name" />
+                        <input type="text" name="name" className="form-control" placeholder="Payer Name" ref={nameInput}/>
                         <button type="submit" className="btn btn-sm btn-secondary">Save</button>
                     </form>
                 </li>
