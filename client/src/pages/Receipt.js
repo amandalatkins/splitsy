@@ -3,6 +3,7 @@ import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
 import PayersList from "../components/PayersList";
 import ReceiptItem from "../components/ReceiptItem";
+import ReceiptItemEdit from "../components/ReceiptItemEdit";
 import Breakdown from "../components/Breakdown";
 
 function Receipt(props) {
@@ -11,14 +12,15 @@ function Receipt(props) {
     const receiptId = props.match.params.id;
 
     useEffect(() => {
-        console.log('use effect');
         loadReceipt(receiptId);
     }, []);
 
     function loadReceipt(receiptId) {
+        console.log("loading receipt");
         API.getReceiptById(receiptId)
         .then(receipt => {
-            receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data], isEditMode: false })
+            console.log(receipt);
+            receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data] })
         })
         .catch(err => console.log(err));
     }
@@ -62,40 +64,85 @@ function Receipt(props) {
                         <div className="receipt">
                         <div className="receipt-body">
                             <table className="w-100 table">
-                                <tbody>
-                                    {receiptState.receipts.length ? receiptState.receipts[0].Items.map(item => {
-                                        return <ReceiptItem key={item.id} isEditMode={receiptState.isEditMode} item={item} isTotalItem={false}  />
-                                    }) : ""}
-                                    
-                                    {receiptState.receipts.length ? 
-                                        <ReceiptItem 
-                                            isEditMode={receiptState.isEditMode} 
-                                            item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
-                                            isTotalItem={true} 
-                                        />
-                                    : ""}
-                                    {receiptState.receipts.length ? 
-                                        <ReceiptItem 
-                                            isEditMode={receiptState.isEditMode} 
-                                            item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
-                                            isTotalItem={true} 
-                                        />
-                                    : ""}
-                                    {receiptState.receipts.length ? 
-                                        <ReceiptItem 
-                                            isEditMode={receiptState.isEditMode} 
-                                            item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
-                                            isTotalItem={true} 
-                                        />
-                                    : ""}
-                                    {receiptState.receipts.length ? 
-                                        <ReceiptItem 
-                                            isEditMode={receiptState.isEditMode} 
-                                            item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
-                                            isTotalItem={true} 
-                                        />
-                                    : "<tr><td></td></tr>" }
-                                </tbody>
+
+                                {receiptState.isEditMode ? 
+
+                                    <tbody>
+                                        {receiptState.receipts.length ? receiptState.receipts[0].Items.map(item => {
+                                            return <ReceiptItemEdit key={item.id} item={item} isTotalItem={false} loadReceipt={loadReceipt} />
+                                        }) : ""}
+
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItemEdit 
+                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
+                                                isTotalItem={true}
+                                                loadReceipt={loadReceipt}
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItemEdit 
+                                                item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
+                                                isTotalItem={true}
+                                                loadReceipt={loadReceipt}
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItemEdit 
+                                                item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                                isTotalItem={true}
+                                                loadReceipt={loadReceipt}
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItemEdit  
+                                                item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                                isTotalItem={true}
+                                                loadReceipt={loadReceipt}
+                                            />
+                                        : "<tr><td></td></tr>" }
+                                    </tbody>
+
+                                :
+
+                                    <tbody>
+                                        {receiptState.receipts.length ? receiptState.receipts[0].Items.map(item => {
+                                            return <ReceiptItem key={item.id} item={item} isTotalItem={false}  />
+                                        }) : ""}
+
+                                        <tr className="receipt-item">
+                                            <td className="receipt-item-label text-left"><button className="btn btn-sm btn-secondary">Add Item</button></td>
+                                            <td className="receipt-item-price text-right"></td>
+                                        </tr>
+                                        
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItem 
+                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
+                                                isTotalItem={true} 
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItem 
+                                                item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
+                                                isTotalItem={true} 
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItem 
+                                                item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                                isTotalItem={true} 
+                                            />
+                                        : ""}
+                                        {receiptState.receipts.length ? 
+                                            <ReceiptItem 
+                                                item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                                isTotalItem={true} 
+                                            />
+                                        : "<tr><td></td></tr>" }
+                                    </tbody>
+
+                                }
+
+
                             </table>
                         </div>
                     </div>

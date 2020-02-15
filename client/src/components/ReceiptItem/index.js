@@ -63,7 +63,7 @@ function ReceiptItem(props) {
                     <p>{item.name}</p>
                 }
                 {payersState.map(payer => {
-                    return <span className={receiptState.currentPayer === payer.id ? "badge bg-orange text-white" : "badge bg-secondary text-white"}>{payer.name}</span>
+                    return <span key={payer.id} className={receiptState.currentPayer === payer.id ? "badge bg-orange text-white" : "badge bg-secondary text-white"}>{payer.name}</span>
                 })}
             </td>
             <td className="receipt-item-price text-right">

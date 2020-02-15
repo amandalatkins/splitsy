@@ -33,6 +33,9 @@ export default {
   deleteItem: function(id) {
     return axios.delete("/api/items/" + id);
   },
+  updateItem: function(id, postData) {
+    return axios.put("/api/items/"+id, postData);
+  },
   // Create payer
   createPayer: function(postData) {
     return axios.post("/api/payers", postData);
