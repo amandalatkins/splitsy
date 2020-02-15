@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
+import { is } from "bluebird";
 
 function ReceiptItemEdit(props) {
 
@@ -19,10 +20,7 @@ function ReceiptItemEdit(props) {
 
     function updateItem() {
         API.updateItem(item.id, { name: itemName.current.value, price: itemPrice.current.value })
-        .then(_ => {
-            loadReceipt(item.ReceiptId)
-            setEditItem(false);
-        })
+        .then(_ => loadAndReset(item.ReceiptId))
         .catch(err => console.log(err));
     }
 
@@ -30,6 +28,25 @@ function ReceiptItemEdit(props) {
         API.deleteItem(item.id)
         .then(_ => loadReceipt(item.ReceiptId))
         .catch(err => console.log(err));
+    }
+
+    function updateTotalItem(type) {
+        console.log("updating "+type);
+        var newPrice;
+        if (type === "Total" || type === "Subtotal") {
+            newPrice = itemPrice.current.value;
+        } else {
+            newPrice = (parseFloat(itemPrice.current.value) / parseFloat(props.subTotal)).toFixed(2);
+        }
+        console.log(newPrice);
+        API.updateReceipt(item.id, { price: newPrice })
+        .then(_ => { console.log(_); loadAndReset(item.id); })
+        .catch(err => console.log(err));
+    }
+
+    function loadAndReset(id) {
+        loadReceipt(id);
+        setEditItem(false);
     }
 
     return (
@@ -42,11 +59,25 @@ function ReceiptItemEdit(props) {
                         <p>{item.name}</p>
                 :
                     <div>
-                        <input type="text" className="form-control" defaultValue={item.name} ref={itemName}/>
-                        <p className="mt-2">
-                            <button className="btn btn-secondary btn-sm mr-1" onClick={() => updateItem()}>Save</button>
-                            <button className="btn btn-danger btn-sm" onClick={() => removeItem()}>Remove</button>
-                        </p>
+                        {!isTotalItem ?
+                            <input type="text" className="form-control" defaultValue={item.name} ref={itemName}/>
+                        : 
+                            item.name === "Total" ?
+                                <h4>{item.name}</h4>
+                            :
+                                <p>{item.name}</p>
+                        }
+                            
+                            {!isTotalItem ?
+                                <p className="mt-2">
+                                    <button className="btn btn-secondary btn-sm mr-1" onClick={() => updateItem()}>Save</button>
+                                    <button className="btn btn-danger btn-sm" onClick={() => removeItem()}>Remove</button>
+                                </p>
+                            : 
+                                <p className="mt-2">
+                                    <button className="btn btn-secondary btn-sm mr-1" onClick={() => updateTotalItem(item.name)}>Save</button>
+                                </p>
+                            }
                     </div>
                 }
 

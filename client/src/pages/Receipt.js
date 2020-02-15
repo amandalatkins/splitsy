@@ -112,7 +112,7 @@ function Receipt(props) {
 
                                         {receiptState.receipts.length ? 
                                             <ReceiptItemEdit 
-                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
+                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].subtotal, receiptId: receiptState.receipts[0].id }}
                                                 isTotalItem={true}
                                                 loadReceipt={loadReceipt}
                                             />
@@ -121,13 +121,15 @@ function Receipt(props) {
                                             <ReceiptItemEdit 
                                                 item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
                                                 isTotalItem={true}
+                                                subtotal={receiptState.receipts[0].subtotal}
                                                 loadReceipt={loadReceipt}
                                             />
                                         : ""}
                                         {receiptState.receipts.length ? 
                                             <ReceiptItemEdit 
-                                                item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
+                                                item={{ name: "Tip", price: receiptState.receipts[0].tip, id: receiptState.receipts[0].id }} 
                                                 isTotalItem={true}
+                                                subtotal={receiptState.receipts[0].subtotal}
                                                 loadReceipt={loadReceipt}
                                             />
                                         : ""}

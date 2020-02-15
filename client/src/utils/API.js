@@ -21,6 +21,10 @@ export default {
   createReceipt: function(postData) {
     return axios.post("/api/receipts", postData);
   },
+  // Update receipt
+  updateReceipt: function(id, postData) {
+    return axios.put("/api/receipts/"+id, postData);
+  },
   // Delete receipt
   deleteReceipt: function(id) {
     return axios.delete("/api/receipts/" + id);
