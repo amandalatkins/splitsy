@@ -48,5 +48,8 @@ export default {
   // remove item from payer
   removeItemToPayer: function(payerId, itemId) {
     return axios.put("/api/payers/" + payerId + "/remove/item/" + itemId);
+  },
+  getItemById: function(itemId) {
+    return axios.get('/api/items/id/'+itemId);
   }
 };
