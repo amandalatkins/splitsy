@@ -9,7 +9,7 @@ function ReceiptItemEdit(props) {
 
     const [editItem, setEditItem] = useState(false);
 
-    const { item, isTotalItem, loadReceipt } = props;
+    const { item, isTotalItem, loadReceipt, subTotal } = props;
 
     const itemName = useRef();
     const itemPrice = useRef();
@@ -36,10 +36,11 @@ function ReceiptItemEdit(props) {
         if (type === "Total" || type === "Subtotal") {
             newPrice = itemPrice.current.value;
         } else {
-            newPrice = (parseFloat(itemPrice.current.value) / parseFloat(props.subTotal)).toFixed(2);
+            newPrice = (parseFloat(itemPrice.current.value)  / parseFloat(subTotal)).toFixed(5);
         }
         console.log(newPrice);
-        API.updateReceipt(item.id, { price: newPrice })
+        console.log({[type.toLowerCase()]: newPrice });
+        API.updateReceipt(item.id, { [type.toLowerCase()]: newPrice })
         .then(_ => { console.log(_); loadAndReset(item.id); })
         .catch(err => console.log(err));
     }
@@ -85,13 +86,16 @@ function ReceiptItemEdit(props) {
             <td className="receipt-item-price text-right">
                 {!editItem ? 
                     item.name === "Total" ?
-                        <h4>${item.price}</h4>
+                        <h4>${item.price.toFixed(2)}</h4>
                     :
-                        <p>${item.price}</p>
+                        item.name === "Tax" || item.name === "Tip" ?
+                            <p>${(item.price*subTotal).toFixed(2)}</p>
+                        :
+                            <p>${item.price.toFixed(2)}</p>
                     
                 :
                     <div>
-                        <input type="text" className="form-control" defaultValue={item.price} ref={itemPrice}/>
+                        <input type="text" className="form-control" defaultValue={item.name === "Tax" || item.name === "Tip" ? (item.price*subTotal).toFixed(2) : item.price.toFixed(2)} ref={itemPrice}/>
                     </div>
                 }
 

@@ -10,6 +10,7 @@ function Receipt(props) {
 
     const [receiptState, receiptStateDispatch] = useReceiptContext();
     const receiptId = props.match.params.id;
+    const isEditMode = props.match.params.edit;
 
     const [addItem, setAddItem] = useState(false);
 
@@ -30,8 +31,9 @@ function Receipt(props) {
         .catch(err => console.log(err));
     }
 
-    function toggleEditState() {
-        receiptStateDispatch({ type: "toggleEditState" });
+    function saveReceipt() {
+        // receiptStateDispatch({ type: "toggleEditState" });
+        props.history.push('/receipt/'+receiptId);
     }
 
     function toggleAddItem() {
@@ -57,17 +59,17 @@ function Receipt(props) {
                         <div className="dashboard-header w-100 clearfix">
                             <h3 className="float-left">
                                 {receiptState.receipts.length ? receiptState.receipts[0].label + " " + receiptState.receipts[0].date : ""}
-                                { receiptState.isEditMode ? <span className="badge bg-danger text-white mt-2 ml-2">Edit Mode</span> : ""}
+                                { isEditMode ? <span className="badge bg-danger text-white mt-2 ml-2">Edit Mode</span> : ""}
                             </h3>
                             <h3 className="float-right"> 
-                                { receiptState.isEditMode ? 
-                                    <button className="btn btn-primary" onClick={() => toggleEditState()}>
+                                { isEditMode ? 
+                                    <button className="btn btn-primary" onClick={() => saveReceipt()}>
                                         <i className="fas fa-save"></i>
                                     </button>
                                     :
-                                    <button className="btn btn-secondary" onClick={() => toggleEditState()}>
+                                    <a className="btn btn-secondary" href={`/receipt/${receiptId}/edit`}>
                                         <i className="fas fa-pencil-alt"></i>
-                                    </button>
+                                    </a>
                                 }
                             </h3>
                         </div>
@@ -75,17 +77,17 @@ function Receipt(props) {
                 </div>
             </div>
 
-             <div className={ receiptState.isEditMode ? "container receipt-edit-mode" : "container" }>
+             <div className={ isEditMode ? "container receipt-edit-mode" : "container" }>
                 <div className="row">
                     <div className="col-xs-12 col-md-1 col-lg-3 p-0">
-                        <PayersList receiptId={receiptId} loadReceipt={loadReceipt} />
+                        <PayersList receiptId={receiptId} loadReceipt={loadReceipt} isEditMode={isEditMode}/>
                     </div>
                     <div className="col-xs-12 col-md-11 col-lg-5 p-0">
                         <div className="receipt">
                         <div className="receipt-body">
                             <table className="w-100 table">
 
-                                {receiptState.isEditMode ? 
+                                {isEditMode ? 
 
                                     <tbody>
                                         {receiptState.receipts.length ? receiptState.receipts[0].Items.map(item => {
@@ -112,7 +114,7 @@ function Receipt(props) {
 
                                         {receiptState.receipts.length ? 
                                             <ReceiptItemEdit 
-                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].subtotal, receiptId: receiptState.receipts[0].id }}
+                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].subtotal, id: receiptState.receipts[0].id }}
                                                 isTotalItem={true}
                                                 loadReceipt={loadReceipt}
                                             />
@@ -121,7 +123,7 @@ function Receipt(props) {
                                             <ReceiptItemEdit 
                                                 item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
                                                 isTotalItem={true}
-                                                subtotal={receiptState.receipts[0].subtotal}
+                                                subTotal={receiptState.receipts[0].subtotal}
                                                 loadReceipt={loadReceipt}
                                             />
                                         : ""}
@@ -129,7 +131,7 @@ function Receipt(props) {
                                             <ReceiptItemEdit 
                                                 item={{ name: "Tip", price: receiptState.receipts[0].tip, id: receiptState.receipts[0].id }} 
                                                 isTotalItem={true}
-                                                subtotal={receiptState.receipts[0].subtotal}
+                                                subTotal={receiptState.receipts[0].subtotal}
                                                 loadReceipt={loadReceipt}
                                             />
                                         : ""}
@@ -151,7 +153,7 @@ function Receipt(props) {
                                         
                                         {receiptState.receipts.length ? 
                                             <ReceiptItem 
-                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].total, receiptId: receiptState.receipts[0].id }}
+                                                item={{ name: "Subtotal",  price: receiptState.receipts[0].subtotal, receiptId: receiptState.receipts[0].id }}
                                                 isTotalItem={true} 
                                             />
                                         : ""}
@@ -159,12 +161,14 @@ function Receipt(props) {
                                             <ReceiptItem 
                                                 item={{ name: "Tax", price: receiptState.receipts[0].tax, id: receiptState.receipts[0].id }}
                                                 isTotalItem={true} 
+                                                subTotal={receiptState.receipts[0].subtotal}
                                             />
                                         : ""}
                                         {receiptState.receipts.length ? 
                                             <ReceiptItem 
-                                                item={{ name: "Tip", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
-                                                isTotalItem={true} 
+                                                item={{ name: "Tip", price: receiptState.receipts[0].tip, id: receiptState.receipts[0].id }} 
+                                                isTotalItem={true}
+                                                subTotal={receiptState.receipts[0].subtotal} 
                                             />
                                         : ""}
                                         {receiptState.receipts.length ? 

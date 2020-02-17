@@ -15,11 +15,6 @@ const reducer = (state, action) => {
                 ...state,
                 receipts: action.receipts
             }
-        case "toggleEditState":
-            return {
-                ...state,
-                isEditMode: !state.isEditMode
-            }
         case "setCurrentPayer":
             return {
                 ...state,
@@ -31,7 +26,6 @@ const reducer = (state, action) => {
 }
 
 const defaultState = {
-    isEditMode: false,
     currentPayer: null,
     currentItemEdit: null,
     receipts: []

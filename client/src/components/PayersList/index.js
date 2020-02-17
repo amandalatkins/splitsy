@@ -11,15 +11,18 @@ function PayerList(props) {
     const nameInput = useRef();
 
     function toggleAddPayer() {
-        setAddPayer(!addPayer);
+        if (!props.isEditMode) {
+            setAddPayer(!addPayer);
+        }
     }
 
     function selectPayer(id) {
-        console.log("setting payer");
-        if (id === receiptState.currentPayer) {
-            receiptStateDispatch({ type: "setCurrentPayer", payerId: null });
-        } else {
-            receiptStateDispatch({ type: "setCurrentPayer", payerId: id });
+        if (!props.isEditMode) {
+            if (id === receiptState.currentPayer) {
+                receiptStateDispatch({ type: "setCurrentPayer", payerId: null });
+            } else {
+                receiptStateDispatch({ type: "setCurrentPayer", payerId: id });
+            }
         }
     }
 

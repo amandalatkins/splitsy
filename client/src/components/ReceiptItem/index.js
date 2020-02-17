@@ -8,7 +8,7 @@ function ReceiptItem(props) {
 
     const [payersState, setPayersState] = useState([{ id: null, name: null }]);
 
-    const { item, isTotalItem } = props;
+    const { item, isTotalItem, subTotal } = props;
 
     useEffect(()=>{
         loadItem();
@@ -68,9 +68,12 @@ function ReceiptItem(props) {
             </td>
             <td className="receipt-item-price text-right">
                 {item.name === "Total" ?
-                    <h4>${item.price}</h4>
+                    <h4>${item.price.toFixed(2)}</h4>
                 :
-                    <p>${item.price}</p>
+                    item.name === "Tax" || item.name === "Tip" ? 
+                        <p>${(item.price*subTotal).toFixed(2)}</p>
+                    :
+                        <p>${item.price.toFixed(2)}</p>
                 }
                 
             </td>
