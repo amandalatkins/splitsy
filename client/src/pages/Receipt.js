@@ -79,7 +79,7 @@ function Receipt(props) {
                                     : 
                                     <h3 className="float-left receipt-label">
                                         <span>{receiptState.receipts[0].label}</span>
-                                        <span class="badge bg-secondary text-white ml-2">{moment(receiptState.receipts[0].date).format("M/DD/YYYY")}</span>
+                                        <span className="badge bg-secondary text-white ml-2">{moment(receiptState.receipts[0].date).format("M/DD/YYYY")}</span>
                                     </h3>
                                 : ""}
                             

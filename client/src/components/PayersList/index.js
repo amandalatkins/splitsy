@@ -36,6 +36,12 @@ function PayerList(props) {
         .catch(err => console.log(err));
     }
 
+    function deletePayer(id) {
+        API.deletePayer(id)
+        .then(_ => props.loadReceipt(receiptState.receipts[0].id))
+        .catch(err => console.log(err));
+    }
+
     return (
 
         <ul className="list-group payer-list">
@@ -46,7 +52,11 @@ function PayerList(props) {
                     className={receiptState.currentPayer === payer.id ? "list-group-item selected" : "list-group-item"} 
                     onClick={() => selectPayer(payer.id)}
                 >
+                    {receiptState.currentPayer === payer.id ?
+                        <span className="remove-btn bg-danger text-white mr-1" onClick={() => deletePayer(payer.id)}><i className="fas fa-times"></i></span>
+                    : ""}
                     {payer.name}
+                    
                 </li>
             }) : ""}
 
