@@ -4,6 +4,7 @@ const ReceiptContext = createContext();
 const { Provider } = ReceiptContext;
 
 const reducer = (state, action) => {
+
     switch (action.type) {
         case "loadReceipts":
           return {
@@ -31,13 +32,13 @@ const defaultState = {
     receipts: []
 }
 
-const ReceiptProvider = ({ value = defaultState , ...props }) => {
-    const [state, dispatch] = useReducer(reducer, defaultState);
-    return <Provider value={[state, dispatch]} {...props} />
-}
+const ReceiptProvider = ({ value = defaultState, ...props }) => {
+  const [state, dispatch] = useReducer(reducer, defaultState);
+  return <Provider value={[state, dispatch]} {...props} />;
+};
 
 const useReceiptContext = () => {
-    return useContext(ReceiptContext);
-}
+  return useContext(ReceiptContext);
+};
 
 export { ReceiptProvider, useReceiptContext };
