@@ -5,6 +5,7 @@ import PayersList from "../components/PayersList";
 import ReceiptItem from "../components/ReceiptItem";
 import ReceiptItemEdit from "../components/ReceiptItemEdit";
 import Breakdown from "../components/Breakdown";
+import moment from "moment";
 
 function Receipt(props) {
 
@@ -16,6 +17,9 @@ function Receipt(props) {
 
     const itemName = useRef();
     const itemPrice = useRef();
+
+    const receiptLabel = useRef();
+    const receiptDate = useRef();
 
     useEffect(() => {
         loadReceipt(receiptId);
@@ -32,7 +36,10 @@ function Receipt(props) {
     }
 
     function saveReceipt() {
-        // receiptStateDispatch({ type: "toggleEditState" });
+        API.updateReceipt(receiptId, { label: receiptLabel.current.value, date: receiptDate.current.value + " 00:00:00" })
+        .then(_ => { console.log(_); loadReceipt(receiptId) })
+        .catch(err => console.log(err));
+        
         props.history.push('/receipt/'+receiptId);
     }
 
@@ -57,10 +64,25 @@ function Receipt(props) {
                 <div className="row">
                     <div className="col-12">
                         <div className="dashboard-header w-100 clearfix">
-                            <h3 className="float-left">
-                                {receiptState.receipts.length ? receiptState.receipts[0].label + " " + receiptState.receipts[0].date : ""}
-                                { isEditMode ? <span className="badge bg-danger text-white mt-2 ml-2">Edit Mode</span> : ""}
-                            </h3>
+                            
+                                { receiptState.receipts.length ?
+                                    isEditMode ? 
+                                        <form className="form-inline float-left" onSubmit={(e) => e.preventDefault()}>
+                                            <div className="form-group">
+                                                <input type="text" className="form-control" defaultValue={receiptState.receipts[0].label} placeholder="Label your receipt" ref={receiptLabel}/>
+                                            </div>
+                                            <div className="form-group">
+                                                <input type="date" className="form-control" defaultValue={moment(receiptState.receipts[0].date).format("YYYY-MM-DD")} placeholder="Select date" ref={receiptDate} />
+                                            </div>
+                                            <span className="badge bg-danger text-white mt-2 ml-2">Edit Mode</span>
+                                        </form>
+                                    : 
+                                    <h3 className="float-left receipt-label">
+                                        <span>{receiptState.receipts[0].label}</span>
+                                        <span class="badge bg-secondary text-white ml-2">{moment(receiptState.receipts[0].date).format("M/DD/YYYY")}</span>
+                                    </h3>
+                                : ""}
+                            
                             <h3 className="float-right"> 
                                 { isEditMode ? 
                                     <button className="btn btn-primary" onClick={() => saveReceipt()}>

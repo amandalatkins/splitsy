@@ -180,6 +180,15 @@ body {
   font-weight: 300;
 }
 
+.dashboard-header h3 span {
+  display:inline-block;
+  vertical-align:middle;
+}
+
+.dashboard-header h3 .badge {
+  font-size: 12px;
+}
+
 /* RECEIPT OBJECT
 ========================================================= */
 

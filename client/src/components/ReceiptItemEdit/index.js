@@ -31,17 +31,14 @@ function ReceiptItemEdit(props) {
     }
 
     function updateTotalItem(type) {
-        console.log("updating "+type);
         var newPrice;
         if (type === "Total" || type === "Subtotal") {
             newPrice = itemPrice.current.value;
         } else {
             newPrice = (parseFloat(itemPrice.current.value)  / parseFloat(subTotal)).toFixed(5);
         }
-        console.log(newPrice);
-        console.log({[type.toLowerCase()]: newPrice });
         API.updateReceipt(item.id, { [type.toLowerCase()]: newPrice })
-        .then(_ => { console.log(_); loadAndReset(item.id); })
+        .then(_ => loadAndReset(item.id))
         .catch(err => console.log(err));
     }
 
