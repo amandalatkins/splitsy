@@ -54,6 +54,13 @@ module.exports = function(app) {
     });
   });
 
+  //update receipt
+
+  app.put("/api/receipts/:id", function (req, res) {
+    db.Receipt.update(req.body, {where: { id: req.params.id } })
+    .then(dbReceipt => res.json(dbReceipt));
+  });
+
   // delete Receipt
   app.delete("/api/receipts/:id", function(req, res) {
     db.Receipt.destroy({

@@ -21,6 +21,10 @@ export default {
   createReceipt: function(postData) {
     return axios.post("/api/receipts", postData);
   },
+  // Update receipt
+  updateReceipt: function(id, postData) {
+    return axios.put("/api/receipts/"+id, postData);
+  },
   // Delete receipt
   deleteReceipt: function(id) {
     return axios.delete("/api/receipts/" + id);
@@ -32,6 +36,9 @@ export default {
   // Delete item
   deleteItem: function(id) {
     return axios.delete("/api/items/" + id);
+  },
+  updateItem: function(id, postData) {
+    return axios.put("/api/items/"+id, postData);
   },
   // Create payer
   createPayer: function(postData) {
@@ -48,5 +55,8 @@ export default {
   // remove item from payer
   removeItemToPayer: function(payerId, itemId) {
     return axios.put("/api/payers/" + payerId + "/remove/item/" + itemId);
+  },
+  getItemById: function(itemId) {
+    return axios.get('/api/items/id/'+itemId);
   }
 };
