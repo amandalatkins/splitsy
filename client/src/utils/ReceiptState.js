@@ -10,26 +10,24 @@ const reducer = (state, action) => {
         ...state,
         receipts: action.receipts
       };
-    case "toggleEditState":
-      if (!state.isEditMode) {
-        return {
-          ...state,
-          isEditMode: false
-        };
-      } else {
-        return {
-          ...state,
-          isEditMode: !state.isEditMode
-        };
-      }
+    case "loadSingleReceipt":
+      return {
+        ...state,
+        receipts: action.receipts
+      };
+    case "setCurrentPayer":
+      return {
+        ...state,
+        currentPayer: action.payerId
+      };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
 };
 
 const defaultState = {
-  isEditMode: false,
   currentPayer: null,
+  currentItemEdit: null,
   receipts: []
 };
 

@@ -109,6 +109,7 @@ body {
   z-index: 100;
   border-color: #dee2e6;
   margin-left: 1em;
+  cursor: pointer;
 }
 .payer-list .list-group-item:first-child,
 .payer-list .list-group-item:last-child {
@@ -127,6 +128,17 @@ body {
 
 .payer-list .list-group-item.selected {
   background-color: #f1f3f5;
+}
+
+.payer-list .list-group-item.selected .remove-btn {
+  border-radius: 100%;
+  vertical-align: middle;
+  font-size: 12px;
+  height: 20px;
+    width: 20px;
+    display: inline-block;
+    line-height: 20px;
+    text-align: center;
 }
 
 .payer-list .list-group-item.selected:after,
@@ -179,6 +191,15 @@ body {
   font-weight: 300;
 }
 
+.dashboard-header h3 span {
+  display:inline-block;
+  vertical-align:middle;
+}
+
+.dashboard-header h3 .badge {
+  font-size: 12px;
+}
+
 /* RECEIPT OBJECT
 ========================================================= */
 
@@ -196,6 +217,10 @@ body {
 .receipt .receipt-item td {
   padding: 1rem 0.75rem;
   /* border-top-style: dotted; */
+}
+
+.receipt .receipt-item {
+  cursor: pointer
 }
 
 .receipt .receipt-item:first-of-type td {
@@ -222,6 +247,10 @@ body {
   border-top-style: dashed;
 }
 
+.receipt .receipt-item.receipt-tally.first td {
+  border-top: 2px solid #495057;
+}
+
 .receipt .receipt-item.receipt-total {
   font-size: 1.25rem;
   font-weight: bold;
@@ -239,6 +268,10 @@ body {
 .receipt-edit-mode .payer-list *,
 .receipt-edit-mode .breakdown {
   opacity: 0.2;
+}
+
+.receipt-item.receipt-tally .receipt-item-label {
+  text-align: right;
 }
 
 /* BREAKDOWN

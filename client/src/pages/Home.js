@@ -16,12 +16,12 @@ const Home = () => {
             </h1>
             <p className="lead my-3">
               Splity is a web app that allows a user to easily divide up a
-              recipt by uploading an image. <br />
+              recipt by simply uploading an image. <br />
               Why waste time trying to do complicated math, let us do the work
               for you!
             </p>
             <div>
-              <div>HEY</div>
+              <div>Insert Gif</div>
               <button
                 className="btn btn-lg btn-success my-3  bg-orange border-orange"
                 data-toggle="modal"
