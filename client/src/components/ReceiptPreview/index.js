@@ -6,7 +6,13 @@ function ReceiptPreview(props) {
   console.log(props);
 
   return (
-    <div className="col-xs-12 col-md-6 col-lg-4">
+    <div
+      className="col-xs-12 col-md-6 col-lg-4"
+      id={props.value.id}
+      onClick={() => {
+        props.onClick(props.value.id);
+      }}
+    >
       <div className="receipt-preview">
         <h3>
           {props.value.label}

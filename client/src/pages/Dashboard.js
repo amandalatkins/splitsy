@@ -5,15 +5,16 @@ import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 
 const Dashboard = () => {
-
   const [receiptState, dispatchReceiptState] = useReceiptContext();
-  
-  // function receiptClick() {
-  //   console.log("receipt button works");
-  // }
-  // function newReceiptClick() {
-  //   console.log("newreceipt button works");
-  // }
+
+  const receiptClick = id => {
+    window.location.href = "/receipt/" + id;
+    console.log("receipt button works");
+  };
+
+  function newReceiptClick() {
+    API.createReceipt().then(res => {});
+  }
 
   useEffect(() => {
     loadReceipts();
@@ -92,7 +93,11 @@ const Dashboard = () => {
             </div>
           </div>
           {receiptState.receipts.map(receipt => (
-            <ReceiptPreview key={receipt.id} value={receipt}></ReceiptPreview>
+            <ReceiptPreview
+              key={receipt.id}
+              value={receipt}
+              onClick={receiptClick}
+            ></ReceiptPreview>
           ))}
         </div>
       </div>
