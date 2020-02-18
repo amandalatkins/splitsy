@@ -4,6 +4,7 @@ import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 import NewReceiptModal from "../components/Modal/NewReceiptModal";
+import PlusReceiptModal from "../components/Modal/PlusReceiptModal";
 
 const Dashboard = () => {
   const [receiptState, dispatchReceiptState] = useReceiptContext();
@@ -89,10 +90,11 @@ const Dashboard = () => {
 
       <div className="container mt-5">
         <div className="row">
-          <div className="d-none d-md-block col-md-6 col-lg-4">
-            <div className="add-receipt">
-              <i className="fas fa-plus"></i>
-            </div>
+          <div
+            className="d-none d-md-block col-md-6 col-lg-4"
+            // onClick={newReceiptClick}
+          >
+            <PlusReceiptModal></PlusReceiptModal>
           </div>
           {receiptState.receipts.map(receipt => (
             <ReceiptPreview
