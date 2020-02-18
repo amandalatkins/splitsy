@@ -22,21 +22,22 @@ const LoginModal = props => {
         <ModalHeader toggle={toggle}>{className}</ModalHeader>
         <ModalBody>
           <form>
-            <label for="fname">Userame:</label>
-            <br></br>
-            <input type="text" id="username"></input>
-            <br></br>
-            <label for="lname">Password:</label>
-            <br></br>
-            <input type="text" id="password"></input>
+            <div className="form-group">
+              	<label>Userame:</label>
+              	<input type="text" id="username" className="form-control"/>
+            </div>
+			<div className="form-group">
+				<label>Password:</label>
+				<input type="text" id="password" className="form-control"></input>
+			</div>          
           </form>
         </ModalBody>
         <ModalFooter>
+		<Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>{" "}
           <Button color="primary" onClick={login}>
             Login{" "}
-          </Button>{" "}
-          <Button color="secondary" onClick={toggle}>
-            Cancel
           </Button>
         </ModalFooter>
       </Modal>

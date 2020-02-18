@@ -17,18 +17,13 @@ function NavBar() {
         </li>
       </ol>
 
-      <ul className="nav">
-        <li className="nav-item dropdown">
-          <RegisterModal buttonLabel="Register" className="Register">
-            Register{" "}
-          </RegisterModal>
-        </li>
-        <li>
-          <LoginModal buttonLabel="Login" className="Login">
-            Login
-          </LoginModal>
-        </li>
-      </ul>
+        <RegisterModal buttonLabel="Register" className="Register">
+          Register{" "}
+        </RegisterModal>
+        &nbsp;&nbsp;
+        <LoginModal buttonLabel="Login" className="Login">
+          Login
+        </LoginModal>
     </nav>
   );
 }
