@@ -39,6 +39,14 @@ module.exports = function(app) {
     });
   });
 
+  // update item
+  app.put("/api/items/:id", function(req, res) {
+    db.Item.update(req.body, { where: { id: req.params.id } })
+    .then(dbItem => {
+      res.json(dbItem);
+    });
+  });
+
   // delete Item
   app.delete("/api/items/:id", function(req, res) {
     db.Item.destroy({
