@@ -1,27 +1,35 @@
 import React from "react";
+import RegisterModal from "../Modal/RegisterModal";
+import LoginModal from "../Modal/LoginModal";
 
 function NavBar() {
   // add functionality to show percentage of receipt filled
 
   return (
     <nav className="navbar navbar-dark">
-        <a className="navbar-brand" href="#">Splitsy</a>
+      <a className="navbar-brand" href="/home">
+        Splitsy
+      </a>
 
-        <ol className="breadcrumb mr-auto">
-            <li className="breadcrumb-item active"><a href="/dashboard">Your Dashboard</a></li>
-        </ol>
+      <ol className="breadcrumb mr-auto">
+        <li className="breadcrumb-item active">
+          <a href="/dashboard">Your Dashboard</a>
+        </li>
+      </ol>
 
-        <ul className="nav">
-            <li className="nav-item dropdown">
-                <a className="nav-link text-white" href="#" id="navbarDropdown" data-toggle="modal" data-target="#loginModal">
-                  Login/Register
-                </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a className="dropdown-item" href="#">Log Out</a>
-                </div>
-              </li>
-          </ul>
-      </nav>
+      <ul className="nav">
+        <li className="nav-item dropdown">
+          <RegisterModal buttonLabel="Register" className="Register">
+            Register{" "}
+          </RegisterModal>
+        </li>
+        <li>
+          <LoginModal buttonLabel="Login" className="Login">
+            Login
+          </LoginModal>
+        </li>
+      </ul>
+    </nav>
   );
 }
 

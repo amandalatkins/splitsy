@@ -3,17 +3,23 @@ import React, { useEffect } from "react";
 import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
+import NewReceiptModal from "../components/Modal/NewReceiptModal";
 
 const Dashboard = () => {
-
   const [receiptState, dispatchReceiptState] = useReceiptContext();
-  
-  // function receiptClick() {
-  //   console.log("receipt button works");
-  // }
-  // function newReceiptClick() {
-  //   console.log("newreceipt button works");
-  // }
+
+  const receiptClick = id => {
+    window.location.href = "/receipt/" + id;
+    console.log("receipt button works");
+  };
+
+  function newReceiptClick() {
+    console.log("hit");
+    API.createReceipt({}).then(res => {
+      console.log(res);
+      // window.location.href = "/receipt/" + res.;
+    });
+  }
 
   useEffect(() => {
     loadReceipts();
@@ -22,23 +28,20 @@ const Dashboard = () => {
   // get user id from user state i believe, "2" is placeholder
   function loadReceipts() {
     API.getReceiptsForUser(1).then(results => {
-      console.log(results);
+      // console.log(results);
       dispatchReceiptState({ type: "loadReceipts", receipts: results.data });
     });
   }
 
   return (
+    // onClick={() => {
+    //   newReceiptClick();
+    // }}
     <div>
       <div className="container mt-5 clearfix">
-        <button
-          className="btn text-white bg-orange"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="modal"
-          data-target="#addReceiptModal"
-        >
-          <i className="fas fa-plus" aria-hidden="true"></i> Add Receipt
-        </button>
+        <NewReceiptModal buttonLabel="Add" className="Add">
+          Add{" "}
+        </NewReceiptModal>
         <div className="dropdown float-right">
           <button
             className="btn btn-secondary dropdown-toggle"
@@ -92,7 +95,11 @@ const Dashboard = () => {
             </div>
           </div>
           {receiptState.receipts.map(receipt => (
-            <ReceiptPreview key={receipt.id} value={receipt}></ReceiptPreview>
+            <ReceiptPreview
+              key={receipt.id}
+              value={receipt}
+              onClick={receiptClick}
+            ></ReceiptPreview>
           ))}
         </div>
       </div>
