@@ -1,4 +1,5 @@
 import React from "react";
+import RegisterModal from "../components/Modal/RegisterModal";
 
 const Home = () => {
   function registerClick() {
@@ -22,14 +23,9 @@ const Home = () => {
             </p>
             <div>
               <div>Insert Gif</div>
-              <button
-                className="btn btn-lg btn-success my-3  bg-orange border-orange"
-                data-toggle="modal"
-                data-target="#loginModal"
-                onClick={() => registerClick()}
-              >
+              <RegisterModal buttonLabel="Register Now!" className="Register">
                 Register Now!
-              </button>
+              </RegisterModal>
             </div>
           </div>
         </div>

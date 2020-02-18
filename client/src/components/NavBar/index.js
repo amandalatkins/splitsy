@@ -1,5 +1,6 @@
 import React from "react";
-import TheModal from "../Modal/index";
+import RegisterModal from "../Modal/RegisterModal";
+import LoginModal from "../Modal/LoginModal";
 
 function NavBar() {
   // add functionality to show percentage of receipt filled
@@ -18,14 +19,14 @@ function NavBar() {
 
       <ul className="nav">
         <li className="nav-item dropdown">
-          <TheModal buttonLabel="Sign Up" className="signUp">
-            Sign Up
-          </TheModal>
+          <RegisterModal buttonLabel="Register" className="Register">
+            Register{" "}
+          </RegisterModal>
         </li>
         <li>
-          <TheModal buttonLabel="Login" className="login">
+          <LoginModal buttonLabel="Login" className="Login">
             Login
-          </TheModal>
+          </LoginModal>
         </li>
       </ul>
     </nav>
