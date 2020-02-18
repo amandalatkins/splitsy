@@ -4,18 +4,12 @@ const ReceiptContext = createContext();
 const { Provider } = ReceiptContext;
 
 const reducer = (state, action) => {
-
     switch (action.type) {
         case "loadReceipts":
           return {
               ...state,
               receipts: action.receipts
           }
-        case "loadSingleReceipt":
-            return {
-                ...state,
-                receipts: action.receipts
-            }
         case "setCurrentPayer":
             return {
                 ...state,

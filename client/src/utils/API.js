@@ -7,7 +7,7 @@ export default {
   },
   // Create user
   createUser: function(postData) {
-    return axios.post("/api/user", postData);
+    return axios.post("/api/users", postData);
   },
   // Gets all receipt for a user
   getReceiptsForUser: function(userId) {

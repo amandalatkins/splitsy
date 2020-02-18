@@ -10,6 +10,9 @@
     "if-env": "^1.0.4",
     "mysql2": "^2.1.0",
     "path": "^0.12.7",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "reactstrap": "^8.4.1",
     "sequelize": "^5.21.4"
   },
   "devDependencies": {

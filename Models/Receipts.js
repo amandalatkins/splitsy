@@ -5,26 +5,30 @@ module.exports = function(sequelize, DataTypes) {
   var Receipt = sequelize.define("Receipt", {
     label: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: [1, 60]
       }
     },
     tax: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true,
+      defaultValue: 0
     },
     tip: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true,
+      defaultValue: 0
     },
     subtotal: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true,
+      defaultValue: 0
     },
     total: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true,
+      defaultValue: 0
     },
     date: {
       type: DataTypes.DATE,
