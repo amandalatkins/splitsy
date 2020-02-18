@@ -6,26 +6,34 @@ const RegisterModal = props => {
   const { buttonLabel, className } = props;
 
   const [modal, setModal] = useState(false);
-  const firstName = useInput("");
-  const lastName = useInput("");
-  const username = useInput("");
-  const password = useInput("");
 
-  const handleSubmit = () => {
-    const form = {
-      favoriteThing: favoriteThing.value,
-      comment: comment.value,
-      feeling: feeling.value,
-      rating: rating.value
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: ""
+  });
+
+  const handleInputChange = event => {
+    let variable = event.target.id;
+    setFormState({ ...formState, [variable]: event.target.value });
+  };
+
+  const handleFormSubmit = event => {
+    event.preventDefault();
+    let user = {
+      user_name: formState.username,
+      password: formState.password,
+      first_name: formState.firstName,
+      last_name: formState.lastName
     };
-    console.log(form);
+    console.log(user);
+
+    API.createUser(user).then(res => {
+      console.log(res);
+    });
   };
 
-  const register = () => {
-    console.log("works");
-    API.createUser();
-    toggle();
-  };
   const toggle = () => {
     setModal(!modal);
   };
@@ -41,23 +49,43 @@ const RegisterModal = props => {
           <form>
             <label for="fname">First name:</label>
             <br></br>
-            <input type="text" id="firstName"></input>
+            <input
+              onChange={handleInputChange}
+              type="text"
+              id="firstName"
+              value={formState.value}
+            ></input>
             <br></br>
             <label for="fname">Last name:</label>
             <br></br>
-            <input type="text" id="lastName"></input>
+            <input
+              type="text"
+              id="lastName"
+              value={formState.value}
+              onChange={handleInputChange}
+            ></input>
             <br></br>
             <label for="fname">Desired userame:</label>
             <br></br>
-            <input type="text" id="username"></input>
+            <input
+              type="text"
+              id="username"
+              value={formState.value}
+              onChange={handleInputChange}
+            ></input>
             <br></br>
             <label for="lname">Password:</label>
             <br></br>
-            <input type="text" id="password"></input>
+            <input
+              type="text"
+              id="password"
+              value={formState.value}
+              onChange={handleInputChange}
+            ></input>
           </form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={register}>
+          <Button color="primary" onClick={handleFormSubmit}>
             Register{" "}
           </Button>{" "}
           <Button color="secondary" onClick={toggle}>
