@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import API from "../../utils/API";
+import { useUserAuthContext } from '../../utils/UserAuthState';
 
 const NewReceiptModal = props => {
   const { buttonLabel, className } = props;
@@ -11,6 +12,8 @@ const NewReceiptModal = props => {
     label: ""
   });
 
+  const [userAuth] = useUserAuthContext();
+
   const handleInputChange = event => {
     let variable = event.target.id;
     setFormState({ ...formState, [variable]: event.target.value });
@@ -19,12 +22,11 @@ const NewReceiptModal = props => {
   const handleFormSubmit = event => {
     event.preventDefault();
     let receipt = {
-      label: formState.label
+      label: formState.label,
+      UserId: userAuth.user.id
     };
-    console.log(receipt);
 
     API.createReceipt(receipt).then(res => {
-      console.log(res);
       window.location.href = "/receipt/" + res.data.id + "/edit";
     });
   };
@@ -35,8 +37,8 @@ const NewReceiptModal = props => {
 
   return (
     <div>
-      <Button color="danger" onClick={toggle}>
-        {buttonLabel}
+      <Button className="btn bg-orange border-orange text-white" onClick={toggle}>
+      <i class="fas fa-plus"></i> {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>{className}</ModalHeader>

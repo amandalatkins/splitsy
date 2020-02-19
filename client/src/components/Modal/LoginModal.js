@@ -20,9 +20,11 @@ const LoginModal = props => {
     })
     .then(results => {
       if (results.data) {
+        console.log(results.data);
         setUserAuth({
           type: "logIn",
           user: {
+            id: results.data.id,
             firstName: results.data.first_name,
             lastName: results.data.last_name,
             userName: results.data.user_name,
