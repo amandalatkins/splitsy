@@ -25,12 +25,16 @@ function Receipt(props) {
         loadReceipt(receiptId);
     }, []);
 
-    function loadReceipt(receiptId) {
+    function loadReceipt(receiptId, payerId) {
         console.log("loading receipt");
         API.getReceiptById(receiptId)
         .then(receipt => {
-            console.log(receipt);
-            receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data] })
+            if (payerId) {
+                receiptStateDispatch({ type: "loadReceiptsAndPayer", receipts: [receipt.data], payerId })
+            } else {
+                receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data] })
+            }
+            
         })
         .catch(err => console.log(err));
     }
@@ -207,7 +211,7 @@ function Receipt(props) {
                                                 item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
                                                 isTotalItem={true} 
                                             />
-                                        : "<tr><td></td></tr>" }
+                                        : <tr><td></td></tr> }
                                     </tbody>
 
                                 }

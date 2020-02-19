@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API"
 
@@ -8,7 +8,19 @@ function PayerList(props) {
 
     const [addPayer, setAddPayer] = useState(false);
 
+    const [payers, setPayers] = useState([]);
+
+    useEffect(() => {
+        if (receiptState.receipts[0]) {
+            loadPayers();
+        }
+    }, [receiptState]);
+
     const nameInput = useRef();
+
+    function loadPayers() {
+        setPayers(receiptState.receipts[0].Payers);
+    }
 
     function toggleAddPayer() {
         if (!props.isEditMode) {
@@ -29,10 +41,10 @@ function PayerList(props) {
     function savePayer(e) {
         e.preventDefault();
         API.createPayer({ name: nameInput.current.value, ReceiptId: props.receiptId })
-        .then(_ => {
+        .then(results => {
             nameInput.current.value = "";
             toggleAddPayer();
-            props.loadReceipt(receiptState.receipts[0].id)
+            props.loadReceipt(receiptState.receipts[0].id, results.data.id);
         })
         .catch(err => console.log(err));
     }
@@ -49,8 +61,8 @@ function PayerList(props) {
     return (
 
         <ul className="list-group payer-list">
-
-            {receiptState.receipts.length ? receiptState.receipts[0].Payers.map(payer => {
+            {payers.map(payer => {
+            // {receiptState.receipts.length ? receiptState.receipts[0].Payers.map(payer => {
                 return <li 
                     key={payer.id}
                     className={receiptState.currentPayer === payer.id ? "list-group-item selected" : "list-group-item"} 
@@ -59,10 +71,11 @@ function PayerList(props) {
                     {receiptState.currentPayer === payer.id ?
                         <span className="remove-btn bg-danger text-white mr-1" onClick={() => deletePayer(payer.id)}><i className="fas fa-times"></i></span>
                     : ""}
-                    {payer.name} <span class="cancel-payer">Close</span>
+                    {payer.name} <span className="cancel-payer">Close</span>
                     
                 </li>
-            }) : ""}
+            // }) : ""}
+            })}
 
             {addPayer ?
                 <li className="list-group-item">
