@@ -134,7 +134,8 @@ function Receipt(props) {
                                                 <td className="receipt-item-label text-left">
                                                     <input className="form-control" type="text" ref={itemName}/>
                                                     <p className="mt-2">
-                                                        <button className="btn btn-secondary btn-sm mr-1" onClick={() => addNewItem()}>Save</button>
+                                                        <button className="btn btn-primary btn-sm mr-1" onClick={() => addNewItem()}>Save</button>
+                                                        <button className="btn btn-secondary btn-sm mr-1" onClick={toggleAddItem}>Cancel</button>
                                                     </p>
                                                 </td>
                                                 <td className="receipt-item-price text-right"><input className="form-control" type="text" ref={itemPrice}/></td>
@@ -143,8 +144,9 @@ function Receipt(props) {
                                         : "" }
 
                                         <tr className="receipt-item">
-                                            <td className="receipt-item-label text-left"><button className="btn btn-sm btn-secondary" onClick={toggleAddItem}>Add Item</button></td>
-                                            <td className="receipt-item-price text-right"></td>
+                                            <td colSpan="2" className="receipt-item-label text-center">
+                                                <button className="btn btn-sm btn-secondary w-50" onClick={toggleAddItem}>Add Item</button>
+                                            </td>
                                         </tr>
 
                                         {receiptState.receipts.length ? 
