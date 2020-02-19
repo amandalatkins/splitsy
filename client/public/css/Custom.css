@@ -43,6 +43,9 @@ body {
   color: rgba(255, 255, 255, 0.65);
 }
 
+.navbar .loginButtons div {
+  float:right
+}
 /* .navbar .nav-item:not(:last-child):after {
   display: list-item;
   content: '/'
@@ -70,9 +73,20 @@ body {
 .border-orange {
   border-color: #ff6444;
 }
+.border-teal {
+  border-color: #00ada9;
+}
 
 .bg-teal {
   background-color: #00ada9;
+}
+
+.btn.bg-teal:hover,
+.btn.btn-secondary.bg-teal:active,
+.btn.btn-secondary.bg-teal:focus {
+  background-color: #00ada9;
+  border-color: #00ada9;
+  box-shadow: none
 }
 
 .text-teal {

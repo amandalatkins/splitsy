@@ -40,11 +40,17 @@ const LoginModal = props => {
 
   return (
     <div>
-      <Button color="danger" onClick={toggle}>
-        {buttonLabel}
-      </Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>{className}</ModalHeader>
+      { buttonLabel === "Register" ?
+			<Button className="bg-orange border-orange text-white" onClick={toggle}>
+				{buttonLabel}
+			</Button>
+		: 
+			<Button className="bg-teal border-teal text-white" onClick={toggle}>
+				{buttonLabel}
+			</Button>
+  		}
+      <Modal isOpen={modal} toggle={toggle} className={buttonLabel}>
+        <ModalHeader toggle={toggle}>{buttonLabel}</ModalHeader>
         <ModalBody>
           <form>
             <div className="form-group">

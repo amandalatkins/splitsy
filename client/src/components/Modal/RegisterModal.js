@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import API from "../../utils/API";
 
 const RegisterModal = props => {
-  const { buttonLabel, className } = props;
+  const { buttonLabel } = props;
 
   const [modal, setModal] = useState(false);
 
@@ -40,11 +40,11 @@ const RegisterModal = props => {
 
   return (
     <div>
-      <Button color="danger" onClick={toggle}>
-        {buttonLabel}
-      </Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>{className}</ModalHeader>
+		<Button className="bg-orange border-orange text-white" onClick={toggle}>
+			{buttonLabel}
+		</Button>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>{buttonLabel}</ModalHeader>
         <ModalBody>
           <form>
 			
