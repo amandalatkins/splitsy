@@ -5,6 +5,7 @@ import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 import NewReceiptModal from "../components/Modal/NewReceiptModal";
 import { useUserAuthContext } from '../utils/UserAuthState';
+import moment from "moment";
 
 const Dashboard = (props) => {
   const [receiptState, dispatchReceiptState] = useReceiptContext();
@@ -104,53 +105,7 @@ const Dashboard = (props) => {
           </div>
           </div>
         </div>
-        
-        
-
-      <div className="modal" tabIndex="-1" role="dialog" id="addReceiptModal">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Add a Receipt</h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="form-group my-2">
-                  <p>
-                    Upload a well-lighted photo of your receipt. Make sure the
-                    receipt is laying flat on a flat surface and your photo is
-                    as straight on as possible.
-                  </p>
-                  <input type="file" name="fileToUpload" id="receiptFile" />
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <a href="receipt.html">
-                <button type="button" className="btn btn-primary">
-                  Upload File
-                </button>
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
   );
 };
 

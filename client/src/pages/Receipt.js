@@ -95,9 +95,6 @@ function Receipt(props) {
                                         <button className="btn btn-primary" onClick={() => saveReceipt()}>
                                             <i className="fas fa-save"></i>
                                         </button>
-                                        <button className="btn btn-danger" onClick={() => deleteReceipt()}>
-                                            <i className="fas fa-times"></i>
-                                        </button>
                                     </span>
                                 :
                                     <a className="btn btn-secondary" href={`/receipt/${receiptId}/edit`}>
@@ -218,7 +215,11 @@ function Receipt(props) {
 
                             </table>
                         </div>
+                        
                     </div>
+                        <button className="btn text-danger" onClick={() => deleteReceipt()}>
+                            Delete Receipt
+                        </button>
                     </div>
                     <div className="col-xs-12 col-lg-4">
                         <Breakdown receipt={receiptState.receipts[0]} />
