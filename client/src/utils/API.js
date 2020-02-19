@@ -61,5 +61,8 @@ export default {
   },
   getPayerById: function(payerId) {
     return axios.get("/api/payers/id/" + payerId);
+  },
+  updatePayer: function(payerId, body) {
+    return axios.put("/api/payers/" + payerId, body);
   }
 };

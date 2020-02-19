@@ -33,6 +33,14 @@ module.exports = function(app) {
       res.json(dbPayer);
     });
   });
+  // update Payer
+  app.put("/api/payers/:id", function(req, res) {
+    db.Payer.update(req.body, { where: { id: req.params.id } }).then(
+      dbPayer => {
+        res.json(dbPayer);
+      }
+    );
+  });
 
   //create new Payer
   app.post("/api/payers", function(req, res) {

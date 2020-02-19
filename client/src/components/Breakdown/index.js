@@ -31,6 +31,19 @@ function Breakdown(props) {
     return total;
   }
 
+  function paid(payer) {
+    let payerUpdate = {
+      paid: true
+    };
+    if (payer.paid === true) {
+      payerUpdate.paid = false;
+    }
+
+    API.updatePayer(payer.id, payerUpdate).then(res => {
+      console.log("worked");
+    });
+  }
+
   return (
     <div className="breakdown h-100">
       <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
@@ -42,7 +55,12 @@ function Breakdown(props) {
               <td className="text-left">{payer.name}</td>
               <td className="text-right">
                 {totalCalculator(payer)}
-                <i className="fas fa-times-circle text-red"></i>
+                <i
+                  className="fas fa-times-circle text-red"
+                  onClick={() => {
+                    paid(payer);
+                  }}
+                ></i>
               </td>
             </tr>
           ))}
