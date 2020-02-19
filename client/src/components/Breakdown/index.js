@@ -13,6 +13,7 @@ function Breakdown(props) {
   }, [receiptState]);
 
   function loadBreakdown() {
+    setPayersState([]);
     for (let i = 0; i < props.receipt.Payers.length; i++) {
       API.getPayerById(props.receipt.Payers[i].id).then(res => {
         console.log(res.data);
@@ -32,6 +33,8 @@ function Breakdown(props) {
   }
 
   function paid(payer) {
+    props.reload(props.receipt.id);
+
     let payerUpdate = {
       paid: true
     };
