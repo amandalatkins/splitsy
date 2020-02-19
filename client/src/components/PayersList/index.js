@@ -59,7 +59,7 @@ function PayerList(props) {
                     {receiptState.currentPayer === payer.id ?
                         <span className="remove-btn bg-danger text-white mr-1" onClick={() => deletePayer(payer.id)}><i className="fas fa-times"></i></span>
                     : ""}
-                    {payer.name}
+                    {payer.name} <span class="cancel-payer">Close</span>
                     
                 </li>
             }) : ""}
