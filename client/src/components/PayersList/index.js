@@ -29,9 +29,10 @@ function PayerList(props) {
     function savePayer(e) {
         e.preventDefault();
         API.createPayer({ name: nameInput.current.value, ReceiptId: props.receiptId })
-        .then(newPayer => {
-            console.log(newPayer);
-            receiptStateDispatch({ type: "loadSingleReceipt", receipts: receiptState.receipts })
+        .then(_ => {
+            nameInput.current.value = "";
+            toggleAddPayer();
+            props.loadReceipt(receiptState.receipts[0].id)
         })
         .catch(err => console.log(err));
     }

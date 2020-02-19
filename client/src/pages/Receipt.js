@@ -172,7 +172,7 @@ function Receipt(props) {
                                                 isTotalItem={true}
                                                 loadReceipt={loadReceipt}
                                             />
-                                        : "<tr><td></td></tr>" }
+                                        : <tr><td></td></tr> }
                                     </tbody>
 
                                 :
