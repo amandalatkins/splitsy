@@ -217,9 +217,11 @@ function Receipt(props) {
                         </div>
                         
                     </div>
+                    {isEditMode ?
                         <button className="btn text-danger" onClick={() => deleteReceipt()}>
                             Delete Receipt
                         </button>
+                    : ""}
                     </div>
                     <div className="col-xs-12 col-lg-4">
                         <Breakdown receipt={receiptState.receipts[0]} />
