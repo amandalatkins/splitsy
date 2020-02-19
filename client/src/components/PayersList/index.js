@@ -39,7 +39,10 @@ function PayerList(props) {
 
     function deletePayer(id) {
         API.deletePayer(id)
-        .then(_ => props.loadReceipt(receiptState.receipts[0].id))
+        .then(_ => {
+            props.loadReceipt(receiptState.receipts[0].id)
+            window.location.reload();
+        })
         .catch(err => console.log(err));
     }
 
