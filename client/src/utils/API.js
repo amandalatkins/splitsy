@@ -68,5 +68,8 @@ export default {
   },
   updatePayer: function(payerId, body) {
     return axios.put("/api/payers/" + payerId, body);
+  },
+  getItemsForReceipt: function(receiptId) {
+    return axios.get("/api/items/receipt/" + receiptId);
   }
 };

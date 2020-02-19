@@ -41,8 +41,19 @@ module.exports = function(app) {
 
   // update item
   app.put("/api/items/:id", function(req, res) {
-    db.Item.update(req.body, { where: { id: req.params.id } })
-    .then(dbItem => {
+    db.Item.update(req.body, { where: { id: req.params.id } }).then(dbItem => {
+      res.json(dbItem);
+    });
+  });
+
+  // get items for specific receipt
+  app.get("/api/items/receipt/:receiptId", function(req, res) {
+    db.Item.findAll({
+      where: {
+        ReceiptId: req.params.receiptId
+      },
+      include: [db.Payer, db.Receipt]
+    }).then(function(dbItem) {
       res.json(dbItem);
     });
   });
