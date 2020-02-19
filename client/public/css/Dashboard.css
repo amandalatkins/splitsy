@@ -13,6 +13,7 @@
 .receipt-preview,
 .add-receipt {
   margin-bottom: 2rem;
+  cursor: pointer
 }
 
 .receipt-preview {

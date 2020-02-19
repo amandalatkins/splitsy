@@ -43,6 +43,9 @@ body {
   color: rgba(255, 255, 255, 0.65);
 }
 
+.navbar .loginButtons div {
+  float:right
+}
 /* .navbar .nav-item:not(:last-child):after {
   display: list-item;
   content: '/'
@@ -70,9 +73,20 @@ body {
 .border-orange {
   border-color: #ff6444;
 }
+.border-teal {
+  border-color: #00ada9;
+}
 
 .bg-teal {
   background-color: #00ada9;
+}
+
+.btn.bg-teal:hover,
+.btn.btn-secondary.bg-teal:active,
+.btn.btn-secondary.bg-teal:focus {
+  background-color: #00ada9;
+  border-color: #00ada9;
+  box-shadow: none
 }
 
 .text-teal {
@@ -175,6 +189,66 @@ body {
 .edit-buttons {
   margin-right: 1em;
 }
+
+/* DASHBOARD STYLES
+========================================================= */
+
+.add-receipt {
+  width: 100%;
+  height: 300px;
+  background-color: #f1f3f5;
+  border: 1px solid #dee2e6;
+  font-size: 60px;
+  text-align: center;
+  line-height: 300px;
+  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.05);
+  color: #868e96;
+}
+
+.receipt-preview,
+.add-receipt {
+  margin-bottom: 2rem;
+  cursor: pointer
+}
+
+.receipt-preview {
+  width: 100%;
+  height: 300px;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  padding: 2em 2.5em;
+}
+
+.receipt-preview .receipt-date {
+  font-weight: 300;
+  color: #868e96;
+  float: right;
+}
+
+.receipt-preview .receipt-total {
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 3em;
+}
+
+.receipt-preview .receipt-complete {
+  width: 100%;
+  font-size: 60px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 2.5rem;
+}
+
+.receipt-preview .receipt-icon {
+  font-size: 25px;
+}
+
+.receipt-preview .receipt-progress {
+  width: 85%;
+}
+
 
 /* DASHBOARD HEADER
 ========================================================= */

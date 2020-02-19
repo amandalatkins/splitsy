@@ -5,6 +5,10 @@ export default {
   getUsers: function() {
     return axios.get("/api/users");
   },
+  // Log User In
+  logInUser: function(info) {
+    return axios.post("/api/users/login", info);
+  },
   // Create user
   createUser: function(postData) {
     return axios.post("/api/users", postData);
