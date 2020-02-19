@@ -42,6 +42,14 @@ function ReceiptItemEdit(props) {
         .catch(err => console.log(err));
     }
 
+    function onlyAllowNumbers(e) {
+        var allowed = "1234567890.";
+        if (e.keyCode !== 8 && !allowed.includes(e.key)) {
+            e.preventDefault();
+        }
+
+    }
+
     function loadAndReset(id) {
         loadReceipt(id);
         setEditItem(false);
@@ -92,7 +100,7 @@ function ReceiptItemEdit(props) {
                     
                 :
                     <div>
-                        <input type="text" className="form-control" defaultValue={item.name === "Tax" || item.name === "Tip" ? (item.price*subTotal).toFixed(2) : item.price.toFixed(2)} ref={itemPrice}/>
+                        <input type="text" className="form-control" defaultValue={item.name === "Tax" || item.name === "Tip" ? (item.price*subTotal).toFixed(2) : item.price.toFixed(2)} ref={itemPrice} onKeyDown={(e) => onlyAllowNumbers(e) }/>
                     </div>
                 }
 
