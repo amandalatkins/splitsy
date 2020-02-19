@@ -58,6 +58,12 @@ function Receipt(props) {
         .catch(err => console.log(err));
     }
 
+    function deleteReceipt() {
+        API.deleteReceipt(receiptId)
+        .then(_ => props.history.push('/dashboard'))
+        .catch(err => console.log(err));
+    }
+
     return (
         <div>
             <div className="container pt-5">
@@ -85,13 +91,16 @@ function Receipt(props) {
                             
                             <h3 className="float-right"> 
                                 { isEditMode ? 
-                                    <button className="btn btn-primary" onClick={() => saveReceipt()}>
-                                        <i className="fas fa-save"></i>
-                                    </button>
-                                    :
+                                    <span>
+                                        <button className="btn btn-primary" onClick={() => saveReceipt()}>
+                                            <i className="fas fa-save"></i>
+                                        </button>
+                                    </span>
+                                :
                                     <a className="btn btn-secondary" href={`/receipt/${receiptId}/edit`}>
                                         <i className="fas fa-pencil-alt"></i>
                                     </a>
+                                    
                                 }
                             </h3>
                         </div>
@@ -163,7 +172,7 @@ function Receipt(props) {
                                                 isTotalItem={true}
                                                 loadReceipt={loadReceipt}
                                             />
-                                        : "<tr><td></td></tr>" }
+                                        : <tr><td></td></tr> }
                                     </tbody>
 
                                 :
@@ -206,7 +215,13 @@ function Receipt(props) {
 
                             </table>
                         </div>
+                        
                     </div>
+                    {isEditMode ?
+                        <button className="btn text-danger" onClick={() => deleteReceipt()}>
+                            Delete Receipt
+                        </button>
+                    : ""}
                     </div>
                     <div className="col-xs-12 col-lg-4">
                         <Breakdown receipt={receiptState.receipts[0]} />

@@ -1,10 +1,13 @@
 import React from "react";
 import RegisterModal from "../components/Modal/RegisterModal";
+import { useUserAuthContext } from "../utils/UserAuthState"
 
-const Home = () => {
-  function registerClick() {
-    // prompt model for sign up
-    console.log("register button works");
+const Home = (props) => {
+
+  const [userAuth, setUserAuth] = useUserAuthContext();
+
+  if (userAuth.isLoggedIn) {
+    props.history.push('/dashboard');
   }
 
   return (

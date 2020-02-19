@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 function ReceiptPreview(props) {
   // add functionality to show percentage of receipt filled
@@ -16,10 +17,10 @@ function ReceiptPreview(props) {
       <div className="receipt-preview">
         <h3>
           {props.value.label}
-          <span className="receipt-date">{props.value.date}</span>
+          <span className="receipt-date">{moment(props.value.date).format('M/DD')}</span>
         </h3>
         <hr />
-        <p className="receipt-total">{props.value.total}</p>
+        <p className="receipt-total">${props.value.total.toFixed(2)}</p>
 
         <table className="w-100">
           <tbody>

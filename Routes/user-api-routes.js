@@ -62,4 +62,11 @@ module.exports = function(app) {
       res.json(dbUser);
     });
   });
+
+  app.post('/api/users/login', function({body}, res) {
+    db.User.findOne({where: { user_name: body.user_name, password: body.password }})
+    .then(dbUser => {
+      res.json(dbUser);
+    });
+  });
 };
