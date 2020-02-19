@@ -4,16 +4,13 @@ import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 import NewReceiptModal from "../components/Modal/NewReceiptModal";
+import PlusReceiptModal from "../components/Modal/PlusReceiptModal";
 import { useUserAuthContext } from '../utils/UserAuthState';
 import moment from "moment";
 
 const Dashboard = (props) => {
   const [receiptState, dispatchReceiptState] = useReceiptContext();
   const [userAuth] = useUserAuthContext();
-
-  // const receiptClick = id => {
-  //   console.log("receipt button works");
-  // };
 
   function newReceiptClick() {
     console.log("hit");
@@ -90,9 +87,7 @@ const Dashboard = (props) => {
           <div className="container mt-5">
             <div className="row">
               <div className="d-none d-md-block col-md-6 col-lg-4">
-                <div className="add-receipt">
-                  <i className="fas fa-plus"></i>
-                </div>
+                <PlusReceiptModal></PlusReceiptModal>
               </div>
               {receiptState.receipts.map(receipt => (
                 <ReceiptPreview
