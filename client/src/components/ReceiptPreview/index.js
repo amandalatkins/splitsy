@@ -20,7 +20,7 @@ function ReceiptPreview(props) {
           <span className="receipt-date">{moment(props.value.date).format('M/DD')}</span>
         </h3>
         <hr />
-        <p className="receipt-total">{props.value.total}</p>
+        <p className="receipt-total">${props.value.total.toFixed(2)}</p>
 
         <table className="w-100">
           <tbody>

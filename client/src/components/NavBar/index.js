@@ -1,10 +1,14 @@
 import React from "react";
 import RegisterModal from "../Modal/RegisterModal";
 import LoginModal from "../Modal/LoginModal";
+import { useReceiptContext } from "../../utils/ReceiptState";
 import { useUserAuthContext } from "../../utils/UserAuthState";
+import moment from "moment";
 
 function NavBar() {
   // add functionality to show percentage of receipt filled
+
+  const [receiptState] = useReceiptContext();
 
   const [userAuth, setUserAuth] = useUserAuthContext();
 
@@ -19,13 +23,22 @@ function NavBar() {
       </a>
 
       { userAuth.isLoggedIn ?
-
-        <ol className="breadcrumb mr-auto">
-          <li className="breadcrumb-item active">
-            <a href="/dashboard">{userAuth.user.firstName ? userAuth.user.firstName : userAuth.user.userName}'s Dashboard</a>
-          </li>
-        </ol>
-
+           window.location.pathname === "/dashboard" ?
+           <ol className="breadcrumb mr-auto">
+                <li className="breadcrumb-item active">
+                  <a href="/dashboard">{userAuth.user.firstName ? userAuth.user.firstName : userAuth.user.userName}'s Dashboard</a>
+                </li>
+            </ol>
+          :
+          <ol className="breadcrumb mr-auto">
+              <li className="breadcrumb-item">
+                <a href="/dashboard">{userAuth.user.firstName ? userAuth.user.firstName : userAuth.user.userName}'s Dashboard</a>
+              </li>
+              <li className="breadcrumb-item active">
+                <a href="/dashboard" onClick={(e) => e.preventDefault()}>{receiptState.receipts.length ? receiptState.receipts[0].label + " " + moment(receiptState.receipts[0].date).format('M/DD') : ""}</a>
+              </li>
+          </ol>
+             
       : ""  }
 
       { userAuth.isLoggedIn ?
