@@ -40,11 +40,66 @@ function Receipt(props) {
     }
 
     function saveReceipt() {
-        API.updateReceipt(receiptId, { label: receiptLabel.current.value, date: receiptDate.current.value + " 00:00:00" })
-        .then(_ => { console.log(_); loadReceipt(receiptId) })
-        .catch(err => console.log(err));
-        
-        props.history.push('/receipt/'+receiptId);
+
+        var isValid = validateTotals();
+
+        if (isValid[0]) {
+
+            API.updateReceipt(receiptId, { label: receiptLabel.current.value, date: receiptDate.current.value + " 00:00:00" })
+            .then(_ => { 
+                console.log(_); loadReceipt(receiptId) })
+            .catch(err => console.log(err));
+            
+            props.history.push('/receipt/'+receiptId);
+
+        } else {
+            alert(isValid[1]);
+        }
+    }
+
+    function validateTotals() {
+
+        let receipt = receiptState.receipts[0];
+
+        var isSubValid = false;
+        var isTotValid = false;
+
+        var calcSubtotal = parseFloat(0);
+        receipt.Items.forEach(({ price }) => {
+            calcSubtotal += parseFloat(price);
+        });
+
+        if (calcSubtotal.toFixed(2) === receipt.subtotal.toFixed(2)) {
+            isSubValid = true;
+        }
+
+        var tax = parseFloat(receipt.subtotal) * parseFloat(receipt.tax);
+        var tip = parseFloat(receipt.subtotal) * parseFloat(receipt.tip);
+
+        if (parseFloat(receipt.subtotal + tax + tip).toFixed(2) === receipt.total.toFixed(2) ) {
+            isTotValid = true;
+        }
+
+        if (!isTotValid || !isSubValid) {
+
+            var message = ""
+
+            if (!isSubValid) {
+                message += "Subtotal does not match items total. Try $"+calcSubtotal.toFixed(2)+". \n";
+            }
+
+            if (!isTotValid) {
+                message += receipt.total.toFixed(2)+ " Total does not match Subtotal + Tax + Tip. Try $" + parseFloat(receipt.subtotal + tax + tip).toFixed(2) + ".";
+            }
+
+            return [false, message];
+            
+        } else {
+            return [true];
+        }
+
+
+
     }
 
     function toggleAddItem() {
