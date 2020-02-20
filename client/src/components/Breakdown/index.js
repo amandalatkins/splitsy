@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
+var Chart = require("chart.js");
+var ctx = "myChart";
 
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
@@ -54,38 +56,13 @@ function Breakdown(props) {
         }
       }
 
-      // if (itemsState[0]) {
-      //   for (let j = 0; j < itemsState[0].length; j++) {
-      //     if (itemsState[0][j].Payers) {
-      //       for (let k = 0; k < itemsState[0][j].Payers.length; k++) {
-      //         if (itemsState[0][j].Payers[k].id === payer.id) {
-      //           counter++;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
       portionPay = toFloat / counter;
       total = total + portionPay;
     }
+    API.updatePayer(payer.id, { amountDue: total });
+    makeChart();
     return total;
   }
-  // function totalCalculator(payer) {
-  //   let total = 0;
-
-  //   for (let i = 0; i < payer.Items.length; i++) {
-  //     let toFloat = parseFloat(payer.Items[i].price);
-  //     let portionPay;
-
-  //     API.getItemById(payer.Items[i].id).then(res => {
-  //       portionPay = toFloat / res.data.Payers.length;
-
-  //       total = total + portionPay;
-  //       console.log(total);
-  //     });
-  //   }
-  //   return total;
-  // }
 
   function paid(payer) {
     props.reload(props.receipt.id);
@@ -99,13 +76,45 @@ function Breakdown(props) {
 
     API.updatePayer(payer.id, payerUpdate).then(res => {
       console.log("worked");
+      console.log(payersState);
     });
+  }
+
+  function makeChart() {
+    var myPieChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        datasets: [
+          {
+            data: getPayersAmountDue(),
+            backgroundColor: ["red", "yellow", "blue", "green"]
+          }
+        ],
+        labels: getPayersNames()
+      }
+    });
+  }
+
+  function getPayersNames() {
+    let names = [];
+    for (let i = 0; i < payersState.length; i++) {
+      names.push(payersState[i].name);
+    }
+    return names;
+  }
+
+  function getPayersAmountDue() {
+    let amountDue = [];
+    for (let i = 0; i < payersState.length; i++) {
+      amountDue.push(payersState[i].amountDue);
+    }
+    return amountDue;
   }
 
   return (
     <div className="breakdown h-100">
       <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
-      <img src="img/pie.png" className="breakdown-graph mx-auto" />
+      <canvas id="myChart" width="400" height="400"></canvas>
       <table className="table w-100">
         <tbody>
           {payersState.map(payer => (
@@ -135,10 +144,10 @@ function Breakdown(props) {
               <td className="text-right">{totalCalculator(payer)}</td>
             </tr>
           ))}
-          <tr>
+          {/* <tr>
             <td className="text-left">Tot</td>
             <td className="text-right"> yo</td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </div>

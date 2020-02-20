@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
+import { useReceiptContext } from "../../utils/ReceiptState";
+import API from "../../utils/API";
 
 function ReceiptPreview(props) {
-  // add functionality to show percentage of receipt filled
+  const [barState, setBarState] = useState(0);
+  const [receiptState, receiptStateDispatch] = useReceiptContext();
+
+  useEffect(() => {
+    if (props.value) {
+      getProgess();
+    }
+  }, [receiptState]);
+
+  function getProgess() {
+    API.getPayersForReceipt(props.value.id).then(res => {
+      let paid = 0;
+      for (let i = 0; i < res.data.length; i++) {
+        if (res.data[i].paid) {
+          paid = paid + res.data[i].amountDue;
+        }
+      }
+      let percent = 100 * (paid / props.value.total);
+      console.log(percent);
+      setBarState(percent);
+      console.log(barState);
+    });
+  }
 
   console.log(props);
 
@@ -17,7 +41,9 @@ function ReceiptPreview(props) {
       <div className="receipt-preview">
         <h3>
           {props.value.label}
-          <span className="receipt-date">{moment(props.value.date).format('M/DD')}</span>
+          <span className="receipt-date">
+            {moment(props.value.date).format("M/DD")}
+          </span>
         </h3>
         <hr />
         <p className="receipt-total">${props.value.total.toFixed(2)}</p>
@@ -30,7 +56,9 @@ function ReceiptPreview(props) {
                   <div
                     className="progress-bar progress-bar-striped bg-orange"
                     role="progressbar"
-                    style={{ width: "65%" }}
+                    style={{
+                      width: barState + "%"
+                    }}
                     aria-valuenow="80"
                     aria-valuemin="0"
                     aria-valuemax="100"
