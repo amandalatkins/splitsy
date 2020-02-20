@@ -89,7 +89,7 @@ function Receipt(props) {
             }
 
             if (!isTotValid) {
-                message += receipt.total.toFixed(2)+ " Total does not match Subtotal + Tax + Tip. Try $" + parseFloat(receipt.subtotal + tax + tip).toFixed(2) + ".";
+                message += "Total does not match Subtotal + Tax + Tip. Try $" + parseFloat(receipt.subtotal + tax + tip).toFixed(2) + ".";
             }
 
             return [false, message];
