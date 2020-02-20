@@ -24,7 +24,6 @@ function ReceiptPreview(props) {
       let percent = 100 * (paid / props.value.total);
       console.log(percent);
       setBarState(percent);
-      console.log(barState);
     });
   }
 
@@ -50,25 +49,47 @@ function ReceiptPreview(props) {
 
         <table className="w-100">
           <tbody>
-            <tr>
-              <td className="align-middle receipt-progress">
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped bg-orange"
-                    role="progressbar"
-                    style={{
-                      width: barState + "%"
-                    }}
-                    aria-valuenow="80"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </td>
-              <td className="align-middle receipt-icon text-right text-orange">
-                <i className="fas fa-times-circle"></i>
-              </td>
-            </tr>
+            {barState === 100 ? (
+              <tr>
+                <td class="align-middle receipt-progress">
+                  <div class="progress">
+                    <div
+                      class="progress-bar progress-bar-striped bg-teal"
+                      role="progressbar"
+                      style={{
+                        width: barState + "%"
+                      }}
+                      aria-valuenow="80"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                </td>
+                <td class="align-middle receipt-icon text-teal text-right">
+                  <i class="fas fa-check-circle"></i>
+                </td>
+              </tr>
+            ) : (
+              <tr>
+                <td className="align-middle receipt-progress">
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-bar-striped bg-orange"
+                      role="progressbar"
+                      style={{
+                        width: barState + "%"
+                      }}
+                      aria-valuenow="80"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                </td>
+                <td className="align-middle receipt-icon text-right text-orange">
+                  <i className="fas fa-times-circle"></i>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
