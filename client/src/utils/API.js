@@ -25,6 +25,10 @@ export default {
   createReceipt: function(postData) {
     return axios.post("/api/receipts", postData);
   },
+  // Create receipt with Image
+  createReceiptImage: function(postData) {
+    return axios.post("/api/upload", postData, { headers: { 'content-type': 'multipart/form-data' } });
+  },
   // Update receipt
   updateReceipt: function(id, postData) {
     return axios.put("/api/receipts/" + id, postData);

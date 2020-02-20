@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import API from "../../utils/API";
 import { useUserAuthContext } from '../../utils/UserAuthState';
@@ -15,6 +15,8 @@ const NewReceiptModal = props => {
 
   const [userAuth] = useUserAuthContext();
 
+  const fileUpload = useRef();
+
   useEffect(() => {
     setFormState({ ...formState, date: moment().format('YYYY-MM-DD') });
   }, [])
@@ -26,16 +28,43 @@ const NewReceiptModal = props => {
 
   const handleFormSubmit = event => {
     event.preventDefault();
-    let receipt = {
-      label: formState.label,
-      date: formState.date + " 00:00:00",
-      UserId: userAuth.user.id
-    };
 
-    API.createReceipt(receipt).then(res => {
-      window.location.href = "/receipt/" + res.data.id + "/edit";
-    });
+    console.log("form submitted");
+
+    console.log(formState);
+
+    if (formState.receiptImage) {
+
+      console.log(formState.receiptImage);
+
+      var formData = new FormData();
+
+      formData.append('label',formState.label);
+      formData.append('date', formState.date);
+      formData.append('receiptImage',formState.receiptImage);
+
+      API.createReceiptImage(formData)
+      .then(results => console.log(results))
+      .catch(err => console.log(err));
+
+    } else {
+
+      let receipt = {
+        label: formState.label,
+        date: formState.date + " 00:00:00",
+        UserId: userAuth.user.id
+      };
+
+      API.createReceipt(receipt).then(res => {
+        window.location.href = "/receipt/" + res.data.id + "/edit";
+      });
+
+    }
   };
+
+  function handleFileUploadChange(e) {
+    setFormState({ ...formState, receiptImage: e.target.files[0]});
+  }
 
   const toggle = () => {
     setModal(!modal);
@@ -49,7 +78,7 @@ const NewReceiptModal = props => {
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Add New Receipt</ModalHeader>
         <ModalBody>
-          <form>
+          <form id="newReceipt" onSubmit={handleFormSubmit}>
               <div className="form-group">
                 <label>What's your receipt for?</label>
                 <input
@@ -70,13 +99,22 @@ const NewReceiptModal = props => {
                   onChange={handleInputChange}
                 />
               </div>
+              <div className="form-group">
+                <label>Select a file to upload:</label>
+                <input 
+                  type="file" 
+                  className="form-control"
+                  name="receiptImage"
+                  onChange={handleFileUploadChange}
+                />
+              </div>
           </form>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
-          <Button color="primary" onClick={handleFormSubmit}>
+          <Button color="primary" type="submit" form="newReceipt">
             Create Receipt{" "}
           </Button>{" "}
         </ModalFooter>

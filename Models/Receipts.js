@@ -34,6 +34,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
+    image: {
+      type: DataTypes.STRING
+    },
     createdAt: {
       type: DataTypes.DATE,
       get() {
