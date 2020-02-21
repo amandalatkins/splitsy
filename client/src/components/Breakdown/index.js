@@ -19,11 +19,11 @@ function Breakdown(props) {
   const [itemsState, setItemsState] = useState([]);
   const [totalPayedState, setTotalPayedState] = useState(0);
 
-  // useEffect(() => {
-  //   if (props.receipt) {
-  //     loadBreakdown();
-  //   }
-  // }, [props.receipt]);
+  useEffect(() => {
+    if (receiptState.payers[0]) {
+      getTotalPayed();
+    }
+  }, [receiptState]);
 
   // useEffect(() => {
   //   if (props.receipt) {
@@ -136,11 +136,12 @@ function Breakdown(props) {
 
   function getTotalPayed() {
     let paid = 0;
-    for (let i = 0; i < payersState.length; i++) {
-      if (payersState[i].paid) {
-        paid = paid + parseInt(payersState[i].amountDue);
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      if (receiptState.payers[0][i].paid) {
+        paid = paid + parseInt(receiptState.payers[0][i].amountDue);
       }
     }
+    console.log(paid);
     setTotalPayedState(paid);
   }
 
