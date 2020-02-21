@@ -4,15 +4,6 @@ import API from "../../utils/API";
 var Chart = require("chart.js");
 var ctx = "myChart";
 
-const getPayers = async payersList => {
-  const finalArray = [];
-  for (let i = 0; i < payersList.length; i++) {
-    const { data } = await API.getPayerById(payersList[i].id);
-    finalArray.push(data);
-  }
-  return finalArray;
-};
-
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
   const [payersState, setPayersState] = useState([]);
@@ -25,36 +16,6 @@ function Breakdown(props) {
       getTotalPayed();
     }
   }, [receiptState]);
-
-  // useEffect(() => {
-  //   if (props.receipt) {
-  //     loadItems();
-  //     // getTotalPayed();
-  //   }
-  // }, [receiptState]);
-
-  async function loadBreakdown() {
-    let sortedPayers = props.receipt.Payers.sort();
-    const payers = await getPayers(sortedPayers);
-    setPayersState(payers);
-
-    API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
-      setItemsState(itemsState => {
-        return [...itemsState, res.data];
-      });
-    });
-    // loadItems();
-    getTotalPayed();
-  }
-
-  // function loadItems() {
-  //   API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
-  //     receiptStateDispatch({
-  //       type: "setItems",
-  //       items: [res.data]
-  //     });
-  //   });
-  // }
 
   function totalCalculator(payer) {
     let total = 0;
@@ -90,11 +51,6 @@ function Breakdown(props) {
     API.updatePayer(payer.id, payerUpdate).then(res => {
       props.reload(props.receipt.id);
     });
-    // setPayersState(prevState => {
-    //   const newState = [...prevState];
-    //   newState[index].paid = !prevState[index].paid;
-    //   return newState;
-    // });
   }
 
   function makeChart() {
