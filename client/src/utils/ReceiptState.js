@@ -10,6 +10,12 @@ const reducer = (state, action) => {
               ...state,
               receipts: action.receipts
           }
+        case "loadReceiptsAndPayer":
+            return {
+                ...state,
+                currentPayer: action.payerId,
+                receipts: action.receipts
+        }
         case "setCurrentPayer":
             return {
                 ...state,

@@ -25,22 +25,81 @@ function Receipt(props) {
         loadReceipt(receiptId);
     }, []);
 
-    function loadReceipt(receiptId) {
+    function loadReceipt(receiptId, payerId) {
         console.log("loading receipt");
         API.getReceiptById(receiptId)
         .then(receipt => {
-            console.log(receipt);
-            receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data] })
+            if (payerId) {
+                receiptStateDispatch({ type: "loadReceiptsAndPayer", receipts: [receipt.data], payerId })
+            } else {
+                receiptStateDispatch({ type: "loadReceipts", receipts: [receipt.data] })
+            }
+            
         })
         .catch(err => console.log(err));
     }
 
     function saveReceipt() {
-        API.updateReceipt(receiptId, { label: receiptLabel.current.value, date: receiptDate.current.value + " 00:00:00" })
-        .then(_ => { console.log(_); loadReceipt(receiptId) })
-        .catch(err => console.log(err));
-        
-        props.history.push('/receipt/'+receiptId);
+
+        var isValid = validateTotals();
+
+        if (isValid[0]) {
+
+            API.updateReceipt(receiptId, { label: receiptLabel.current.value, date: receiptDate.current.value + " 00:00:00" })
+            .then(_ => { 
+                console.log(_); loadReceipt(receiptId) })
+            .catch(err => console.log(err));
+            
+            props.history.push('/receipt/'+receiptId);
+
+        } else {
+            alert(isValid[1]);
+        }
+    }
+
+    function validateTotals() {
+
+        let receipt = receiptState.receipts[0];
+
+        var isSubValid = false;
+        var isTotValid = false;
+
+        var calcSubtotal = parseFloat(0);
+        receipt.Items.forEach(({ price }) => {
+            calcSubtotal += parseFloat(price);
+        });
+
+        if (calcSubtotal.toFixed(2) === receipt.subtotal.toFixed(2)) {
+            isSubValid = true;
+        }
+
+        var tax = parseFloat(receipt.subtotal) * parseFloat(receipt.tax);
+        var tip = parseFloat(receipt.subtotal) * parseFloat(receipt.tip);
+
+        if (parseFloat(receipt.subtotal + tax + tip).toFixed(2) === receipt.total.toFixed(2) ) {
+            isTotValid = true;
+        }
+
+        if (!isTotValid || !isSubValid) {
+
+            var message = ""
+
+            if (!isSubValid) {
+                message += "Subtotal does not match items total. Try $"+calcSubtotal.toFixed(2)+". \n";
+            }
+
+            if (!isTotValid) {
+                message += "Total does not match Subtotal + Tax + Tip. Try $" + parseFloat(receipt.subtotal + tax + tip).toFixed(2) + ".";
+            }
+
+            return [false, message];
+            
+        } else {
+            return [true];
+        }
+
+
+
     }
 
     function toggleAddItem() {
@@ -130,7 +189,8 @@ function Receipt(props) {
                                                 <td className="receipt-item-label text-left">
                                                     <input className="form-control" type="text" ref={itemName}/>
                                                     <p className="mt-2">
-                                                        <button className="btn btn-secondary btn-sm mr-1" onClick={() => addNewItem()}>Save</button>
+                                                        <button className="btn btn-primary btn-sm mr-1" onClick={() => addNewItem()}>Save</button>
+                                                        <button className="btn btn-secondary btn-sm mr-1" onClick={toggleAddItem}>Cancel</button>
                                                     </p>
                                                 </td>
                                                 <td className="receipt-item-price text-right"><input className="form-control" type="text" ref={itemPrice}/></td>
@@ -139,8 +199,9 @@ function Receipt(props) {
                                         : "" }
 
                                         <tr className="receipt-item">
-                                            <td className="receipt-item-label text-left"><button className="btn btn-sm btn-secondary" onClick={toggleAddItem}>Add Item</button></td>
-                                            <td className="receipt-item-price text-right"></td>
+                                            <td colSpan="2" className="receipt-item-label text-center">
+                                                <button className="btn btn-sm btn-secondary w-50" onClick={toggleAddItem}>Add Item</button>
+                                            </td>
                                         </tr>
 
                                         {receiptState.receipts.length ? 
@@ -207,7 +268,7 @@ function Receipt(props) {
                                                 item={{ name: "Total", price: receiptState.receipts[0].total, id: receiptState.receipts[0].id }} 
                                                 isTotalItem={true} 
                                             />
-                                        : "<tr><td></td></tr>" }
+                                        : <tr><td></td></tr> }
                                     </tbody>
 
                                 }
