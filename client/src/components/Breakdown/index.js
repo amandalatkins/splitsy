@@ -4,15 +4,6 @@ import API from "../../utils/API";
 var Chart = require("chart.js");
 var ctx = "myChart";
 
-const getPayers = async payersList => {
-  const finalArray = [];
-  for (let i = 0; i < payersList.length; i++) {
-    const { data } = await API.getPayerById(payersList[i].id);
-    finalArray.push(data);
-  }
-  return finalArray;
-};
-
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
   const [payersState, setPayersState] = useState([]);
@@ -20,53 +11,36 @@ function Breakdown(props) {
   const [totalPayedState, setTotalPayedState] = useState(0);
 
   useEffect(() => {
-    if (props.receipt) {
-      loadBreakdown();
+    if (receiptState.payers[0]) {
+      makeChart();
+      getTotalPayed();
     }
   }, [receiptState]);
 
-  async function loadBreakdown() {
-    let sortedPayers = props.receipt.Payers.sort();
-    const payers = await getPayers(sortedPayers);
-    setPayersState(payers);
-    loadItems();
-    getTotalPayed();
-  }
-
-  function loadItems() {
-    setItemsState([]);
-    API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
-      setItemsState(itemsState => {
-        return [...itemsState, res.data];
-      });
-    });
-  }
-
   function totalCalculator(payer) {
     let total = 0;
-
     for (let i = 0; i < payer.Items.length; i++) {
       let toFloat = parseFloat(payer.Items[i].price);
       let portionPay;
       let counter = 0;
 
-      if (itemsState[0]) {
-        for (let j = 0; j < itemsState[0].length; j++) {
-          if (itemsState[0][j].id === payer.Items[i].id) {
-            counter = itemsState[0][j].Payers.length;
+      if (receiptState.items[0]) {
+        for (let j = 0; j < receiptState.items[0].length; j++) {
+          if (receiptState.items[0][j].id === payer.Items[i].id) {
+            counter = receiptState.items[0][j].Payers.length;
           }
         }
       }
 
       portionPay = toFloat / counter;
       total = total + portionPay;
+      total = parseFloat(total).toFixed(2);
     }
-    API.updatePayer(payer.id, { amountDue: total });
-    makeChart();
+    API.updatePayer(payer.id, { amountDue: total }).then(res => {});
     return total;
   }
 
-  function paid(payer) {
+  function paid(payer, index) {
     let payerUpdate = {
       paid: true
     };
@@ -75,19 +49,26 @@ function Breakdown(props) {
     }
 
     API.updatePayer(payer.id, payerUpdate).then(res => {
-      // console.log(payersState);
       props.reload(props.receipt.id);
-      // console.log(payersState);
     });
   }
 
   function makeChart() {
+    let names = [];
+    let amountDue = [];
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      names.push(receiptState.payers[0][i].name);
+    }
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      amountDue.push(receiptState.payers[0][i].amountDue);
+    }
+
     var myPieChart = new Chart(ctx, {
       type: "pie",
       data: {
         datasets: [
           {
-            data: getPayersAmountDue(),
+            data: amountDue,
             backgroundColor: [
               "red",
               "yellow",
@@ -98,39 +79,37 @@ function Breakdown(props) {
             ]
           }
         ],
-        labels: getPayersNames()
+        labels: names
       }
     });
   }
 
   function getPayersNames() {
-    console.log(payersState);
     let names = [];
-    for (let i = 0; i < payersState.length; i++) {
-      names.push(payersState[i].name);
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      names.push(receiptState.payers[0][i].name);
     }
     return names;
   }
 
   function getPayersAmountDue() {
     let amountDue = [];
-    for (let i = 0; i < payersState.length; i++) {
-      amountDue.push(payersState[i].amountDue);
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      amountDue.push(receiptState.payers[0][i].amountDue);
     }
+    console.log(amountDue);
     return amountDue;
   }
 
   function getTotalPayed() {
-    console.log("Gette");
-
     let paid = 0;
-    for (let i = 0; i < payersState.length; i++) {
-      console.log("adasd");
-      if (payersState[i].paid) {
-        paid = paid + parseInt(payersState[i].amountDue);
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      if (receiptState.payers[0][i].paid) {
+        paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
       }
     }
-    setTotalPayedState(paid);
+    console.log(paid);
+    setTotalPayedState(parseFloat(paid).toFixed(2));
   }
 
   return (
@@ -139,36 +118,42 @@ function Breakdown(props) {
       <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
-          {payersState.map(payer => (
-            <tr key={payer.id}>
-              <td className="text-left">
-                {payer.name}{" "}
-                {payer.paid === true ? (
-                  <span
-                    onClick={() => {
-                      paid(payer);
-                    }}
-                    className="badge badge-success"
-                  >
-                    Paid
-                  </span>
-                ) : (
-                  <span
-                    onClick={() => {
-                      paid(payer);
-                    }}
-                    className="badge badge-warning"
-                  >
-                    Not Paid
-                  </span>
-                )}
-              </td>
-              <td className="text-right">{totalCalculator(payer)}</td>
-            </tr>
-          ))}
+          {receiptState.payers[0]
+            ? receiptState.payers[0].map((payer, index) => (
+                <tr key={payer.id}>
+                  <td className="text-left">
+                    {payer.name}{" "}
+                    {payer.paid === true ? (
+                      <span
+                        onClick={() => {
+                          paid(payer, index);
+                        }}
+                        className="badge badge-success"
+                      >
+                        Paid
+                      </span>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          paid(payer, index);
+                        }}
+                        className="badge badge-warning"
+                      >
+                        Not Paid
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-right">${totalCalculator(payer)}</td>
+                </tr>
+              ))
+            : ""}
           <tr>
-            <td className="text-left">Total Paid:</td>
-            <td className="text-right">{totalPayedState}</td>
+            <td className="text-left" style={{ fontWeight: "bold" }}>
+              Total Paid:
+            </td>
+            <td className="text-right" style={{ fontWeight: "bold" }}>
+              ${totalPayedState}
+            </td>
           </tr>
         </tbody>
       </table>

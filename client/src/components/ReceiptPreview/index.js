@@ -31,16 +31,19 @@ function ReceiptPreview(props) {
 
   return (
     <div
-      className="col-xs-12 col-md-6 col-lg-4"
+      className="col-xs-12 col-md-6 col-lg-4 "
       id={props.value.id}
       onClick={() => {
         props.onClick(props.value.id);
       }}
     >
-      <div className="receipt-preview">
+      <div className="receipt-preview thePreview">
         <h5>
-          {props.value.label.substring(0,20).trim()}{props.value.label.length > 20 ? "..." : "" }
-          <span className="receipt-date">{moment(props.value.date).format('M/DD')}</span>
+          {props.value.label.substring(0, 20).trim()}
+          {props.value.label.length > 20 ? "..." : ""}
+          <span className="receipt-date">
+            {moment(props.value.date).format("M/DD")}
+          </span>
         </h5>
 
         <hr />
