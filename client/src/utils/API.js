@@ -25,6 +25,16 @@ export default {
   createReceipt: function(postData) {
     return axios.post("/api/receipts", postData);
   },
+  // Create receipt with Image
+  uploadImageAndOCR: function(postData) {
+    return axios.post("/api/upload", postData, { headers: { 'content-type': 'multipart/form-data' } });
+  },
+  ocrImage: function(postData) {
+    return axios.post("/api/ocr", postData);
+  },
+  parseOcrData: function(postData) {
+    return axios.post("/api/parse", postData);
+  },
   // Update receipt
   updateReceipt: function(id, postData) {
     return axios.put("/api/receipts/" + id, postData);
