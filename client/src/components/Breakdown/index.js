@@ -19,41 +19,53 @@ function Breakdown(props) {
   const [itemsState, setItemsState] = useState([]);
   const [totalPayedState, setTotalPayedState] = useState(0);
 
-  useEffect(() => {
-    if (props.receipt) {
-      loadBreakdown();
-    }
-  }, [receiptState]);
+  // useEffect(() => {
+  //   if (props.receipt) {
+  //     loadBreakdown();
+  //   }
+  // }, [props.receipt]);
+
+  // useEffect(() => {
+  //   if (props.receipt) {
+  //     loadItems();
+  //     // getTotalPayed();
+  //   }
+  // }, [receiptState]);
 
   async function loadBreakdown() {
     let sortedPayers = props.receipt.Payers.sort();
     const payers = await getPayers(sortedPayers);
     setPayersState(payers);
-    loadItems();
-    getTotalPayed();
-  }
 
-  function loadItems() {
-    setItemsState([]);
     API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
       setItemsState(itemsState => {
         return [...itemsState, res.data];
       });
     });
+    // loadItems();
+    getTotalPayed();
   }
+
+  // function loadItems() {
+  //   API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
+  //     receiptStateDispatch({
+  //       type: "setItems",
+  //       items: [res.data]
+  //     });
+  //   });
+  // }
 
   function totalCalculator(payer) {
     let total = 0;
-
     for (let i = 0; i < payer.Items.length; i++) {
       let toFloat = parseFloat(payer.Items[i].price);
       let portionPay;
       let counter = 0;
 
-      if (itemsState[0]) {
-        for (let j = 0; j < itemsState[0].length; j++) {
-          if (itemsState[0][j].id === payer.Items[i].id) {
-            counter = itemsState[0][j].Payers.length;
+      if (receiptState.items[0]) {
+        for (let j = 0; j < receiptState.items[0].length; j++) {
+          if (receiptState.items[0][j].id === payer.Items[i].id) {
+            counter = receiptState.items[0][j].Payers.length;
           }
         }
       }
@@ -62,11 +74,11 @@ function Breakdown(props) {
       total = total + portionPay;
     }
     API.updatePayer(payer.id, { amountDue: total });
-    makeChart();
+    // makeChart();
     return total;
   }
 
-  function paid(payer) {
+  function paid(payer, index) {
     let payerUpdate = {
       paid: true
     };
@@ -75,57 +87,56 @@ function Breakdown(props) {
     }
 
     API.updatePayer(payer.id, payerUpdate).then(res => {
-      // console.log(payersState);
       props.reload(props.receipt.id);
-      // console.log(payersState);
     });
+    // setPayersState(prevState => {
+    //   const newState = [...prevState];
+    //   newState[index].paid = !prevState[index].paid;
+    //   return newState;
+    // });
   }
 
-  function makeChart() {
-    var myPieChart = new Chart(ctx, {
-      type: "pie",
-      data: {
-        datasets: [
-          {
-            data: getPayersAmountDue(),
-            backgroundColor: [
-              "red",
-              "yellow",
-              "blue",
-              "green",
-              "orange",
-              "cyan"
-            ]
-          }
-        ],
-        labels: getPayersNames()
-      }
-    });
-  }
+  // function makeChart() {
+  //   var myPieChart = new Chart(ctx, {
+  //     type: "pie",
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: getPayersAmountDue(),
+  //           backgroundColor: [
+  //             "red",
+  //             "yellow",
+  //             "blue",
+  //             "green",
+  //             "orange",
+  //             "cyan"
+  //           ]
+  //         }
+  //       ],
+  //       labels: getPayersNames()
+  //     }
+  //   });
+  // }
 
-  function getPayersNames() {
-    console.log(payersState);
-    let names = [];
-    for (let i = 0; i < payersState.length; i++) {
-      names.push(payersState[i].name);
-    }
-    return names;
-  }
+  // function getPayersNames() {
+  //   let names = [];
+  //   for (let i = 0; i < payersState.length; i++) {
+  //     names.push(payersState[i].name);
+  //   }
+  //   return names;
+  // }
 
-  function getPayersAmountDue() {
-    let amountDue = [];
-    for (let i = 0; i < payersState.length; i++) {
-      amountDue.push(payersState[i].amountDue);
-    }
-    return amountDue;
-  }
+  // function getPayersAmountDue() {
+  //   let amountDue = [];
+  //   for (let i = 0; i < payersState.length; i++) {
+  //     amountDue.push(payersState[i].amountDue);
+  //   }
+  //   return amountDue;
+  // }
 
   function getTotalPayed() {
-    console.log("Gette");
-
     let paid = 0;
     for (let i = 0; i < payersState.length; i++) {
-      console.log("adasd");
       if (payersState[i].paid) {
         paid = paid + parseInt(payersState[i].amountDue);
       }
@@ -136,36 +147,38 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
       <table className="table w-100">
         <tbody>
-          {payersState.map(payer => (
-            <tr key={payer.id}>
-              <td className="text-left">
-                {payer.name}{" "}
-                {payer.paid === true ? (
-                  <span
-                    onClick={() => {
-                      paid(payer);
-                    }}
-                    className="badge badge-success"
-                  >
-                    Paid
-                  </span>
-                ) : (
-                  <span
-                    onClick={() => {
-                      paid(payer);
-                    }}
-                    className="badge badge-warning"
-                  >
-                    Not Paid
-                  </span>
-                )}
-              </td>
-              <td className="text-right">{totalCalculator(payer)}</td>
-            </tr>
-          ))}
+          {receiptState.payers[0]
+            ? receiptState.payers[0].map((payer, index) => (
+                <tr key={payer.id}>
+                  <td className="text-left">
+                    {payer.name}{" "}
+                    {payer.paid === true ? (
+                      <span
+                        onClick={() => {
+                          paid(payer, index);
+                        }}
+                        className="badge badge-success"
+                      >
+                        Paid
+                      </span>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          paid(payer, index);
+                        }}
+                        className="badge badge-warning"
+                      >
+                        Not Paid
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-right">{totalCalculator(payer)}</td>
+                </tr>
+              ))
+            : ""}
           <tr>
             <td className="text-left">Total Paid:</td>
             <td className="text-right">{totalPayedState}</td>
