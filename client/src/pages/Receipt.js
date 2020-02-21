@@ -285,7 +285,9 @@ function Receipt(props) {
                     : ""}
                     </div>
                     <div className="col-xs-12 col-lg-4">
-                        <Breakdown receipt={receiptState.receipts[0]} />
+                        <Breakdown 
+                          receipt={receiptState.receipts[0]} 
+                          reload={loadReceipt}/>
                     </div>
                 </div>
             </div>
