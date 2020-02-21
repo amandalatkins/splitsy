@@ -38,12 +38,11 @@ function ReceiptPreview(props) {
       }}
     >
       <div className="receipt-preview">
-        <h3>
-          {props.value.label}
-          <span className="receipt-date">
-            {moment(props.value.date).format("M/DD")}
-          </span>
-        </h3>
+        <h5>
+          {props.value.label.substring(0,20).trim()}{props.value.label.length > 20 ? "..." : "" }
+          <span className="receipt-date">{moment(props.value.date).format('M/DD')}</span>
+        </h5>
+
         <hr />
         <p className="receipt-total">${props.value.total.toFixed(2)}</p>
 

@@ -5,7 +5,7 @@ import { is } from "bluebird";
 
 function ReceiptItemEdit(props) {
 
-    // const [receiptState, receiptStateDispatch] = useReceiptContext();
+    const [receiptState] = useReceiptContext();
 
     const [editItem, setEditItem] = useState(false);
 
@@ -13,10 +13,6 @@ function ReceiptItemEdit(props) {
 
     const itemName = useRef();
     const itemPrice = useRef();
-
-    // useEffect(()=>{
-    //     loadItem();
-    // },[]);
 
     function updateItem() {
         API.updateItem(item.id, { name: itemName.current.value, price: itemPrice.current.value })
@@ -55,6 +51,26 @@ function ReceiptItemEdit(props) {
         setEditItem(false);
     }
 
+    function autoCalculate(type) {
+
+        var receipt = receiptState.receipts[0];
+
+        switch (type) {
+            case "Total":
+                var tax = parseFloat(receipt.subtotal) * parseFloat(receipt.tax);
+                var tip = parseFloat(receipt.subtotal) * parseFloat(receipt.tip);
+                return itemPrice.current.value = parseFloat(receipt.subtotal + tax + tip).toFixed(2);
+            case "Subtotal":
+                var calcSubtotal = parseFloat(0);
+                receipt.Items.forEach(({ price }) => {
+                    calcSubtotal += parseFloat(price);
+                });
+                itemPrice.current.value = calcSubtotal;
+            default:
+                return "Not an option.";
+        }
+    }
+
     return (
         <tr className={isTotalItem ? "receipt-item receipt-tally" : "receipt-item"} onClick={() => setEditItem(true)}>
             <td className="receipt-item-label">
@@ -69,7 +85,9 @@ function ReceiptItemEdit(props) {
                             <input type="text" className="form-control" defaultValue={item.name} ref={itemName}/>
                         : 
                             item.name === "Total" ?
-                                <h4>{item.name}</h4>
+                                <h4>                              
+                                    {item.name}
+                                </h4>
                             :
                                 <p>{item.name}</p>
                         }
@@ -81,7 +99,7 @@ function ReceiptItemEdit(props) {
                                 </p>
                             : 
                                 <p className="mt-2">
-                                    <button className="btn btn-secondary btn-sm mr-1" onClick={() => updateTotalItem(item.name)}>Save</button>
+                                    
                                 </p>
                             }
                     </div>
@@ -100,7 +118,13 @@ function ReceiptItemEdit(props) {
                     
                 :
                     <div>
-                        <input type="text" className="form-control" defaultValue={item.name === "Tax" || item.name === "Tip" ? (item.price*subTotal).toFixed(2) : item.price.toFixed(2)} ref={itemPrice} onKeyDown={(e) => onlyAllowNumbers(e) }/>
+                        <div class="mb-1">
+                            <input type="text" className="form-control" defaultValue={item.name === "Tax" || item.name === "Tip" ? (item.price*subTotal).toFixed(2) : item.price.toFixed(2)} ref={itemPrice} onKeyDown={(e) => onlyAllowNumbers(e) }/>
+                        </div>
+                        { item.name === "Total" || item.name === "Subtotal" ?
+                        <button className="btn btn-sm btn-secondary mr-1" onClick={() => autoCalculate(item.name)} title={"Automatically calculate the "+item.name.toLowerCase()}><i class="fas fa-calculator"></i></button>
+                        : "" }
+                        <button className="btn btn-secondary btn-sm" onClick={() => updateTotalItem(item.name)}>Save</button>
                     </div>
                 }
 
