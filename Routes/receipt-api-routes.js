@@ -1,11 +1,11 @@
 var db = require("../models");
-const multer = require("multer");
+const multer = require("./node_modules/multer");
 const upload = multer({ dest: "uploads/" });
 const path = require("path");
 const fs = require('fs');
-const axios = require("axios");
-require("dotenv").config();
-const jimp = require("jimp");
+const axios = require("./node_modules/axios");
+require("./node_modules/dotenv").config();
+const jimp = require("./node_modules/jimp");
 
 module.exports = function(app) {
   //get all receipts
