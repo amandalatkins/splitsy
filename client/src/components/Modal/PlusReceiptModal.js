@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import API from "../../utils/API";
-import { useUserAuthContext } from '../../utils/UserAuthState';
+import { useUserAuthContext } from "../../utils/UserAuthState";
 import moment from "moment";
 
 const PlusReceiptModal = props => {
@@ -40,33 +40,33 @@ const PlusReceiptModal = props => {
 
   return (
     <div onClick={toggle}>
-      <div className="add-receipt">
-        <i className="fas fa-plus"></i>
+      <div className="add-receipt ">
+        <i className="fas fa-plus "></i>
       </div>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Add New Receipt</ModalHeader>
         <ModalBody>
-        <form>
-              <div className="form-group">
-                <label>What's your receipt for?</label>
-                <input
-                  onChange={handleInputChange}
-                  type="text"
-                  name="label"
-                  placeholder="Coffee at Cafe Grumpy"
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
+          <form>
+            <div className="form-group">
+              <label>What's your receipt for?</label>
+              <input
+                onChange={handleInputChange}
+                type="text"
+                name="label"
+                placeholder="Coffee at Cafe Grumpy"
+                className="form-control"
+              />
+            </div>
+            <div className="form-group">
               <label>Enter a date for the receipt:</label>
-                <input 
-                  type="date" 
-                  className="form-control"
-                  name="date"
-                  defaultValue={moment().format('YYYY-MM-DD')}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <input
+                type="date"
+                className="form-control"
+                name="date"
+                defaultValue={moment().format("YYYY-MM-DD")}
+                onChange={handleInputChange}
+              />
+            </div>
           </form>
         </ModalBody>
         <ModalFooter>

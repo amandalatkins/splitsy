@@ -21,6 +21,7 @@ function Breakdown(props) {
 
   useEffect(() => {
     if (receiptState.payers[0]) {
+      makeChart();
       getTotalPayed();
     }
   }, [receiptState]);
@@ -72,9 +73,9 @@ function Breakdown(props) {
 
       portionPay = toFloat / counter;
       total = total + portionPay;
+      total = parseFloat(total).toFixed(2);
     }
-    API.updatePayer(payer.id, { amountDue: total });
-    // makeChart();
+    API.updatePayer(payer.id, { amountDue: total }).then(res => {});
     return total;
   }
 
@@ -96,59 +97,69 @@ function Breakdown(props) {
     // });
   }
 
-  // function makeChart() {
-  //   var myPieChart = new Chart(ctx, {
-  //     type: "pie",
-  //     data: {
-  //       datasets: [
-  //         {
-  //           data: getPayersAmountDue(),
-  //           backgroundColor: [
-  //             "red",
-  //             "yellow",
-  //             "blue",
-  //             "green",
-  //             "orange",
-  //             "cyan"
-  //           ]
-  //         }
-  //       ],
-  //       labels: getPayersNames()
-  //     }
-  //   });
-  // }
+  function makeChart() {
+    let names = [];
+    let amountDue = [];
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      names.push(receiptState.payers[0][i].name);
+    }
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      amountDue.push(receiptState.payers[0][i].amountDue);
+    }
 
-  // function getPayersNames() {
-  //   let names = [];
-  //   for (let i = 0; i < payersState.length; i++) {
-  //     names.push(payersState[i].name);
-  //   }
-  //   return names;
-  // }
+    var myPieChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        datasets: [
+          {
+            data: amountDue,
+            backgroundColor: [
+              "red",
+              "yellow",
+              "blue",
+              "green",
+              "orange",
+              "cyan"
+            ]
+          }
+        ],
+        labels: names
+      }
+    });
+  }
 
-  // function getPayersAmountDue() {
-  //   let amountDue = [];
-  //   for (let i = 0; i < payersState.length; i++) {
-  //     amountDue.push(payersState[i].amountDue);
-  //   }
-  //   return amountDue;
-  // }
+  function getPayersNames() {
+    let names = [];
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      names.push(receiptState.payers[0][i].name);
+    }
+    return names;
+  }
+
+  function getPayersAmountDue() {
+    let amountDue = [];
+    for (let i = 0; i < receiptState.payers[0].length; i++) {
+      amountDue.push(receiptState.payers[0][i].amountDue);
+    }
+    console.log(amountDue);
+    return amountDue;
+  }
 
   function getTotalPayed() {
     let paid = 0;
     for (let i = 0; i < receiptState.payers[0].length; i++) {
       if (receiptState.payers[0][i].paid) {
-        paid = paid + parseInt(receiptState.payers[0][i].amountDue);
+        paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
       }
     }
     console.log(paid);
-    setTotalPayedState(paid);
+    setTotalPayedState(parseFloat(paid).toFixed(2));
   }
 
   return (
     <div className="breakdown h-100">
       <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
-      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
+      <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
           {receiptState.payers[0]
@@ -176,13 +187,17 @@ function Breakdown(props) {
                       </span>
                     )}
                   </td>
-                  <td className="text-right">{totalCalculator(payer)}</td>
+                  <td className="text-right">${totalCalculator(payer)}</td>
                 </tr>
               ))
             : ""}
           <tr>
-            <td className="text-left">Total Paid:</td>
-            <td className="text-right">{totalPayedState}</td>
+            <td className="text-left" style={{ fontWeight: "bold" }}>
+              Total Paid:
+            </td>
+            <td className="text-right" style={{ fontWeight: "bold" }}>
+              ${totalPayedState}
+            </td>
           </tr>
         </tbody>
       </table>
