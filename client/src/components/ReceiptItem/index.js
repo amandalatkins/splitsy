@@ -41,7 +41,7 @@ function ReceiptItem(props) {
       API.addItemToPayer(receiptState.currentPayer, item.id)
         .then(_ => {
           loadItem();
-          props.reload(receiptState.receipts[0].id);
+          // props.reload(receiptState.receipts[0].id);
         })
         .catch(err => console.log(err));
     } else {
@@ -53,7 +53,7 @@ function ReceiptItem(props) {
     API.removeItemToPayer(receiptState.currentPayer, item.id)
       .then(_ => {
         loadItem();
-        props.reload(receiptState.receipts[0].id);
+        // props.reload(receiptState.receipts[0].id);
       })
       .catch(err => console.log(err));
   }

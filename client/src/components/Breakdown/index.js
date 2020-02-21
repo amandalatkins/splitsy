@@ -6,8 +6,8 @@ var ctx = "myChart";
 
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
-  const [payersState, setPayersState] = useState([]);
-  const [itemsState, setItemsState] = useState([]);
+  // const [payersState, setPayersState] = useState([]);
+  // const [itemsState, setItemsState] = useState([]);
   const [totalPayedState, setTotalPayedState] = useState(0);
 
   useEffect(() => {
@@ -32,12 +32,15 @@ function Breakdown(props) {
         }
       }
 
-      portionPay = toFloat / counter;
+      portionPay =
+        (toFloat / counter) *
+        (1 + receiptState.receipts[0].tax) *
+        (1 + receiptState.receipts[0].tip);
       total = total + portionPay;
-      total = parseFloat(total).toFixed(2);
+      total = total;
     }
-    API.updatePayer(payer.id, { amountDue: total }).then(res => {});
-    return total;
+    API.updatePayer(payer.id, { amountDue: total.toFixed(2) }).then(res => {});
+    return total.toFixed(2);
   }
 
   function paid(payer, index) {
@@ -54,6 +57,8 @@ function Breakdown(props) {
   }
 
   function makeChart() {
+    document.getElementById("myChart").innerHTML = "";
+
     let names = [];
     let amountDue = [];
     for (let i = 0; i < receiptState.payers[0].length; i++) {
@@ -84,37 +89,40 @@ function Breakdown(props) {
     });
   }
 
-  function getPayersNames() {
-    let names = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      names.push(receiptState.payers[0][i].name);
-    }
-    return names;
-  }
+  // function getPayersNames() {
+  //   let names = [];
+  //   for (let i = 0; i < receiptState.payers[0].length; i++) {
+  //     names.push(receiptState.payers[0][i].name);
+  //   }
+  //   return names;
+  // }
 
-  function getPayersAmountDue() {
-    let amountDue = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      amountDue.push(receiptState.payers[0][i].amountDue);
-    }
-    console.log(amountDue);
-    return amountDue;
-  }
+  // function getPayersAmountDue() {
+  //   let amountDue = [];
+  //   for (let i = 0; i < receiptState.payers[0].length; i++) {
+  //     amountDue.push(receiptState.payers[0][i].amountDue);
+  //   }
+  //   console.log(amountDue);
+  //   return amountDue;
+  // }
 
   function getTotalPayed() {
     let paid = 0;
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      if (receiptState.payers[0][i].paid) {
-        paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
+    if (receiptState.payers[0]) {
+      for (let i = 0; i < receiptState.payers[0].length; i++) {
+        if (receiptState.payers[0][i].paid) {
+          paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
+        }
       }
     }
     console.log(paid);
     setTotalPayedState(parseFloat(paid).toFixed(2));
+    // return parseFloat(paid).toFixed(2);
   }
 
   return (
     <div className="breakdown h-100">
-      <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
+      <h4>Breakdown</h4>
       <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
