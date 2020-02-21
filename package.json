@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "axios": "^0.19.2",
+    "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "if-env": "^1.0.4",
