@@ -51,7 +51,7 @@ function ReceiptPreview(props) {
 
         <table className="w-100">
           <tbody>
-            {barState === 100 ? (
+            {barState === 100 || barState > 100 ? (
               <tr>
                 <td class="align-middle receipt-progress">
                   <div class="progress">
