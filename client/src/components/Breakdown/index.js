@@ -4,10 +4,20 @@ import API from "../../utils/API";
 var Chart = require("chart.js");
 var ctx = "myChart";
 
+const getPayers = async payersList => {
+  const finalArray = [];
+  for (let i = 0; i < payersList.length; i++) {
+    const { data } = await API.getPayerById(payersList[i].id);
+    finalArray.push(data);
+  }
+  return finalArray;
+};
+
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
   const [payersState, setPayersState] = useState([]);
   const [itemsState, setItemsState] = useState([]);
+  const [totalPayedState, setTotalPayedState] = useState(0);
 
   useEffect(() => {
     if (props.receipt) {
@@ -15,23 +25,17 @@ function Breakdown(props) {
     }
   }, [receiptState]);
 
-  function loadBreakdown() {
-    setPayersState([]);
-    for (let i = 0; i < props.receipt.Payers.length; i++) {
-      API.getPayerById(props.receipt.Payers[i].id).then(res => {
-        console.log(res.data);
-        setPayersState(payersState => {
-          return [...payersState, res.data];
-        });
-      });
-    }
+  async function loadBreakdown() {
+    let sortedPayers = props.receipt.Payers.sort();
+    const payers = await getPayers(sortedPayers);
+    setPayersState(payers);
     loadItems();
+    getTotalPayed();
   }
 
   function loadItems() {
     setItemsState([]);
     API.getItemsForReceipt(receiptState.receipts[0].id).then(res => {
-      console.log(res.data);
       setItemsState(itemsState => {
         return [...itemsState, res.data];
       });
@@ -39,7 +43,6 @@ function Breakdown(props) {
   }
 
   function totalCalculator(payer) {
-    console.log(itemsState);
     let total = 0;
 
     for (let i = 0; i < payer.Items.length; i++) {
@@ -51,7 +54,6 @@ function Breakdown(props) {
         for (let j = 0; j < itemsState[0].length; j++) {
           if (itemsState[0][j].id === payer.Items[i].id) {
             counter = itemsState[0][j].Payers.length;
-            console.log(counter);
           }
         }
       }
@@ -65,8 +67,6 @@ function Breakdown(props) {
   }
 
   function paid(payer) {
-    props.reload(props.receipt.id);
-
     let payerUpdate = {
       paid: true
     };
@@ -75,8 +75,9 @@ function Breakdown(props) {
     }
 
     API.updatePayer(payer.id, payerUpdate).then(res => {
-      console.log("worked");
-      console.log(payersState);
+      // console.log(payersState);
+      props.reload(props.receipt.id);
+      // console.log(payersState);
     });
   }
 
@@ -87,7 +88,14 @@ function Breakdown(props) {
         datasets: [
           {
             data: getPayersAmountDue(),
-            backgroundColor: ["red", "yellow", "blue", "green"]
+            backgroundColor: [
+              "red",
+              "yellow",
+              "blue",
+              "green",
+              "orange",
+              "cyan"
+            ]
           }
         ],
         labels: getPayersNames()
@@ -96,6 +104,7 @@ function Breakdown(props) {
   }
 
   function getPayersNames() {
+    console.log(payersState);
     let names = [];
     for (let i = 0; i < payersState.length; i++) {
       names.push(payersState[i].name);
@@ -111,10 +120,23 @@ function Breakdown(props) {
     return amountDue;
   }
 
+  function getTotalPayed() {
+    console.log("Gette");
+
+    let paid = 0;
+    for (let i = 0; i < payersState.length; i++) {
+      console.log("adasd");
+      if (payersState[i].paid) {
+        paid = paid + parseInt(payersState[i].amountDue);
+      }
+    }
+    setTotalPayedState(paid);
+  }
+
   return (
     <div className="breakdown h-100">
       <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
           {payersState.map(payer => (
@@ -126,7 +148,7 @@ function Breakdown(props) {
                     onClick={() => {
                       paid(payer);
                     }}
-                    class="badge badge-success"
+                    className="badge badge-success"
                   >
                     Paid
                   </span>
@@ -135,7 +157,7 @@ function Breakdown(props) {
                     onClick={() => {
                       paid(payer);
                     }}
-                    class="badge badge-warning"
+                    className="badge badge-warning"
                   >
                     Not Paid
                   </span>
@@ -144,10 +166,10 @@ function Breakdown(props) {
               <td className="text-right">{totalCalculator(payer)}</td>
             </tr>
           ))}
-          {/* <tr>
-            <td className="text-left">Tot</td>
-            <td className="text-right"> yo</td>
-          </tr> */}
+          <tr>
+            <td className="text-left">Total Paid:</td>
+            <td className="text-right">{totalPayedState}</td>
+          </tr>
         </tbody>
       </table>
     </div>
