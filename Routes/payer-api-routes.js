@@ -95,6 +95,18 @@ module.exports = function(app) {
     });
   });
 
+  // get payers for specific receipt
+  app.get("/api/payers/receipt/:receiptId", function(req, res) {
+    db.Payer.findAll({
+      where: {
+        ReceiptId: req.params.receiptId
+      },
+      include: [db.Item, db.Receipt]
+    }).then(function(dbPayer) {
+      res.json(dbPayer);
+    });
+  });
+
   // delete Payer
   app.delete("/api/payers/:id", function(req, res) {
     db.Payer.destroy({

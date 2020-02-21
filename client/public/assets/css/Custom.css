@@ -44,7 +44,7 @@ body {
 }
 
 .navbar .loginButtons div {
-  float:right
+  float: right;
 }
 /* .navbar .nav-item:not(:last-child):after {
   display: list-item;
@@ -86,7 +86,7 @@ body {
 .btn.btn-secondary.bg-teal:focus {
   background-color: #00ada9;
   border-color: #00ada9;
-  box-shadow: none
+  box-shadow: none;
 }
 
 .text-teal {
@@ -149,11 +149,11 @@ body {
   vertical-align: middle;
   font-size: 10px;
   height: 20px;
-    width: 20px;
-    display: inline-block;
-    line-height: 20px;
-    text-align: center;
-    padding-left: 1px;
+  width: 20px;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+  padding-left: 1px;
 }
 
 .payer-list .list-group-item.selected:after,
@@ -218,10 +218,14 @@ body {
   color: #868e96;
 }
 
+.thePreview:hover {
+  background-color: rgba(224, 224, 224, 0.15);
+}
+
 .receipt-preview,
 .add-receipt {
   margin-bottom: 2rem;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .receipt-preview {
@@ -262,7 +266,6 @@ body {
   width: 85%;
 }
 
-
 /* DASHBOARD HEADER
 ========================================================= */
 
@@ -279,8 +282,8 @@ body {
 }
 
 .dashboard-header h3 span {
-  display:inline-block;
-  vertical-align:middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .dashboard-header h3 .badge {
@@ -307,7 +310,7 @@ body {
 }
 
 .receipt .receipt-item {
-  cursor: pointer
+  cursor: pointer;
 }
 
 .receipt .receipt-item:first-of-type td {

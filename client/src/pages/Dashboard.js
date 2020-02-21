@@ -5,10 +5,10 @@ import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 import NewReceiptModal from "../components/Modal/NewReceiptModal";
 import PlusReceiptModal from "../components/Modal/PlusReceiptModal";
-import { useUserAuthContext } from '../utils/UserAuthState';
+import { useUserAuthContext } from "../utils/UserAuthState";
 import moment from "moment";
 
-const Dashboard = (props) => {
+const Dashboard = props => {
   const [receiptState, dispatchReceiptState] = useReceiptContext();
   const [userAuth] = useUserAuthContext();
 
@@ -36,7 +36,7 @@ const Dashboard = (props) => {
       <div className="container mt-5 clearfix">
         <div className="row">
           <div className="col-xs-12 col-md-6 text-left">
-            <NewReceiptModal buttonLabel="Add Receipt" className="Add"/>
+            <NewReceiptModal buttonLabel="Add Receipt" className="Add" />
           </div>
           <div className="col-xs-12 col-md-6 text-right">
             <div className="dropdown float-right">
@@ -50,7 +50,10 @@ const Dashboard = (props) => {
               >
                 Sort
               </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
                 <a className="dropdown-item" href="#">
                   Date
                 </a>
@@ -73,7 +76,10 @@ const Dashboard = (props) => {
               >
                 Filter
               </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
                 <a className="dropdown-item" href="#">
                   Paid
                 </a>
@@ -86,21 +92,21 @@ const Dashboard = (props) => {
 
           <div className="container mt-5">
             <div className="row">
-              <div className="d-none d-md-block col-md-6 col-lg-4">
+              <div className="d-none d-md-block col-md-6 col-lg-4 ">
                 <PlusReceiptModal></PlusReceiptModal>
               </div>
               {receiptState.receipts.map(receipt => (
                 <ReceiptPreview
                   key={receipt.id}
                   value={receipt}
-                  onClick={() => props.history.push('/receipt/'+receipt.id)}
+                  onClick={() => props.history.push("/receipt/" + receipt.id)}
                 ></ReceiptPreview>
               ))}
             </div>
           </div>
-          </div>
         </div>
       </div>
+    </div>
   );
 };
 
