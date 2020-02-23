@@ -7,7 +7,7 @@ function ReceiptItem(props) {
 
   const [payersState, setPayersState] = useState([{ id: null, name: null }]);
 
-  const { item, isTotalItem, subTotal } = props;
+  const { item, isTotalItem, subTotal, reload } = props;
 
   useEffect(() => {
     loadItem();
@@ -18,7 +18,7 @@ function ReceiptItem(props) {
       API.getItemById(item.id)
         .then(results => {
           setPayersState(results.data.Payers);
-          props.reload(receiptState.receipts[0].id);
+          reload(receiptState.receipts[0].id);
         })
         .catch(err => console.log(err));
     }
@@ -32,7 +32,7 @@ function ReceiptItem(props) {
         addPayer();
       }
     } else {
-      console.log("Must select payer");
+      // console.log("Must select payer");
     }
   }
 

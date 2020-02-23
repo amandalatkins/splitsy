@@ -1,21 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
-var Chart = require("chart.js");
-var ctx = "myChart";
+let Chart = require("chart.js");
+let ctx = "myChart";
+
+let payersTotal = 0;
 
 function Breakdown(props) {
   const [receiptState, receiptStateDispatch] = useReceiptContext();
   // const [payersState, setPayersState] = useState([]);
   // const [itemsState, setItemsState] = useState([]);
-  const [totalPayedState, setTotalPayedState] = useState(0);
 
-  useEffect(() => {
-    if (receiptState.payers[0]) {
-      makeChart();
-      getTotalPayed();
-    }
-  }, [receiptState]);
+  // useEffect(() => {
+  //   if (receiptState.payers[0]) {
+  //     makeChart();
+  //     // getTotalPayed();
+  //   }
+  // }, [receiptState]);
 
   function totalCalculator(payer) {
     let total = 0;
@@ -39,7 +40,7 @@ function Breakdown(props) {
       total = total + portionPay;
       total = total;
     }
-    API.updatePayer(payer.id, { amountDue: total.toFixed(2) }).then(res => {});
+    API.updatePayer(payer.id, { amountDue: total.toFixed(2) });
     return total.toFixed(2);
   }
 
@@ -68,19 +69,19 @@ function Breakdown(props) {
       amountDue.push(receiptState.payers[0][i].amountDue);
     }
 
-    var myPieChart = new Chart(ctx, {
+    let myPieChart = new Chart(ctx, {
       type: "pie",
       data: {
         datasets: [
           {
             data: amountDue,
             backgroundColor: [
-              "red",
-              "yellow",
-              "blue",
-              "green",
-              "orange",
-              "cyan"
+              "#f44336",
+              "#ff9800",
+              "#2196f3",
+              "#4caf50",
+              "#f48fb1",
+              "#90caf9"
             ]
           }
         ],
@@ -106,63 +107,89 @@ function Breakdown(props) {
   //   return amountDue;
   // }
 
-  function getTotalPayed() {
-    let paid = 0;
-    if (receiptState.payers[0]) {
-      for (let i = 0; i < receiptState.payers[0].length; i++) {
-        if (receiptState.payers[0][i].paid) {
-          paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
-        }
-      }
-    }
-    console.log(paid);
-    setTotalPayedState(parseFloat(paid).toFixed(2));
-    // return parseFloat(paid).toFixed(2);
-  }
+  // function getTotalPayed(payers) {
+  //   let paid = 0;
+  //   if (payers) {
+  //     for (let i = 0; i < payers.length; i++) {
+  //       if (payers[i].paid) {
+  //         paid = paid + parseFloat(payers[i].amountDue);
+  //       }
+  //     }
+  //   }
+  //   return parseFloat(paid).toFixed(2);
+  // }
 
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
+      {/* <button
+        class="btn btn-primary"
+        onClick={() => {
+          makeChart();
+        }}
+      >
+        Create Graph
+      </button> */}
       <table className="table w-100">
         <tbody>
           {receiptState.payers[0]
-            ? receiptState.payers[0].map((payer, index) => (
-                <tr key={payer.id}>
-                  <td className="text-left">
-                    {payer.name}{" "}
-                    {payer.paid === true ? (
-                      <span
-                        onClick={() => {
-                          paid(payer, index);
-                        }}
-                        className="badge badge-success"
-                      >
-                        Paid
-                      </span>
-                    ) : (
-                      <span
-                        onClick={() => {
-                          paid(payer, index);
-                        }}
-                        className="badge badge-warning"
-                      >
-                        Not Paid
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-right">${totalCalculator(payer)}</td>
-                </tr>
-              ))
-            : ""}
-          <tr>
-            <td className="text-left" style={{ fontWeight: "bold" }}>
-              Total Paid:
-            </td>
-            <td className="text-right" style={{ fontWeight: "bold" }}>
-              ${totalPayedState}
-            </td>
-          </tr>
+            ? receiptState.payers[0].map((payer, index, payers) => {
+                if (index === 0) {
+                  payersTotal = 0;
+                }
+                const payerTotal = totalCalculator(payer);
+                if (payer.paid) {
+                  payersTotal += parseFloat(payerTotal);
+                }
+
+                return (
+                  <React.Fragment key={payer.id}>
+                    <tr>
+                      <td className="text-left">
+                        {payer.name}{" "}
+                        {payer.paid === true ? (
+                          <span
+                            onClick={() => {
+                              paid(payer, index);
+                            }}
+                            className="badge badge-success"
+                          >
+                            Paid
+                          </span>
+                        ) : (
+                          <span
+                            onClick={() => {
+                              paid(payer, index);
+                            }}
+                            className="badge badge-warning"
+                          >
+                            Not Paid
+                          </span>
+                        )}
+                      </td>
+                      <td className="text-right">${payerTotal}</td>
+                    </tr>
+                    {index === payers.length - 1 ? (
+                      <tr>
+                        <td
+                          className="text-left"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          Total Paid:
+                        </td>
+                        <td
+                          className="text-right"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          ${payersTotal}
+                        </td>
+                      </tr>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })
+            : null}
         </tbody>
       </table>
     </div>
