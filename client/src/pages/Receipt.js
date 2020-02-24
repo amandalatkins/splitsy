@@ -291,9 +291,7 @@ function Receipt(props) {
                             />
                           </td>
                         </tr>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
 
                       <tr className="receipt-item">
                         <td
@@ -319,9 +317,7 @@ function Receipt(props) {
                           isTotalItem={true}
                           loadReceipt={loadReceipt}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItemEdit
                           item={{
@@ -333,9 +329,7 @@ function Receipt(props) {
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItemEdit
                           item={{
@@ -347,9 +341,7 @@ function Receipt(props) {
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItemEdit
                           item={{
@@ -379,7 +371,7 @@ function Receipt(props) {
                               />
                             );
                           })
-                        : ""}
+                        : null}
 
                       {receiptState.receipts.length ? (
                         <ReceiptItem
@@ -390,9 +382,7 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItem
                           item={{
@@ -403,9 +393,7 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItem
                           item={{
@@ -416,9 +404,7 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                         />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {receiptState.receipts.length ? (
                         <ReceiptItem
                           item={{
@@ -445,9 +431,7 @@ function Receipt(props) {
               >
                 Delete Receipt
               </button>
-            ) : (
-              ""
-            )}
+            ) : null}
           </div>
           <div className="col-xs-12 col-lg-4">
             <Breakdown

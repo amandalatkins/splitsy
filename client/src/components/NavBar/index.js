@@ -22,39 +22,60 @@ function NavBar() {
         Splitsy
       </a>
 
-      { userAuth.isLoggedIn ?
-           window.location.pathname === "/dashboard" ?
-           <ol className="breadcrumb mr-auto">
-                <li className="breadcrumb-item active">
-                  <a href="/dashboard">{userAuth.user.firstName ? userAuth.user.firstName : userAuth.user.userName}'s Dashboard</a>
-                </li>
-            </ol>
-          :
+      {userAuth.isLoggedIn ? (
+        window.location.pathname === "/dashboard" ? (
           <ol className="breadcrumb mr-auto">
-              <li className="breadcrumb-item">
-                <a href="/dashboard">{userAuth.user.firstName ? userAuth.user.firstName : userAuth.user.userName}'s Dashboard</a>
-              </li>
-              <li className="breadcrumb-item active">
-                <a href="/dashboard" onClick={(e) => e.preventDefault()}>{receiptState.receipts.length ? receiptState.receipts[0].label + " " + moment(receiptState.receipts[0].date).format('M/DD') : ""}</a>
-              </li>
+            <li className="breadcrumb-item active">
+              <a href="/dashboard">
+                {userAuth.user.firstName
+                  ? userAuth.user.firstName
+                  : userAuth.user.userName}
+                's Dashboard
+              </a>
+            </li>
           </ol>
-             
-      : ""  }
+        ) : (
+          <ol className="breadcrumb mr-auto">
+            <li className="breadcrumb-item">
+              <a href="/dashboard">
+                {userAuth.user.firstName
+                  ? userAuth.user.firstName
+                  : userAuth.user.userName}
+                's Dashboard
+              </a>
+            </li>
+            <li className="breadcrumb-item active">
+              <a href="/dashboard" onClick={e => e.preventDefault()}>
+                {receiptState.receipts.length
+                  ? receiptState.receipts[0].label +
+                    " " +
+                    moment(receiptState.receipts[0].date).format("M/DD")
+                  : ""}
+              </a>
+            </li>
+          </ol>
+        )
+      ) : (
+        ""
+      )}
 
-      { userAuth.isLoggedIn ?
-
-        <button className="btn btn-sm text-white" onClick={() => handleLogOut()}>Log Out</button>
-
-      :
-      <div class="loginButtons">
-        <RegisterModal buttonLabel="Register" />
+      {userAuth.isLoggedIn ? (
+        <button
+          className="btn btn-sm text-white"
+          onClick={() => handleLogOut()}
+        >
+          Log Out
+        </button>
+      ) : (
+        <div className="loginButtons">
+          <RegisterModal buttonLabel="Register" />
           {/* Register{" "}
         </RegisterModal> */}
-        <LoginModal buttonLabel="Login" />
+          <LoginModal buttonLabel="Login" />
           {/* Login
         </LoginModal> */}
-      </div>
-      }
+        </div>
+      )}
     </nav>
   );
 }

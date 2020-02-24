@@ -25,7 +25,7 @@ function Breakdown(props) {
       let portionPay;
       let counter = 0;
 
-      if (receiptState.items[0]) {
+      if (receiptState.items[0] && receiptState.receipts[0]) {
         for (let j = 0; j < receiptState.items[0].length; j++) {
           if (receiptState.items[0][j].id === payer.Items[i].id) {
             counter = receiptState.items[0][j].Payers.length;
@@ -122,15 +122,7 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
-      {/* <button
-        class="btn btn-primary"
-        onClick={() => {
-          makeChart();
-        }}
-      >
-        Create Graph
-      </button> */}
+      <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
           {receiptState.payers[0]
