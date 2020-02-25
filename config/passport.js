@@ -15,7 +15,7 @@ passport.use(
         if (!theUser.validPass(password)) {
           return done(null, false, { message: "Password is not valid." });
         }
-        return done(null, true);
+        return done(null, theUser);
       });
     }
   )

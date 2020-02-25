@@ -77,7 +77,6 @@ module.exports = function(app) {
     req,
     res
   ) {
-    console.log("hiiiii");
     res.json(req.user);
   });
 };
