@@ -44,7 +44,7 @@ function Receipt(props) {
         );
       }
     }
-  }, [payerState, itemState]);
+  }, [itemState]);
 
   function loadReceipt(receiptId, payerId) {
     console.log("loading receipt");
@@ -61,7 +61,6 @@ function Receipt(props) {
         }
       })
       .catch(err => console.log(err));
-    loadItems(receiptId);
     loadPayers(receiptId);
   }
 
@@ -80,6 +79,7 @@ function Receipt(props) {
       payerStateDispatch({
         payers: [res.data]
       });
+      loadItems(receiptId);
     });
   }
 

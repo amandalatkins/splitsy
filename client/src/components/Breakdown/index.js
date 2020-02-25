@@ -10,14 +10,13 @@ function Breakdown(props) {
   const { receipt, payers, items, totalCalculator } = props;
   console.log(props);
 
-  // useEffect(() => {
-  //   if (props.payers && props.items && props.receipt) {
-  //     if (props.payers[0] && props.items[0] && props.receipt[0]) {
-  //       totalCalculator(props.payers, props.items, props.receipt);
-  //       makeChart();
-  //     }
-  //   }
-  // }, [props.payers || props.items]);
+  useEffect(() => {
+    if (props.payers && props.items && props.receipt) {
+      if (props.payers[0] && props.items[0] && props.receipt[0]) {
+        makeChart();
+      }
+    }
+  }, [props]);
 
   function totalPayedCalc() {
     let paid = 0;
@@ -65,7 +64,7 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
+      <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
           {props.payers
