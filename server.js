@@ -17,7 +17,9 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(
   session({
-    secret: "your secret line of secretness"
+    secret: "your secret line of secretness",
+    resave: true,
+    saveUninitialized: true
   })
 );
 app.use(passport.initialize());
@@ -29,7 +31,7 @@ require("./routes/items-api-routes.js")(app);
 require("./routes/receipt-api-routes.js")(app);
 
 app.get("*", (_, res) => {
-    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
 db.sequelize.sync({ force: false }).then(function() {

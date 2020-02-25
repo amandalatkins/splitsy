@@ -50,7 +50,7 @@ const RegisterModal = props => {
                 date: Date.now()
               }
             });
-            props.history.push("/dashboard");
+            window.location.href = "/dashboard";
           }
         })
         .catch(err => console.log(err));
