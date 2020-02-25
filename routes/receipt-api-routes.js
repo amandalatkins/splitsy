@@ -5,7 +5,6 @@ const path = require("path");
 const fs = require('fs');
 const axios = require("axios");
 require("dotenv").config();
-const jimp = require("jimp");
 
 module.exports = function(app) {
   //get all receipts
