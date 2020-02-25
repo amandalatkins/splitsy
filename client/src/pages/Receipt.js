@@ -431,6 +431,8 @@ function Receipt(props) {
                                 item={item}
                                 isTotalItem={false}
                                 reload={loadReceipt}
+                                receiptState={receiptState}
+                                receiptStateDispatch={receiptStateDispatch}
                               />
                             );
                           })

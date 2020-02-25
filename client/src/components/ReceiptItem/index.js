@@ -3,8 +3,7 @@ import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
 
 function ReceiptItem(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
-
+  const { receiptState, receiptStateDispatch } = props;
   const [payersState, setPayersState] = useState([{ id: null, name: null }]);
 
   const { item, isTotalItem, subTotal, reload } = props;
@@ -25,8 +24,8 @@ function ReceiptItem(props) {
   }
 
   function togglePayer() {
-    if (receiptState.currentPayer) {
-      if (payersState.some(payer => payer.id === receiptState.currentPayer)) {
+    if (receiptState.payerId) {
+      if (payersState.some(payer => payer.id === receiptState.payerId)) {
         removePayer();
       } else {
         addPayer();
@@ -37,8 +36,8 @@ function ReceiptItem(props) {
   }
 
   function addPayer() {
-    if (receiptState.currentPayer) {
-      API.addItemToPayer(receiptState.currentPayer, item.id)
+    if (receiptState.payerId) {
+      API.addItemToPayer(receiptState.payerId, item.id)
         .then(_ => {
           loadItem();
           // props.reload(receiptState.receipts[0].id);
@@ -50,7 +49,7 @@ function ReceiptItem(props) {
   }
 
   function removePayer() {
-    API.removeItemToPayer(receiptState.currentPayer, item.id)
+    API.removeItemToPayer(receiptState.payerId, item.id)
       .then(_ => {
         loadItem();
         // props.reload(receiptState.receipts[0].id);
@@ -65,20 +64,22 @@ function ReceiptItem(props) {
     >
       <td className="receipt-item-label">
         {item.name === "Total" ? <h4>{item.name}</h4> : <p>{item.name}</p>}
-        {payersState.map(payer => {
-          return (
-            <span
-              key={payer.id}
-              className={
-                receiptState.currentPayer === payer.id
-                  ? "badge bg-orange text-white"
-                  : "badge bg-secondary text-white"
-              }
-            >
-              {payer.name}
-            </span>
-          );
-        })}
+        {props.receiptState
+          ? payersState.map(payer => {
+              return (
+                <span
+                  key={payer.id}
+                  className={
+                    props.receiptState.payerId === payer.id
+                      ? "badge bg-orange text-white"
+                      : "badge bg-secondary text-white"
+                  }
+                >
+                  {payer.name}
+                </span>
+              );
+            })
+          : null}
       </td>
       <td className="receipt-item-price text-right">
         {item.name === "Total" ? (

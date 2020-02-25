@@ -37,14 +37,17 @@ function PayerList(props) {
 
   function selectPayer(id) {
     if (!props.isEditMode) {
-      if (id === props.receiptState.currentPayer) {
-        props.receiptStateDispatch({ payerId: null });
+      if (id === props.receiptState.payerId) {
+        props.receiptStateDispatch(prevState => {
+          return { ...prevState, payerId: null };
+        });
       } else {
         props.receiptStateDispatch(prevState => {
           return { ...prevState, payerId: id };
         });
       }
     }
+    console.log(props.receiptState);
   }
 
   // function savePayer(e) {
@@ -101,16 +104,16 @@ function PayerList(props) {
               <li
                 key={payer.id}
                 className={
-                  props.currentPayer === payer.id
+                  props.receiptState.payerId === payer.id
                     ? "list-group-item selected"
                     : "list-group-item"
                 }
                 onClick={() => selectPayer(payer.id)}
               >
-                {props.currentPayer === payer.id ? (
+                {props.receiptState.payerId === payer.id ? (
                   <span
                     className="remove-btn bg-danger text-white mr-1"
-                    // onClick={() => deletePayer(payer.id)}
+                    onClick={() => deletePayer(payer.id)}
                   >
                     <i className="fas fa-times"></i>
                   </span>
