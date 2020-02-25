@@ -39,7 +39,7 @@ const RegisterModal = props => {
       })
         .then(results => {
           if (results.data) {
-            console.log(results.data);
+            console.log(results);
             setUserAuth({
               type: "logIn",
               user: {
