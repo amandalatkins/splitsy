@@ -7,42 +7,58 @@ let ctx = "myChart";
 let payersTotal = 0;
 
 function Breakdown(props) {
-  // const [payersState, setPayersState] = useState([]);
-  // const [itemsState, setItemsState] = useState([]);
-
-  // useEffect(() => {
-  //   if (receiptState.payers[0]) {
-  //     makeChart();
-  //     // getTotalPayed();
-  //   }
-  // }, [receiptState]);
+  const [payersState, setPayersState] = useState([]);
+  const [itemsState, setItemsState] = useState([]);
 
   const { receipt, payers, items } = props;
 
-  function totalCalculator(payer) {
-    let total = 0;
-    for (let i = 0; i < payer.Items.length; i++) {
-      let toFloat = parseFloat(payer.Items[i].price);
-      let portionPay;
-      let counter = 0;
+  useEffect(() => {
+    console.log(props);
 
-      if (receiptState.items[0] && receiptState.receipts[0]) {
-        for (let j = 0; j < receiptState.items[0].length; j++) {
-          if (receiptState.items[0][j].id === payer.Items[i].id) {
-            counter = receiptState.items[0][j].Payers.length;
+    if (props.payers && props.items && props.receipt) {
+      if (props.payers[0] && props.items[0] && props.receipt[0]) {
+        alterData(props);
+      }
+    }
+  }, [props]);
+
+  function alterData(props) {
+    console.log(props);
+    totalCalculator(props.payers, props.items, props.receipt);
+  }
+
+  function totalCalculator(payers, items, receipt) {
+    console.log("hi");
+    console.log(payers[0].length);
+    for (let k = 0; k < payers[0].length; k++) {
+      let total = 0;
+      for (let i = 0; i < payers[0][k].Items.length; i++) {
+        let toFloat = parseFloat(payers[0][k].Items[i].price);
+        let portionPay;
+        let counter = 0;
+
+        for (let j = 0; j < items[0].length; j++) {
+          if (items[0][j].id === payers[0][k].Items[i].id) {
+            counter = items[0][j].Payers.length;
           }
         }
-      }
 
-      portionPay =
-        (toFloat / counter) *
-        (1 + receiptState.receipts[0].tax) *
-        (1 + receiptState.receipts[0].tip);
-      total = total + portionPay;
-      total = total;
+        portionPay =
+          (toFloat / counter) * (1 + receipt[0].tax) * (1 + receipt[0].tip);
+        total = total + portionPay;
+        total = total;
+      }
+      API.updatePayer(payers[0][k].id, { amountDue: total.toFixed(2) }).then(
+        res => {
+          API.getPayerById(payers[0][k].id).then(res => {
+            setPayersState(prevState => {
+              return [...prevState, res.data];
+            });
+          });
+        }
+      );
     }
-    API.updatePayer(payer.id, { amountDue: total.toFixed(2) });
-    return total.toFixed(2);
+    console.log(payersState);
   }
 
   function paid(payer, index) {
@@ -58,67 +74,67 @@ function Breakdown(props) {
     });
   }
 
-  function makeChart() {
-    document.getElementById("myChart").innerHTML = "";
+  // function makeChart() {
+  //   document.getElementById("myChart").innerHTML = "";
 
-    let names = [];
-    let amountDue = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      names.push(receiptState.payers[0][i].name);
-    }
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      amountDue.push(receiptState.payers[0][i].amountDue);
-    }
-
-    let myPieChart = new Chart(ctx, {
-      type: "pie",
-      data: {
-        datasets: [
-          {
-            data: amountDue,
-            backgroundColor: [
-              "#f44336",
-              "#ff9800",
-              "#2196f3",
-              "#4caf50",
-              "#f48fb1",
-              "#90caf9"
-            ]
-          }
-        ],
-        labels: names
-      }
-    });
-  }
-
-  // function getPayersNames() {
   //   let names = [];
+  //   let amountDue = [];
   //   for (let i = 0; i < receiptState.payers[0].length; i++) {
   //     names.push(receiptState.payers[0][i].name);
   //   }
-  //   return names;
-  // }
-
-  // function getPayersAmountDue() {
-  //   let amountDue = [];
   //   for (let i = 0; i < receiptState.payers[0].length; i++) {
   //     amountDue.push(receiptState.payers[0][i].amountDue);
   //   }
-  //   console.log(amountDue);
-  //   return amountDue;
+
+  //   let myPieChart = new Chart(ctx, {
+  //     type: "pie",
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: amountDue,
+  //           backgroundColor: [
+  //             "#f44336",
+  //             "#ff9800",
+  //             "#2196f3",
+  //             "#4caf50",
+  //             "#f48fb1",
+  //             "#90caf9"
+  //           ]
+  //         }
+  //       ],
+  //       labels: names
+  //     }
+  //   });
   // }
 
-  // function getTotalPayed(payers) {
-  //   let paid = 0;
-  //   if (payers) {
-  //     for (let i = 0; i < payers.length; i++) {
-  //       if (payers[i].paid) {
-  //         paid = paid + parseFloat(payers[i].amountDue);
-  //       }
-  //     }
-  //   }
-  //   return parseFloat(paid).toFixed(2);
-  // }
+  // // function getPayersNames() {
+  // //   let names = [];
+  // //   for (let i = 0; i < receiptState.payers[0].length; i++) {
+  // //     names.push(receiptState.payers[0][i].name);
+  // //   }
+  // //   return names;
+  // // }
+
+  // // function getPayersAmountDue() {
+  // //   let amountDue = [];
+  // //   for (let i = 0; i < receiptState.payers[0].length; i++) {
+  // //     amountDue.push(receiptState.payers[0][i].amountDue);
+  // //   }
+  // //   console.log(amountDue);
+  // //   return amountDue;
+  // // }
+
+  // // function getTotalPayed(payers) {
+  // //   let paid = 0;
+  // //   if (payers) {
+  // //     for (let i = 0; i < payers.length; i++) {
+  // //       if (payers[i].paid) {
+  // //         paid = paid + parseFloat(payers[i].amountDue);
+  // //       }
+  // //     }
+  // //   }
+  // //   return parseFloat(paid).toFixed(2);
+  // // }
 
   return (
     <div className="breakdown h-100">
@@ -126,22 +142,14 @@ function Breakdown(props) {
       {/* <canvas id="myChart" width="400" height="600"></canvas> */}
       <table className="table w-100">
         <tbody>
-          {receiptState.payers[0]
-            ? receiptState.payers[0].map((payer, index, payers) => {
-                if (index === 0) {
-                  payersTotal = 0;
-                }
-                const payerTotal = totalCalculator(payer);
-                if (payer.paid) {
-                  payersTotal += parseFloat(payerTotal);
-                }
-
+          {payersState.length > 0
+            ? payersState.map((payer, index, payers) => {
                 return (
-                  <React.Fragment key={payer.id}>
+                  <div key={payer.id}>
                     <tr>
                       <td className="text-left">
                         {payer.name}{" "}
-                        {payer.paid === true ? (
+                        {/* {payer.paid === true ? (
                           <span
                             onClick={() => {
                               paid(payer, index);
@@ -159,10 +167,10 @@ function Breakdown(props) {
                           >
                             Not Paid
                           </span>
-                        )}
+                        )} */}
                       </td>
-                      <td className="text-right">${payerTotal}</td>
-                    </tr>
+                      <td className="text-right">${payer.amountDue}</td>
+                      {/* </tr>
                     {index === payers.length - 1 ? (
                       <tr>
                         <td
@@ -170,16 +178,16 @@ function Breakdown(props) {
                           style={{ fontWeight: "bold" }}
                         >
                           Total Paid:
-                        </td>
-                        <td
+                        </td> */}
+                      {/* <td
                           className="text-right"
                           style={{ fontWeight: "bold" }}
                         >
                           ${payersTotal}
-                        </td>
-                      </tr>
-                    ) : null}
-                  </React.Fragment>
+                        </td> */}
+                    </tr>
+                    {/* ) : null} */}
+                  </div>
                 );
               })
             : null}
