@@ -10,7 +10,7 @@ var db = require("./models");
 var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.static("public"));
+app.use(express.static("uploads"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
