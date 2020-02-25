@@ -59,9 +59,13 @@ const NewReceiptModal = props => {
           .then(ocrResults => {
 
             if (!ocrResults.error) {
+                console.log(ocrResults.data);
                 setUploadingState({ isUploading: true, message: "Creating your receipt..." });
+
                 API.parseOcrData({ text: ocrResults.data[0].ParsedText })
+                
                 .then(parseResults => {
+
                   if (!parseResults.data.error) {
                     API.createReceipt(receipt).then(res => {
 

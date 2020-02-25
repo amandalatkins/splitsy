@@ -6,7 +6,6 @@ const fs = require('fs');
 const axios = require("axios");
 require("dotenv").config();
 const jimp = require("jimp");
-var FormData = require('form-data');
 
 module.exports = function(app) {
   //get all receipts
@@ -73,7 +72,7 @@ module.exports = function(app) {
 	fs.rename(tempPath, targetPath, err => {
 		if (err) throw err;
 
-		console.log("moved file!");
+		console.log("moved file! " + targetPath);
 	
 		jimp.read(targetPath, (err, img) => {
 			if (err) return console.log(err);
@@ -87,7 +86,8 @@ module.exports = function(app) {
 			.write(targetPath, (err) => {
 				if (err) res.json(err);
 				console.log("wrote jimp file");
-				res.json({ imageUrl: "/api/image/"+newFileName });
+				console.log(process.env);
+				res.json({ imageUrl: process.env.SERVER_PATH+"/api/image/"+newFileName });
 			});		
 		});
 	});
@@ -95,19 +95,27 @@ module.exports = function(app) {
 
 // Sends Image to OCR API
 app.post("/api/ocr", function({body},res) {
-	const { imageUrl } = body;
-	// const imageUrl = "https://raindev.us/b_bar.jpg";
 
+	let imageUrl = "";
 
-	axios.get("https://api.ocr.space/parse/imageurl", { 
-		params: {
-			apikey: process.env.OCR_API_KEY,
-			url: imageUrl,
-			detectOrientation: true,
-			isTable: true,
-			filetype: "JPG"
-		}
-	}).then(results => {
+	if (process.env.NODE_ENV === "production") {
+		imageUrl  = body.imageUrl;
+	} else {
+		imageUrl = "http://splitsy.herokuapp.com/api/image/ukiah_1582657478311.jpg";
+	}
+
+	var params = {
+		apikey: process.env.OCR_API_KEY,
+		url: imageUrl,
+		detectOrientation: true,
+		isTable: true,
+		filetype: "JPG"
+	}
+
+	console.log(params);
+
+	axios.get("https://api.ocr.space/parse/imageurl", { params })
+	.then(results => {
 		console.log(results.data);
 		if (results.data.ParsedResults) {
 			res.json(results.data.ParsedResults);
@@ -127,8 +135,8 @@ app.get('/api/image/:img', ({params}, res) => {
 });
 
 // // Parses OCR response
-app.post("/api/parse", function({body}, res) {
-	var { text } = body;
+app.post("/api/parse", function(req, res) {
+	var { text } = req.body;
 
 	var parse = text.split('\n');
 
@@ -169,10 +177,24 @@ app.post("/api/parse", function({body}, res) {
 	var receiptItems = []
 
 	itemArray.forEach(item => {
-		receiptItems.push({
-			name: item[0],
-			price: item[1].replace(/[^.0-9]+/g,"")
+		if (item.length > 1) {
+			receiptItems.push({
+				name: item[0],
+				price: item[1].replace(/[^.0-9]+/g,"")
 			});
+		} else {
+			if (item[0].includes('$')) {
+				receiptItems.push({
+					name: "",
+					price: item[0].replace(/[^.0-9]+/g,"")
+				});
+			} else {
+				receiptItems.push({
+					name: item[0],
+					price: 0
+				});
+			}
+		}
 	});
 	
 	res.json(receiptItems);
