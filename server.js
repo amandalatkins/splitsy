@@ -1,8 +1,8 @@
 var express = require("express");
 var session = require("express-session");
 var path = require("path");
-
-// var passport = require("./config/passport");
+const LocalStrategy = require("passport-local").Strategy;
+var passport = require("./config/passport");
 
 var PORT = process.env.PORT || 3001;
 var db = require("./models");
@@ -15,6 +15,14 @@ app.use(express.static("uploads"));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+
+app.use(
+  session({
+    secret: "your secret line of secretness"
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 require("./routes/payer-api-routes.js")(app);
 require("./routes/user-api-routes.js")(app);

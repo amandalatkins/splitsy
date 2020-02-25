@@ -1,81 +1,59 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
-var Chart = require("chart.js");
-var ctx = "myChart";
+let Chart = require("chart.js");
+let ctx = "myChart";
+
+let payersTotal = 0;
 
 function Breakdown(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
-  const [payersState, setPayersState] = useState([]);
-  const [itemsState, setItemsState] = useState([]);
-  const [totalPayedState, setTotalPayedState] = useState(0);
+  const { receipt, payers, items, totalCalculator } = props;
+  console.log(props);
 
   useEffect(() => {
-    if (receiptState.payers[0]) {
-      makeChart();
-      getTotalPayed();
-    }
-  }, [receiptState]);
-
-  function totalCalculator(payer) {
-    let total = 0;
-    for (let i = 0; i < payer.Items.length; i++) {
-      let toFloat = parseFloat(payer.Items[i].price);
-      let portionPay;
-      let counter = 0;
-
-      if (receiptState.items[0]) {
-        for (let j = 0; j < receiptState.items[0].length; j++) {
-          if (receiptState.items[0][j].id === payer.Items[i].id) {
-            counter = receiptState.items[0][j].Payers.length;
-          }
-        }
+    if (props.payers && props.items && props.receipt) {
+      if (props.payers[0] && props.items[0] && props.receipt[0]) {
+        makeChart();
       }
-
-      portionPay = toFloat / counter;
-      total = total + portionPay;
-      total = parseFloat(total).toFixed(2);
     }
-    API.updatePayer(payer.id, { amountDue: total }).then(res => {});
-    return total;
-  }
+  }, [props]);
 
-  function paid(payer, index) {
-    let payerUpdate = {
-      paid: true
-    };
-    if (payer.paid === true) {
-      payerUpdate.paid = false;
+  function totalPayedCalc() {
+    let paid = 0;
+    for (let i = 0; i < props.payers[0].length; i++) {
+      if (props.payers[0][i].paid) {
+        paid = paid + parseFloat(props.payers[0][i].amountDue);
+      }
     }
-
-    API.updatePayer(payer.id, payerUpdate).then(res => {
-      props.reload(props.receipt.id);
-    });
+    return parseFloat(paid).toFixed(2);
   }
 
   function makeChart() {
+    document.getElementById("chartHolder").innerHTML =
+      '<canvas id="myChart" width="400" height="600"></canvas>';
+
     let names = [];
     let amountDue = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      names.push(receiptState.payers[0][i].name);
+    for (let i = 0; i < payers[0].length; i++) {
+      names.push(payers[0][i].name);
     }
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      amountDue.push(receiptState.payers[0][i].amountDue);
+    for (let i = 0; i < payers[0].length; i++) {
+      amountDue.push(payers[0][i].amountDue);
     }
 
-    var myPieChart = new Chart(ctx, {
+    let myPieChart = new Chart(ctx, {
       type: "pie",
       data: {
         datasets: [
           {
             data: amountDue,
             backgroundColor: [
-              "red",
-              "yellow",
-              "blue",
-              "green",
-              "orange",
-              "cyan"
+              "#f44336",
+              "#ff9800",
+              "#2196f3",
+              "#4caf50",
+              "#f48fb1",
+              "#90caf9"
             ]
           }
         ],
@@ -84,75 +62,49 @@ function Breakdown(props) {
     });
   }
 
-  function getPayersNames() {
-    let names = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      names.push(receiptState.payers[0][i].name);
-    }
-    return names;
-  }
-
-  function getPayersAmountDue() {
-    let amountDue = [];
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      amountDue.push(receiptState.payers[0][i].amountDue);
-    }
-    console.log(amountDue);
-    return amountDue;
-  }
-
-  function getTotalPayed() {
-    let paid = 0;
-    for (let i = 0; i < receiptState.payers[0].length; i++) {
-      if (receiptState.payers[0][i].paid) {
-        paid = paid + parseFloat(receiptState.payers[0][i].amountDue);
-      }
-    }
-    console.log(paid);
-    setTotalPayedState(parseFloat(paid).toFixed(2));
-  }
-
   return (
     <div className="breakdown h-100">
-      <h4 onClick={() => console.log(payersState)}>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      <h4>Breakdown</h4>
+      <div id="chartHolder"></div>
       <table className="table w-100">
         <tbody>
-          {receiptState.payers[0]
-            ? receiptState.payers[0].map((payer, index) => (
-                <tr key={payer.id}>
-                  <td className="text-left">
-                    {payer.name}{" "}
-                    {payer.paid === true ? (
-                      <span
-                        onClick={() => {
-                          paid(payer, index);
-                        }}
-                        className="badge badge-success"
-                      >
-                        Paid
-                      </span>
-                    ) : (
-                      <span
-                        onClick={() => {
-                          paid(payer, index);
-                        }}
-                        className="badge badge-warning"
-                      >
-                        Not Paid
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-right">${totalCalculator(payer)}</td>
-                </tr>
-              ))
-            : ""}
+          {props.payers
+            ? props.payers[0].map((payer, index, payers) => {
+                return (
+                  <tr key={payer.id}>
+                    <td className="text-left">
+                      {payer.name}{" "}
+                      {payer.paid === true ? (
+                        <span
+                          onClick={() => {
+                            props.paid(payer, index);
+                          }}
+                          className="badge badge-success"
+                        >
+                          Paid
+                        </span>
+                      ) : (
+                        <span
+                          onClick={() => {
+                            props.paid(payer, index);
+                          }}
+                          className="badge badge-warning"
+                        >
+                          Not Paid
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-right">${payer.amountDue}</td>
+                  </tr>
+                );
+              })
+            : null}
           <tr>
             <td className="text-left" style={{ fontWeight: "bold" }}>
               Total Paid:
             </td>
             <td className="text-right" style={{ fontWeight: "bold" }}>
-              ${totalPayedState}
+              ${props.payers ? totalPayedCalc() : null}
             </td>
           </tr>
         </tbody>

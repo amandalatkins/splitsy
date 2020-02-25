@@ -51,12 +51,12 @@ function ReceiptPreview(props) {
 
         <table className="w-100">
           <tbody>
-            {barState === 100 ? (
+            {barState === 100 || barState > 100 ? (
               <tr>
-                <td class="align-middle receipt-progress">
-                  <div class="progress">
+                <td className="align-middle receipt-progress">
+                  <div className="progress">
                     <div
-                      class="progress-bar progress-bar-striped bg-teal"
+                      className="progress-bar progress-bar-striped bg-teal"
                       role="progressbar"
                       style={{
                         width: barState + "%"
@@ -67,8 +67,8 @@ function ReceiptPreview(props) {
                     ></div>
                   </div>
                 </td>
-                <td class="align-middle receipt-icon text-teal text-right">
-                  <i class="fas fa-check-circle"></i>
+                <td className="align-middle receipt-icon text-teal text-right">
+                  <i className="fas fa-check-circle"></i>
                 </td>
               </tr>
             ) : (

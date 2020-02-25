@@ -1,4 +1,5 @@
 var db = require("../models");
+const passport = require("../config/passport");
 
 // API routes for User
 module.exports = function(app) {
@@ -63,10 +64,19 @@ module.exports = function(app) {
     });
   });
 
-  app.post('/api/users/login', function({body}, res) {
-    db.User.findOne({where: { user_name: body.user_name, password: body.password }})
-    .then(dbUser => {
+  app.post("/api/users/login", function({ body }, res) {
+    db.User.findOne({
+      where: { user_name: body.user_name, password: body.password }
+    }).then(dbUser => {
       res.json(dbUser);
     });
+  });
+
+  // passport
+  app.post("/api/users/login/pass", passport.authenticate("local"), function(
+    req,
+    res
+  ) {
+    res.json(req.user);
   });
 };

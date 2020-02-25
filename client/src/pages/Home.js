@@ -1,14 +1,13 @@
 import React from "react";
 import RegisterModal from "../components/Modal/RegisterModal";
-import { useUserAuthContext } from "../utils/UserAuthState"
+import { useUserAuthContext } from "../utils/UserAuthState";
 
-const Home = (props) => {
-
+const Home = props => {
   const [userAuth, setUserAuth] = useUserAuthContext();
 
-  if (userAuth.isLoggedIn) {
-    props.history.push('/dashboard');
-  }
+  // if (userAuth.isLoggedIn) {
+  //   props.history.push("/dashboard");
+  // }
 
   return (
     <div>
@@ -21,14 +20,16 @@ const Home = (props) => {
             <p className="lead my-3">
               Splity is a web app that allows a user to easily divide up a
               recipt by simply uploading an image. <br />
-              Why waste time trying to do complicated math, let us do the work
-              for you!
+              Why waste time trying to do menial math, let us do the work for
+              you!
             </p>
             <div>
               <div>Insert Gif</div>
-              <RegisterModal buttonLabel="Register Now!" className="Register">
-                Register Now!
-              </RegisterModal>
+              {userAuth.isLoggedIn ? null : (
+                <RegisterModal buttonLabel="Register Now!" className="Register">
+                  Register Now!
+                </RegisterModal>
+              )}
             </div>
           </div>
         </div>

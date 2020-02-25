@@ -21,8 +21,8 @@
     "eject": "react-scripts eject"
   },
   "browserslist": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
   ]
 }

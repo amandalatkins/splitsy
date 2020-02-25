@@ -13,22 +13,22 @@ module.exports = function(sequelize, DataTypes) {
     tax: {
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: 0.00
+      defaultValue: 0.0
     },
     tip: {
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: 0.00
+      defaultValue: 0.0
     },
     subtotal: {
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: 0.00
+      defaultValue: 0.0
     },
     total: {
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: 0.00
+      defaultValue: 0.0
     },
     date: {
       type: DataTypes.DATE,

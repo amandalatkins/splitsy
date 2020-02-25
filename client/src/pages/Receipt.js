@@ -8,7 +8,13 @@ import Breakdown from "../components/Breakdown";
 import moment from "moment";
 
 function Receipt(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
+  const [receiptState, receiptStateDispatch] = useState({
+    currentPayer: null,
+    currentItemEdit: null
+  });
+  const [payerState, payerStateDispatch] = useState({});
+  const [itemState, itemStateDispatch] = useState({});
+
   const receiptId = props.match.params.id;
   const isEditMode = props.match.params.edit;
 
@@ -24,32 +30,44 @@ function Receipt(props) {
     loadReceipt(receiptId);
   }, []);
 
+  useEffect(() => {
+    if (payerState.payers && itemState.items && receiptState.receipts) {
+      if (
+        payerState.payers[0] &&
+        itemState.items[0] &&
+        receiptState.receipts[0]
+      ) {
+        totalCalculator(
+          payerState.payers,
+          itemState.items,
+          receiptState.receipts
+        );
+      }
+    }
+  }, [itemState]);
+
   function loadReceipt(receiptId, payerId) {
     console.log("loading receipt");
     API.getReceiptById(receiptId)
       .then(receipt => {
         if (payerId) {
-          receiptStateDispatch({
-            type: "loadReceiptsAndPayer",
-            receipts: [receipt.data],
-            payerId
+          receiptStateDispatch(prevState => {
+            return { ...prevState, receipts: [receipt.data], payerId };
           });
         } else {
-          receiptStateDispatch({
-            type: "loadReceipts",
-            receipts: [receipt.data]
+          receiptStateDispatch(prevState => {
+            return { ...prevState, receipts: [receipt.data] };
           });
         }
       })
       .catch(err => console.log(err));
-    loadItems(receiptId);
     loadPayers(receiptId);
   }
 
+  // Arman stuff
   function loadItems(receiptId) {
     API.getItemsForReceipt(receiptId).then(res => {
-      receiptStateDispatch({
-        type: "setItems",
+      itemStateDispatch({
         items: [res.data]
       });
     });
@@ -58,12 +76,66 @@ function Receipt(props) {
   function loadPayers(receiptId) {
     API.getPayersForReceipt(receiptId).then(res => {
       console.log(res);
-      receiptStateDispatch({
-        type: "setPayers",
+      payerStateDispatch({
         payers: [res.data]
+      });
+      loadItems(receiptId);
+    });
+  }
+
+  function totalCalculator(payers, items, receipt) {
+    for (let k = 0; k < payers[0].length; k++) {
+      let total = 0;
+      for (let i = 0; i < payers[0][k].Items.length; i++) {
+        let toFloat = parseFloat(payers[0][k].Items[i].price);
+        let portionPay;
+        let counter = 0;
+
+        for (let j = 0; j < items[0].length; j++) {
+          if (items[0][j].id === payers[0][k].Items[i].id) {
+            counter = items[0][j].Payers.length;
+          }
+        }
+
+        portionPay =
+          (toFloat / counter) * (1 + receipt[0].tax) * (1 + receipt[0].tip);
+        total = total + portionPay;
+        total = total;
+      }
+      API.updatePayer(payers[0][k].id, { amountDue: total.toFixed(2) }).then(
+        res => {
+          payerStateDispatch(prevState => {
+            const newState = { ...prevState };
+            newState.payers[0][k].amountDue = total.toFixed(2);
+            return newState;
+          });
+        }
+      );
+    }
+  }
+
+  function paid(payer, index) {
+    let payerUpdate = {
+      paid: true
+    };
+    if (payer.paid === true) {
+      payerUpdate.paid = false;
+    }
+
+    API.updatePayer(payer.id, payerUpdate).then(res => {
+      payerStateDispatch(prevState => {
+        const newState = { ...prevState };
+        newState.payers[0][index].paid = !prevState.payers[0][index].paid;
+        console.log(newState);
+        return newState;
       });
     });
   }
+  // enf arman stuff
+
+  // amanda stuff
+
+  // end amanda stuff
 
   function saveReceipt() {
     var isValid = validateTotals();
@@ -164,7 +236,7 @@ function Receipt(props) {
         <div className="row">
           <div className="col-12">
             <div className="dashboard-header w-100 clearfix">
-              {receiptState.receipts.length ? (
+              {receiptState.receipts ? (
                 isEditMode ? (
                   <form
                     className="form-inline float-left"
@@ -239,6 +311,13 @@ function Receipt(props) {
               receiptId={receiptId}
               loadReceipt={loadReceipt}
               isEditMode={isEditMode}
+              receipt={receiptState.receipts}
+              currentPayer={receiptState.currentPayer}
+              currentItemEdit={receiptState.currentItemEdit}
+              payers={payerState.payers}
+              items={itemState.items}
+              receiptState={receiptState}
+              receiptStateDispatch={receiptStateDispatch}
             />
           </div>
           <div className="col-xs-12 col-md-11 col-lg-5 p-0">
@@ -247,7 +326,7 @@ function Receipt(props) {
                 <table className="w-100 table">
                   {isEditMode ? (
                     <tbody>
-                      {receiptState.receipts.length
+                      {receiptState.receipts
                         ? receiptState.receipts[0].Items.map(item => {
                             return (
                               <ReceiptItemEdit
@@ -255,6 +334,7 @@ function Receipt(props) {
                                 item={item}
                                 isTotalItem={false}
                                 loadReceipt={loadReceipt}
+                                receiptState={receiptState}
                               />
                             );
                           })
@@ -291,9 +371,7 @@ function Receipt(props) {
                             />
                           </td>
                         </tr>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
 
                       <tr className="receipt-item">
                         <td
@@ -309,7 +387,7 @@ function Receipt(props) {
                         </td>
                       </tr>
 
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Subtotal",
@@ -318,11 +396,10 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Tax",
@@ -332,11 +409,10 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Tip",
@@ -346,11 +422,10 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Total",
@@ -359,6 +434,7 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
                       ) : (
                         <tr>
@@ -368,7 +444,7 @@ function Receipt(props) {
                     </tbody>
                   ) : (
                     <tbody>
-                      {receiptState.receipts.length
+                      {receiptState.receipts
                         ? receiptState.receipts[0].Items.map(item => {
                             return (
                               <ReceiptItem
@@ -376,12 +452,14 @@ function Receipt(props) {
                                 item={item}
                                 isTotalItem={false}
                                 reload={loadReceipt}
+                                receiptState={receiptState}
+                                receiptStateDispatch={receiptStateDispatch}
                               />
                             );
                           })
-                        : ""}
+                        : null}
 
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Subtotal",
@@ -390,10 +468,8 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Tax",
@@ -403,10 +479,8 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Tip",
@@ -416,10 +490,8 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                         />
-                      ) : (
-                        ""
-                      )}
-                      {receiptState.receipts.length ? (
+                      ) : null}
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Total",
@@ -445,14 +517,15 @@ function Receipt(props) {
               >
                 Delete Receipt
               </button>
-            ) : (
-              ""
-            )}
+            ) : null}
           </div>
           <div className="col-xs-12 col-lg-4">
             <Breakdown
-              receipt={receiptState.receipts[0]}
-              reload={loadReceipt}
+              receipt={receiptState.receipts}
+              payers={payerState.payers}
+              items={itemState.items}
+              paid={paid}
+              totalCalculator={totalCalculator}
             />
           </div>
         </div>
