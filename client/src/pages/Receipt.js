@@ -64,6 +64,55 @@ function Receipt(props) {
     });
   }
 
+  function totalCalculator(payers, items, receipt) {
+    for (let k = 0; k < payers[0].length; k++) {
+      let total = 0;
+      for (let i = 0; i < payers[0][k].Items.length; i++) {
+        let toFloat = parseFloat(payers[0][k].Items[i].price);
+        let portionPay;
+        let counter = 0;
+
+        for (let j = 0; j < items[0].length; j++) {
+          if (items[0][j].id === payers[0][k].Items[i].id) {
+            counter = items[0][j].Payers.length;
+          }
+        }
+
+        portionPay =
+          (toFloat / counter) * (1 + receipt[0].tax) * (1 + receipt[0].tip);
+        total = total + portionPay;
+        total = total;
+      }
+      API.updatePayer(payers[0][k].id, { amountDue: total.toFixed(2) }).then(
+        res => {
+          payerStateDispatch(prevState => {
+            const newState = { ...prevState };
+            newState.payers[0][k].amountDue = total.toFixed(2);
+            return newState;
+          });
+        }
+      );
+    }
+  }
+
+  function paid(payer, index) {
+    let payerUpdate = {
+      paid: true
+    };
+    if (payer.paid === true) {
+      payerUpdate.paid = false;
+    }
+
+    API.updatePayer(payer.id, payerUpdate).then(res => {
+      payerStateDispatch(prevState => {
+        const newState = { ...prevState };
+        newState.payers[0][index].paid = !prevState.payers[0][index].paid;
+        console.log(newState);
+        return newState;
+      });
+    });
+  }
+
   function saveReceipt() {
     var isValid = validateTotals();
 
@@ -437,7 +486,8 @@ function Receipt(props) {
               receipt={receiptState.receipts}
               payers={payerState.payers}
               items={itemState.items}
-              reload={loadReceipt}
+              paid={paid}
+              totalCalculator={totalCalculator}
             />
           </div>
         </div>
