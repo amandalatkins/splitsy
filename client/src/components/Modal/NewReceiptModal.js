@@ -58,7 +58,7 @@ const NewReceiptModal = props => {
           API.ocrImage({imageUrl})
           .then(ocrResults => {
 
-            if (!ocrResults.error) {
+            if (!ocrResults.data.error) {
                 console.log(ocrResults.data);
                 setUploadingState({ isUploading: true, message: "Creating your receipt..." });
 
@@ -106,7 +106,7 @@ const NewReceiptModal = props => {
                   } else {
                     setUploadingState({ isUploading: true, message: "Unable to read your receipt. Creating blank receipt..." });
                     API.createReceipt(receipt).then(res => {
-                      window.location.href = "/receipt/" + res.data.id + "/edit";
+                      // window.location.href = "/receipt/" + res.data.id + "/edit";
                     });
                   }
                 })
@@ -114,7 +114,7 @@ const NewReceiptModal = props => {
             } else {
                 setUploadingState({ isUploading: true, message: "Unable to import your receipt. Creating blank receipt..." });
                 API.createReceipt(receipt).then(res => {
-                  window.location.href = "/receipt/" + res.data.id + "/edit";
+                  // window.location.href = "/receipt/" + res.data.id + "/edit";
                 });
             }
 

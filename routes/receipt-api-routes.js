@@ -81,13 +81,16 @@ module.exports = function(app) {
 			.quality(60)
 			.scaleToFit( 750, 750 )
 			.greyscale()
-			.brightness(0.2)
-			.contrast(0.2)
+			.brightness(0.3)
+			.contrast(0.3)
 			.write(targetPath, (err) => {
 				if (err) res.json(err);
 				console.log("wrote jimp file");
-				console.log(process.env);
-				res.json({ imageUrl: process.env.SERVER_PATH+"/api/image/"+newFileName });
+				if (process.env.NODE_ENV === "production") {
+					res.json({ imageUrl: process.env.SERVER_PATH+"/api/image/"+newFileName });
+				} else {
+					res.json({ imageUrl: "testing only" });
+				}
 			});		
 		});
 	});
@@ -101,7 +104,7 @@ app.post("/api/ocr", function({body},res) {
 	if (process.env.NODE_ENV === "production") {
 		imageUrl  = body.imageUrl;
 	} else {
-		imageUrl = "http://splitsy.herokuapp.com/api/image/ukiah_1582657478311.jpg";
+		imageUrl = "https://splitsy.herokuapp.com/api/image/ukiah_brewing_1582662739176.jpg";
 	}
 
 	var params = {
