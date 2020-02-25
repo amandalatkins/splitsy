@@ -7,82 +7,27 @@ let ctx = "myChart";
 let payersTotal = 0;
 
 function Breakdown(props) {
-  const [payersState, setPayersState] = useState([]);
-  const [itemsState, setItemsState] = useState([]);
-
   const { receipt, payers, items, totalCalculator } = props;
+  console.log(props);
 
-  useEffect(() => {
-    if (props.payers && props.items && props.receipt) {
-      if (props.payers[0] && props.items[0] && props.receipt[0]) {
-        // alterData(props);
-        totalCalculator(props.payers, props.items, props.receipt);
-        makeChart();
-      }
-    }
-  }, [props.payers]);
+  // useEffect(() => {
+  //   if (props.payers && props.items && props.receipt) {
+  //     if (props.payers[0] && props.items[0] && props.receipt[0]) {
+  //       totalCalculator(props.payers, props.items, props.receipt);
+  //       makeChart();
+  //     }
+  //   }
+  // }, [props.payers || props.items]);
 
   function totalPayedCalc() {
-    // console.log("hi");
-    // console.log(payers);
     let paid = 0;
-    for (let i = 0; i < payers[0].length; i++) {
-      if (payers[0][i].paid) {
-        paid = paid + parseFloat(payers[0][i].amountDue);
+    for (let i = 0; i < props.payers[0].length; i++) {
+      if (props.payers[0][i].paid) {
+        paid = paid + parseFloat(props.payers[0][i].amountDue);
       }
     }
     return parseFloat(paid).toFixed(2);
   }
-
-  // function alterData(props) {
-  //   console.log(props);
-  //   totalCalculator(props.payers, props.items, props.receipt);
-  // }
-
-  // function totalCalculator(payers, items, receipt) {
-  //   for (let k = 0; k < payers[0].length; k++) {
-  //     let total = 0;
-  //     for (let i = 0; i < payers[0][k].Items.length; i++) {
-  //       let toFloat = parseFloat(payers[0][k].Items[i].price);
-  //       let portionPay;
-  //       let counter = 0;
-
-  //       for (let j = 0; j < items[0].length; j++) {
-  //         if (items[0][j].id === payers[0][k].Items[i].id) {
-  //           counter = items[0][j].Payers.length;
-  //         }
-  //       }
-
-  //       portionPay =
-  //         (toFloat / counter) * (1 + receipt[0].tax) * (1 + receipt[0].tip);
-  //       total = total + portionPay;
-  //       total = total;
-  //     }
-  //     API.updatePayer(payers[0][k].id, { amountDue: total.toFixed(2) }).then(
-  //       res => {
-  //         API.getPayerById(payers[0][k].id).then(res => {
-  //           setPayersState(prevState => {
-  //             return [...prevState, res.data];
-  //           });
-  //         });
-  //       }
-  //     );
-  //   }
-  //   console.log(payersState);
-  // }
-
-  // function paid(payer, index) {
-  //   let payerUpdate = {
-  //     paid: true
-  //   };
-  //   if (payer.paid === true) {
-  //     payerUpdate.paid = false;
-  //   }
-
-  //   API.updatePayer(payer.id, payerUpdate).then(res => {
-  //     props.reload(props.receipt.id);
-  //   });
-  // }
 
   function makeChart() {
     document.getElementById("myChart").innerHTML = "";
@@ -117,39 +62,10 @@ function Breakdown(props) {
     });
   }
 
-  // // function getPayersNames() {
-  // //   let names = [];
-  // //   for (let i = 0; i < receiptState.payers[0].length; i++) {
-  // //     names.push(receiptState.payers[0][i].name);
-  // //   }
-  // //   return names;
-  // // }
-
-  // // function getPayersAmountDue() {
-  // //   let amountDue = [];
-  // //   for (let i = 0; i < receiptState.payers[0].length; i++) {
-  // //     amountDue.push(receiptState.payers[0][i].amountDue);
-  // //   }
-  // //   console.log(amountDue);
-  // //   return amountDue;
-  // // }
-
-  // // function getTotalPayed(payers) {
-  // //   let paid = 0;
-  // //   if (payers) {
-  // //     for (let i = 0; i < payers.length; i++) {
-  // //       if (payers[i].paid) {
-  // //         paid = paid + parseFloat(payers[i].amountDue);
-  // //       }
-  // //     }
-  // //   }
-  // //   return parseFloat(paid).toFixed(2);
-  // // }
-
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
       <table className="table w-100">
         <tbody>
           {props.payers

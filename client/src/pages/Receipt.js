@@ -30,6 +30,22 @@ function Receipt(props) {
     loadReceipt(receiptId);
   }, []);
 
+  useEffect(() => {
+    if (payerState.payers && itemState.items && receiptState.receipts) {
+      if (
+        payerState.payers[0] &&
+        itemState.items[0] &&
+        receiptState.receipts[0]
+      ) {
+        totalCalculator(
+          payerState.payers,
+          itemState.items,
+          receiptState.receipts
+        );
+      }
+    }
+  }, [payerState, itemState]);
+
   function loadReceipt(receiptId, payerId) {
     console.log("loading receipt");
     API.getReceiptById(receiptId)
