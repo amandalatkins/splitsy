@@ -1,15 +1,14 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-var db = require("../Models");
+var db = require("../models");
 
 passport.use(
   new LocalStrategy(
     {
-      username: "username",
-      password: "password"
+      usernameField: "user_name"
     },
     function(username, password, done) {
-      db.User.findOne({ where: { username: username } }).then(theUser => {
+      db.User.findOne({ where: { user_name: username } }).then(theUser => {
         if (!theUser) {
           return done(null, false, { message: "User does not exist" });
         }
@@ -23,13 +22,11 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-  db.User.findById(id, function(err, user) {
-    done(err, user);
-  });
+  done(null, user);
 });
 
 module.exports = passport;

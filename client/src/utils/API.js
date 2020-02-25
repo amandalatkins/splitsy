@@ -7,7 +7,7 @@ export default {
   },
   // Log User In
   logInUser: function(info) {
-    return axios.post("/api/users/login", info);
+    return axios.post("/api/users/login/pass", info);
   },
   // Create user
   createUser: function(postData) {
@@ -27,7 +27,9 @@ export default {
   },
   // Create receipt with Image
   uploadImage: function(postData) {
-    return axios.post("/api/upload", postData, { headers: { 'content-type': 'multipart/form-data' } });
+    return axios.post("/api/upload", postData, {
+      headers: { "content-type": "multipart/form-data" }
+    });
   },
   ocrImage: function(postData) {
     return axios.post("/api/ocr", postData);
