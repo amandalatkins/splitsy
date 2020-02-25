@@ -86,7 +86,8 @@ module.exports = function(app) {
 			.write(targetPath, (err) => {
 				if (err) res.json(err);
 				console.log("wrote jimp file");
-				res.json({ imageUrl: "/api/image/"+newFileName });
+				console.log(process.env);
+				res.json({ imageUrl: process.env.SERVER_PATH+"/api/image/"+newFileName });
 			});		
 		});
 	});
