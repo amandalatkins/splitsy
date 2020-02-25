@@ -8,7 +8,10 @@ import Breakdown from "../components/Breakdown";
 import moment from "moment";
 
 function Receipt(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
+  const [receiptState, receiptStateDispatch] = useState({});
+  const [payerState, payerStateDispatch] = useState({});
+  const [itemState, itemStateDispatch] = useState({});
+
   const receiptId = props.match.params.id;
   const isEditMode = props.match.params.edit;
 
@@ -30,13 +33,11 @@ function Receipt(props) {
       .then(receipt => {
         if (payerId) {
           receiptStateDispatch({
-            type: "loadReceiptsAndPayer",
             receipts: [receipt.data],
             payerId
           });
         } else {
           receiptStateDispatch({
-            type: "loadReceipts",
             receipts: [receipt.data]
           });
         }
@@ -48,8 +49,7 @@ function Receipt(props) {
 
   function loadItems(receiptId) {
     API.getItemsForReceipt(receiptId).then(res => {
-      receiptStateDispatch({
-        type: "setItems",
+      itemStateDispatch({
         items: [res.data]
       });
     });
@@ -58,8 +58,7 @@ function Receipt(props) {
   function loadPayers(receiptId) {
     API.getPayersForReceipt(receiptId).then(res => {
       console.log(res);
-      receiptStateDispatch({
-        type: "setPayers",
+      payerStateDispatch({
         payers: [res.data]
       });
     });
@@ -164,7 +163,7 @@ function Receipt(props) {
         <div className="row">
           <div className="col-12">
             <div className="dashboard-header w-100 clearfix">
-              {receiptState.receipts.length ? (
+              {receiptState.receipts ? (
                 isEditMode ? (
                   <form
                     className="form-inline float-left"
@@ -247,7 +246,7 @@ function Receipt(props) {
                 <table className="w-100 table">
                   {isEditMode ? (
                     <tbody>
-                      {receiptState.receipts.length
+                      {receiptState.receipts
                         ? receiptState.receipts[0].Items.map(item => {
                             return (
                               <ReceiptItemEdit
@@ -307,7 +306,7 @@ function Receipt(props) {
                         </td>
                       </tr>
 
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Subtotal",
@@ -318,7 +317,7 @@ function Receipt(props) {
                           loadReceipt={loadReceipt}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Tax",
@@ -330,7 +329,7 @@ function Receipt(props) {
                           loadReceipt={loadReceipt}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Tip",
@@ -342,7 +341,7 @@ function Receipt(props) {
                           loadReceipt={loadReceipt}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItemEdit
                           item={{
                             name: "Total",
@@ -360,7 +359,7 @@ function Receipt(props) {
                     </tbody>
                   ) : (
                     <tbody>
-                      {receiptState.receipts.length
+                      {receiptState.receipts
                         ? receiptState.receipts[0].Items.map(item => {
                             return (
                               <ReceiptItem
@@ -373,7 +372,7 @@ function Receipt(props) {
                           })
                         : null}
 
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Subtotal",
@@ -383,7 +382,7 @@ function Receipt(props) {
                           isTotalItem={true}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Tax",
@@ -394,7 +393,7 @@ function Receipt(props) {
                           subTotal={receiptState.receipts[0].subtotal}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Tip",
@@ -405,7 +404,7 @@ function Receipt(props) {
                           subTotal={receiptState.receipts[0].subtotal}
                         />
                       ) : null}
-                      {receiptState.receipts.length ? (
+                      {receiptState.receipts ? (
                         <ReceiptItem
                           item={{
                             name: "Total",
@@ -435,7 +434,9 @@ function Receipt(props) {
           </div>
           <div className="col-xs-12 col-lg-4">
             <Breakdown
-              receipt={receiptState.receipts[0]}
+              receipt={receiptState.receipts}
+              payers={payerState.payers}
+              items={itemState.items}
               reload={loadReceipt}
             />
           </div>

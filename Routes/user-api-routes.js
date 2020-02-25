@@ -1,4 +1,5 @@
 var db = require("../models");
+const passport = require("../config/passport");
 
 // API routes for User
 module.exports = function(app) {

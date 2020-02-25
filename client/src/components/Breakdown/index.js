@@ -7,7 +7,6 @@ let ctx = "myChart";
 let payersTotal = 0;
 
 function Breakdown(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
   // const [payersState, setPayersState] = useState([]);
   // const [itemsState, setItemsState] = useState([]);
 
@@ -17,6 +16,8 @@ function Breakdown(props) {
   //     // getTotalPayed();
   //   }
   // }, [receiptState]);
+
+  const { receipt, payers, items } = props;
 
   function totalCalculator(payer) {
     let total = 0;
@@ -122,7 +123,7 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
       <table className="table w-100">
         <tbody>
           {receiptState.payers[0]
