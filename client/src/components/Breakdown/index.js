@@ -21,10 +21,22 @@ function Breakdown(props) {
     }
   }, [props.payers]);
 
-  function alterData(props) {
-    console.log(props);
-    totalCalculator(props.payers, props.items, props.receipt);
+  function totalPayedCalc() {
+    console.log("hi");
+    console.log(payers);
+    let paid = 0;
+    for (let i = 0; i < payers[0].length; i++) {
+      if (payers[0][i].paid) {
+        paid = paid + parseFloat(payers[0][i].amountDue);
+      }
+    }
+    return parseFloat(paid).toFixed(2);
   }
+
+  // function alterData(props) {
+  //   console.log(props);
+  //   totalCalculator(props.payers, props.items, props.receipt);
+  // }
 
   // function totalCalculator(payers, items, receipt) {
   //   for (let k = 0; k < payers[0].length; k++) {
@@ -142,52 +154,42 @@ function Breakdown(props) {
           {props.payers
             ? props.payers[0].map((payer, index, payers) => {
                 return (
-                  <div key={payer.id}>
-                    <tr>
-                      <td className="text-left">
-                        {payer.name}{" "}
-                        {payer.paid === true ? (
-                          <span
-                            onClick={() => {
-                              props.paid(payer, index);
-                            }}
-                            className="badge badge-success"
-                          >
-                            Paid
-                          </span>
-                        ) : (
-                          <span
-                            onClick={() => {
-                              props.paid(payer, index);
-                            }}
-                            className="badge badge-warning"
-                          >
-                            Not Paid
-                          </span>
-                        )}
-                      </td>
-                      <td className="text-right">${payer.amountDue}</td>
-                      {/* </tr>
-                    {index === payers.length - 1 ? (
-                      <tr>
-                        <td
-                          className="text-left"
-                          style={{ fontWeight: "bold" }}
+                  <tr key={payer.id}>
+                    <td className="text-left">
+                      {payer.name}{" "}
+                      {payer.paid === true ? (
+                        <span
+                          onClick={() => {
+                            props.paid(payer, index);
+                          }}
+                          className="badge badge-success"
                         >
-                          Total Paid:
-                        </td> */}
-                      {/* <td
-                          className="text-right"
-                          style={{ fontWeight: "bold" }}
+                          Paid
+                        </span>
+                      ) : (
+                        <span
+                          onClick={() => {
+                            props.paid(payer, index);
+                          }}
+                          className="badge badge-warning"
                         >
-                          ${payersTotal}
-                        </td> */}
-                    </tr>
-                    {/* ) : null} */}
-                  </div>
+                          Not Paid
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-right">${payer.amountDue}</td>
+                  </tr>
                 );
               })
             : null}
+          <tr>
+            <td className="text-left" style={{ fontWeight: "bold" }}>
+              Total Paid:
+            </td>
+            <td className="text-right" style={{ fontWeight: "bold" }}>
+              ${props.payers ? totalPayedCalc() : null}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
