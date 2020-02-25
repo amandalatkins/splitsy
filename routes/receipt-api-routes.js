@@ -72,7 +72,7 @@ module.exports = function(app) {
 	fs.rename(tempPath, targetPath, err => {
 		if (err) throw err;
 
-		console.log("moved file!");
+		console.log("moved file! " + targetPath);
 	
 		jimp.read(targetPath, (err, img) => {
 			if (err) return console.log(err);
