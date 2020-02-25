@@ -5,11 +5,7 @@ const path = require("path");
 const fs = require('fs');
 const axios = require("axios");
 require("dotenv").config();
-<<<<<<< HEAD:routes/receipt-api-routes.js
-=======
 const jimp = require("jimp");
-var FormData = require('form-data');
->>>>>>> a06c154a829ffeb745e67f21fde6b6466519e159:Routes/receipt-api-routes.js
 
 module.exports = function(app) {
   //get all receipts
@@ -100,7 +96,6 @@ module.exports = function(app) {
 app.post("/api/ocr", function({body},res) {
 	const { imageUrl } = body;
 	// const imageUrl = "https://raindev.us/b_bar.jpg";
-
 
 	axios.get("https://api.ocr.space/parse/imageurl", { 
 		params: {
