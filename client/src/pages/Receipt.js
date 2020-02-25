@@ -334,6 +334,7 @@ function Receipt(props) {
                                 item={item}
                                 isTotalItem={false}
                                 loadReceipt={loadReceipt}
+                                receiptState={receiptState}
                               />
                             );
                           })
@@ -395,6 +396,7 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
                       ) : null}
                       {receiptState.receipts ? (
@@ -407,6 +409,7 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
                       ) : null}
                       {receiptState.receipts ? (
@@ -419,6 +422,7 @@ function Receipt(props) {
                           isTotalItem={true}
                           subTotal={receiptState.receipts[0].subtotal}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
                       ) : null}
                       {receiptState.receipts ? (
@@ -430,6 +434,7 @@ function Receipt(props) {
                           }}
                           isTotalItem={true}
                           loadReceipt={loadReceipt}
+                          receiptState={receiptState}
                         />
                       ) : (
                         <tr>

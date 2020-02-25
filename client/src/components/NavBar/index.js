@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import RegisterModal from "../Modal/RegisterModal";
 import LoginModal from "../Modal/LoginModal";
 import { useReceiptContext } from "../../utils/ReceiptState";
 import { useUserAuthContext } from "../../utils/UserAuthState";
 import moment from "moment";
+import API from "../../utils/API";
 
 function NavBar() {
-  // add functionality to show percentage of receipt filled
-
-  const [receiptState] = useReceiptContext();
-
   const [userAuth, setUserAuth] = useUserAuthContext();
+  const [receiptState, setReceiptState] = useState();
 
   function handleLogOut() {
     setUserAuth({ type: "logOut" });
   }
+
+  // useEffect(() => {
+  //   loadReceiptId();
+  // }, []);
+
+  // function loadReceiptId() {
+  //   const splitUrl = window.location.pathname.split("/");
+  //   console.log(splitUrl);
+  //   const receiptId = splitUrl[2];
+  //   API.getReceiptById(receiptId).then(res => {
+  //     setReceiptState(res.data);
+  //   });
+  // }
 
   return (
     <nav className="navbar navbar-dark">
@@ -44,15 +55,15 @@ function NavBar() {
                 's Dashboard
               </a>
             </li>
-            <li className="breadcrumb-item active">
+            {/* <li className="breadcrumb-item active">
               <a href="/dashboard" onClick={e => e.preventDefault()}>
-                {receiptState.receipts.length
-                  ? receiptState.receipts[0].label +
+                {receiptState
+                  ? receiptState.label +
                     " " +
-                    moment(receiptState.receipts[0].date).format("M/DD")
+                    moment(receiptState.date).format("M/DD")
                   : ""}
               </a>
-            </li>
+            </li> */}
           </ol>
         )
       ) : (

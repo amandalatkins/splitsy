@@ -13,24 +13,28 @@ import NavBar from "./components/NavBar";
 
 function App() {
   return (
-	  <UserAuthProvider>
-		<ReceiptProvider >
-			<Router>
-				<div>
-				<NavBar />
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/home" component={Home} />
-					<PrivateRoute path="/dashboard" component={Dashboard} />
-					<PrivateRoute exact path="/receipt/:id" component={Receipt} />
-					<PrivateRoute exact path="/receipt/:id/:edit" component={Receipt} />
-					<Route component={NoMatch} />
-				</Switch>
-				{/* <Footer /> */}
-				</div>
-			</Router>
-    	</ReceiptProvider>
-	</UserAuthProvider>
+    <UserAuthProvider>
+      <ReceiptProvider>
+        <Router>
+          <div>
+            <NavBar />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/home" component={Home} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/receipt/:id" component={Receipt} />
+              <PrivateRoute
+                exact
+                path="/receipt/:id/:edit"
+                component={Receipt}
+              />
+              <Route component={NoMatch} />
+            </Switch>
+            {/* <Footer /> */}
+          </div>
+        </Router>
+      </ReceiptProvider>
+    </UserAuthProvider>
   );
 }
 

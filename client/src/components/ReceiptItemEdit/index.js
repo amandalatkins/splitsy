@@ -4,7 +4,7 @@ import API from "../../utils/API";
 import { is } from "bluebird";
 
 function ReceiptItemEdit(props) {
-  const [receiptState] = useReceiptContext();
+  const { receiptState } = props;
 
   const [editItem, setEditItem] = useState(false);
 

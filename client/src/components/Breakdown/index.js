@@ -29,7 +29,8 @@ function Breakdown(props) {
   }
 
   function makeChart() {
-    document.getElementById("myChart").innerHTML = "";
+    document.getElementById("chartHolder").innerHTML =
+      '<canvas id="myChart" width="400" height="600"></canvas>';
 
     let names = [];
     let amountDue = [];
@@ -64,7 +65,7 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      <canvas id="myChart" width="400" height="600"></canvas>
+      <div id="chartHolder"></div>
       <table className="table w-100">
         <tbody>
           {props.payers
