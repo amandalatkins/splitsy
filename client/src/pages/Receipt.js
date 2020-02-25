@@ -8,7 +8,10 @@ import Breakdown from "../components/Breakdown";
 import moment from "moment";
 
 function Receipt(props) {
-  const [receiptState, receiptStateDispatch] = useState({});
+  const [receiptState, receiptStateDispatch] = useState({
+    currentPayer: null,
+    currentItemEdit: null
+  });
   const [payerState, payerStateDispatch] = useState({});
   const [itemState, itemStateDispatch] = useState({});
 
@@ -32,13 +35,12 @@ function Receipt(props) {
     API.getReceiptById(receiptId)
       .then(receipt => {
         if (payerId) {
-          receiptStateDispatch({
-            receipts: [receipt.data],
-            payerId
+          receiptStateDispatch(prevState => {
+            return { ...prevState, receipts: [receipt.data], payerId };
           });
         } else {
-          receiptStateDispatch({
-            receipts: [receipt.data]
+          receiptStateDispatch(prevState => {
+            return { ...prevState, receipts: [receipt.data] };
           });
         }
       })
@@ -47,6 +49,7 @@ function Receipt(props) {
     loadPayers(receiptId);
   }
 
+  // Arman stuff
   function loadItems(receiptId) {
     API.getItemsForReceipt(receiptId).then(res => {
       itemStateDispatch({
@@ -112,6 +115,11 @@ function Receipt(props) {
       });
     });
   }
+  // enf arman stuff
+
+  // amanda stuff
+
+  // end amanda stuff
 
   function saveReceipt() {
     var isValid = validateTotals();
@@ -287,6 +295,13 @@ function Receipt(props) {
               receiptId={receiptId}
               loadReceipt={loadReceipt}
               isEditMode={isEditMode}
+              receipt={receiptState.receipts}
+              currentPayer={receiptState.currentPayer}
+              currentItemEdit={receiptState.currentItemEdit}
+              payers={payerState.payers}
+              items={itemState.items}
+              receiptState={receiptState}
+              receiptStateDispatch={receiptStateDispatch}
             />
           </div>
           <div className="col-xs-12 col-md-11 col-lg-5 p-0">

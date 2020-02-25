@@ -17,13 +17,14 @@ function Breakdown(props) {
       if (props.payers[0] && props.items[0] && props.receipt[0]) {
         // alterData(props);
         totalCalculator(props.payers, props.items, props.receipt);
+        makeChart();
       }
     }
   }, [props.payers]);
 
   function totalPayedCalc() {
-    console.log("hi");
-    console.log(payers);
+    // console.log("hi");
+    // console.log(payers);
     let paid = 0;
     for (let i = 0; i < payers[0].length; i++) {
       if (payers[0][i].paid) {
@@ -83,38 +84,38 @@ function Breakdown(props) {
   //   });
   // }
 
-  // function makeChart() {
-  //   document.getElementById("myChart").innerHTML = "";
+  function makeChart() {
+    document.getElementById("myChart").innerHTML = "";
 
-  //   let names = [];
-  //   let amountDue = [];
-  //   for (let i = 0; i < receiptState.payers[0].length; i++) {
-  //     names.push(receiptState.payers[0][i].name);
-  //   }
-  //   for (let i = 0; i < receiptState.payers[0].length; i++) {
-  //     amountDue.push(receiptState.payers[0][i].amountDue);
-  //   }
+    let names = [];
+    let amountDue = [];
+    for (let i = 0; i < payers[0].length; i++) {
+      names.push(payers[0][i].name);
+    }
+    for (let i = 0; i < payers[0].length; i++) {
+      amountDue.push(payers[0][i].amountDue);
+    }
 
-  //   let myPieChart = new Chart(ctx, {
-  //     type: "pie",
-  //     data: {
-  //       datasets: [
-  //         {
-  //           data: amountDue,
-  //           backgroundColor: [
-  //             "#f44336",
-  //             "#ff9800",
-  //             "#2196f3",
-  //             "#4caf50",
-  //             "#f48fb1",
-  //             "#90caf9"
-  //           ]
-  //         }
-  //       ],
-  //       labels: names
-  //     }
-  //   });
-  // }
+    let myPieChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        datasets: [
+          {
+            data: amountDue,
+            backgroundColor: [
+              "#f44336",
+              "#ff9800",
+              "#2196f3",
+              "#4caf50",
+              "#f48fb1",
+              "#90caf9"
+            ]
+          }
+        ],
+        labels: names
+      }
+    });
+  }
 
   // // function getPayersNames() {
   // //   let names = [];
@@ -148,7 +149,7 @@ function Breakdown(props) {
   return (
     <div className="breakdown h-100">
       <h4>Breakdown</h4>
-      {/* <canvas id="myChart" width="400" height="600"></canvas> */}
+      <canvas id="myChart" width="400" height="600"></canvas>
       <table className="table w-100">
         <tbody>
           {props.payers

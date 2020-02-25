@@ -3,23 +3,21 @@ import { useReceiptContext } from "../../utils/ReceiptState";
 import API from "../../utils/API";
 
 function PayerList(props) {
-  const [receiptState, receiptStateDispatch] = useReceiptContext();
-
   const [addPayer, setAddPayer] = useState(false);
+  // const { payers } = props;
+  // const [payers, setPayers] = useState([]);
 
-  const [payers, setPayers] = useState([]);
-
-  useEffect(() => {
-    if (receiptState.receipts[0]) {
-      loadPayers();
-    }
-  }, [receiptState]);
+  // useEffect(() => {
+  //   if (props.receipt[0]) {
+  //     loadPayers();
+  //   }
+  // }, [props.receipt[0]]);
 
   const nameInput = useRef();
 
-  function loadPayers() {
-    setPayers(receiptState.receipts[0].Payers);
-  }
+  // function loadPayers() {
+  //   setPayers(receipt[0].Payers);
+  // }
 
   function toggleAddPayer() {
     if (!props.isEditMode) {
@@ -27,15 +25,41 @@ function PayerList(props) {
     }
   }
 
+  // function selectPayer(id) {
+  //   if (!props.isEditMode) {
+  //     if (id === receipt[0].currentPayer) {
+  //       receiptStateDispatch({ payerId: null });
+  //     } else {
+  //       receiptStateDispatch({ payerId: id });
+  //     }
+  //   }
+  // }
+
   function selectPayer(id) {
     if (!props.isEditMode) {
-      if (id === receiptState.currentPayer) {
-        receiptStateDispatch({ type: "setCurrentPayer", payerId: null });
+      if (id === props.receiptState.currentPayer) {
+        props.receiptStateDispatch({ payerId: null });
       } else {
-        receiptStateDispatch({ type: "setCurrentPayer", payerId: id });
+        props.receiptStateDispatch(prevState => {
+          return { ...prevState, payerId: id };
+        });
       }
     }
   }
+
+  // function savePayer(e) {
+  //   e.preventDefault();
+  //   API.createPayer({
+  //     name: nameInput.current.value,
+  //     ReceiptId: props.receiptId
+  //   })
+  //     .then(results => {
+  //       nameInput.current.value = "";
+  //       toggleAddPayer();
+  //       props.loadReceipt(receipts[0].id, results.data.id);
+  //     })
+  //     .catch(err => console.log(err));
+  // }
 
   function savePayer(e) {
     e.preventDefault();
@@ -46,15 +70,24 @@ function PayerList(props) {
       .then(results => {
         nameInput.current.value = "";
         toggleAddPayer();
-        props.loadReceipt(receiptState.receipts[0].id, results.data.id);
+        props.loadReceipt(props.receipt[0].id, results.data.id);
       })
       .catch(err => console.log(err));
   }
 
+  // function deletePayer(id) {
+  //   API.deletePayer(id)
+  //     .then(_ => {
+  //       props.loadReceipt(receipts[0].id);
+  //       window.location.reload();
+  //     })
+  //     .catch(err => console.log(err));
+  // }
+
   function deletePayer(id) {
     API.deletePayer(id)
       .then(_ => {
-        props.loadReceipt(receiptState.receipts[0].id);
+        props.loadReceipt(props.receipt[0].id);
         window.location.reload();
       })
       .catch(err => console.log(err));
@@ -62,33 +95,33 @@ function PayerList(props) {
 
   return (
     <ul className="list-group payer-list">
-      {payers.map(payer => {
-        // {receiptState.receipts.length ? receiptState.receipts[0].Payers.map(payer => {
-        return (
-          <li
-            key={payer.id}
-            className={
-              receiptState.currentPayer === payer.id
-                ? "list-group-item selected"
-                : "list-group-item"
-            }
-            onClick={() => selectPayer(payer.id)}
-          >
-            {receiptState.currentPayer === payer.id ? (
-              <span
-                className="remove-btn bg-danger text-white mr-1"
-                onClick={() => deletePayer(payer.id)}
+      {props.payers
+        ? props.payers[0].map(payer => {
+            return (
+              <li
+                key={payer.id}
+                className={
+                  props.currentPayer === payer.id
+                    ? "list-group-item selected"
+                    : "list-group-item"
+                }
+                onClick={() => selectPayer(payer.id)}
               >
-                <i className="fas fa-times"></i>
-              </span>
-            ) : (
-              ""
-            )}
-            {payer.name} <span className="cancel-payer">Close</span>
-          </li>
-        );
-        // }) : ""}
-      })}
+                {props.currentPayer === payer.id ? (
+                  <span
+                    className="remove-btn bg-danger text-white mr-1"
+                    // onClick={() => deletePayer(payer.id)}
+                  >
+                    <i className="fas fa-times"></i>
+                  </span>
+                ) : (
+                  ""
+                )}
+                {payer.name} <span className="cancel-payer">Close</span>
+              </li>
+            );
+          })
+        : null}
 
       {addPayer ? (
         <li className="list-group-item">
