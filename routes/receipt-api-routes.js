@@ -94,13 +94,18 @@ module.exports = function(app) {
 
 // Sends Image to OCR API
 app.post("/api/ocr", function({body},res) {
-	const { imageUrl } = body;
-	// const imageUrl = "https://raindev.us/b_bar.jpg";
+
+	let imageUrl = "";
+
+	if (process.env.NODE_ENV === "production") {
+		imageUrl  = body.imageUrl;
+	} else {
+		imageUrl = "http://splitsy.herokuapp.com/api/image/ukiah_1582657478311.jpg";
+	}
 
 	var params = {
 		apikey: process.env.OCR_API_KEY,
-		// url: imageUrl,
-		url: "http://splitsy.herokuapp.com/api/image/ukiah_1582657478311.jpg",
+		url: imageUrl,
 		detectOrientation: true,
 		isTable: true,
 		filetype: "JPG"
