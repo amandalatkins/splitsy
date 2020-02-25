@@ -21,11 +21,9 @@ require("./routes/user-api-routes.js")(app);
 require("./routes/items-api-routes.js")(app);
 require("./routes/receipt-api-routes.js")(app);
 
-if (process.env.NODE_ENV === "production") {
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "./client/build/index.html"));
-    });
-}
+app.get("*", (_, res) => {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 db.sequelize.sync({ force: false }).then(function() {
   app.listen(PORT, function() {
