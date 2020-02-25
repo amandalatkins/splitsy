@@ -97,15 +97,19 @@ app.post("/api/ocr", function({body},res) {
 	const { imageUrl } = body;
 	// const imageUrl = "https://raindev.us/b_bar.jpg";
 
-	axios.get("https://api.ocr.space/parse/imageurl", { 
-		params: {
-			apikey: process.env.OCR_API_KEY,
-			url: imageUrl,
-			detectOrientation: true,
-			isTable: true,
-			filetype: "JPG"
-		}
-	}).then(results => {
+	var params = {
+		apikey: process.env.OCR_API_KEY,
+		// url: imageUrl,
+		url: "http://splitsy.herokuapp.com/api/image/ukiah_1582657478311.jpg",
+		detectOrientation: true,
+		isTable: true,
+		filetype: "JPG"
+	}
+
+	console.log(params);
+
+	axios.get("https://api.ocr.space/parse/imageurl", { params })
+	.then(results => {
 		console.log(results.data);
 		if (results.data.ParsedResults) {
 			res.json(results.data.ParsedResults);
@@ -125,8 +129,8 @@ app.get('/api/image/:img', ({params}, res) => {
 });
 
 // // Parses OCR response
-app.post("/api/parse", function({body}, res) {
-	var { text } = body;
+app.post("/api/parse", function(req, res) {
+	var { text } = req.body;
 
 	var parse = text.split('\n');
 
@@ -167,10 +171,24 @@ app.post("/api/parse", function({body}, res) {
 	var receiptItems = []
 
 	itemArray.forEach(item => {
-		receiptItems.push({
-			name: item[0],
-			price: item[1].replace(/[^.0-9]+/g,"")
+		if (item.length > 1) {
+			receiptItems.push({
+				name: item[0],
+				price: item[1].replace(/[^.0-9]+/g,"")
 			});
+		} else {
+			if (item[0].includes('$')) {
+				receiptItems.push({
+					name: "",
+					price: item[0].replace(/[^.0-9]+/g,"")
+				});
+			} else {
+				receiptItems.push({
+					name: item[0],
+					price: 0
+				});
+			}
+		}
 	});
 	
 	res.json(receiptItems);
