@@ -1,10 +1,15 @@
 var db = require("../models");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/receipt_images/" });
 const path = require("path");
 const fs = require('fs');
 const axios = require("axios");
 require("dotenv").config();
+<<<<<<< HEAD:routes/receipt-api-routes.js
+=======
+const jimp = require("jimp");
+var FormData = require('form-data');
+>>>>>>> a06c154a829ffeb745e67f21fde6b6466519e159:Routes/receipt-api-routes.js
 
 module.exports = function(app) {
   //get all receipts
@@ -63,89 +68,119 @@ module.exports = function(app) {
   //create new Receipt with image
   app.post("/api/upload", upload.single('receiptImage'), function(req, res) {
     // const newFileName = req.body.label.replace(/\s/g, '_').replace(/^A-Za-z0-9/g, '').toLowerCase()+Date.now() + path.extname(req.file.originalname).toLowerCase();
-    const newFileName = req.body.label.replace(/\s/g, '_').replace(/^A-Za-z0-9/g, '').toLowerCase()+Date.now() + ".jpg";
-    const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "../client/public/assets/receipt_uploads/"+newFileName);
+    const newFileName = req.body.label.replace(/\s/g, '_').replace(/^A-Za-z0-9/g, '').toLowerCase()+"_"+Date.now() + ".jpg";
+	// const tempPath = path.join(__dirname, "../"+req.file.path);
+	const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, "../uploads/receipt_images/"+newFileName);
+	console.log(tempPath + " ==> " + targetPath);
+	fs.rename(tempPath, targetPath, err => {
+		if (err) throw err;
 
-	var livePath;
+		console.log("moved file!");
+	
+		jimp.read(targetPath, (err, img) => {
+			if (err) return console.log(err);
+			console.log('running jimp');
+			img
+			.quality(60)
+			.scaleToFit( 750, 750 )
+			.greyscale()
+			.brightness(0.2)
+			.contrast(0.2)
+			.write(targetPath, (err) => {
+				if (err) res.json(err);
+				console.log("wrote jimp file");
+				res.json({ imageUrl: "/api/image/"+newFileName });
+			});		
+		});
+	});
+});
 
-	if (process.env.NODE_ENV === "production") {
-    	//PRODUCTION:
-		livePath = process.env.SERVER_PATH + "/assets/receipt_uploads/"+newFileName;
-	} else {
-    	// TESTING::
-		livePath = "https://raindev.us/b_bar.jpg";
+// Sends Image to OCR API
+app.post("/api/ocr", function({body},res) {
+	const { imageUrl } = body;
+	// const imageUrl = "https://raindev.us/b_bar.jpg";
+
+
+	axios.get("https://api.ocr.space/parse/imageurl", { 
+		params: {
+			apikey: process.env.OCR_API_KEY,
+			url: imageUrl,
+			detectOrientation: true,
+			isTable: true,
+			filetype: "JPG"
+		}
+	}).then(results => {
+		console.log(results.data);
+		if (results.data.ParsedResults) {
+			res.json(results.data.ParsedResults);
+		} else {
+			res.json({ error: "Couldn't process image :(" });
+		}
+	})
+	.catch(err => console.log(err));
+});
+
+// Returns an uploaded receipt image
+app.get('/api/image/:img', ({params}, res) => {
+	var { img } = params;
+	var imageUrl = path.join(__dirname, '../uploads/receipt_images/'+img);
+	console.log(imageUrl);
+	res.sendFile(imageUrl);
+});
+
+// // Parses OCR response
+app.post("/api/parse", function({body}, res) {
+	var { text } = body;
+
+	var parse = text.split('\n');
+
+	for (var i = 0; i < parse.length; i++) {
+		// Replace random characters
+		parse[i] = parse[i].replace(/\t\r/g,'');
+
+		// Split the line by 'tabs'
+		parse[i] = parse[i].split("\t");
 	}
 
+	//Remove any lines that don't have more than one item OR a dollar sign (nearly all the food items end up having 2 children)
+	parse = parse.filter(item => {
+		if (item.length > 1) {
+			return true;
+		} else {
+			return item.some(child => child.includes('$'));	
+		}
+	});
 
-    fs.rename(tempPath, targetPath, err => {
-      	if (err) throw err;
-		axios.get("https://api.ocr.space/parse/imageurl", { 
-			params: {
-				apikey: process.env.OCR_API_KEY,
-				url: livePath,
-				detectOrientation: true,
-				isTable: true,
-				filetype: "JPG"
+	//Loop through the array and see if any item in that array contains a $. Keep it if it does.
+	var itemArray = [];
+
+	for (var i = 0; i < parse.length; i++) {
+		var keep = false;
+		parse[i].forEach(item => {
+			if (item.includes('$')) {
+			keep = true;
 			}
-		})
-			.then(results => {
-				if (!results.data.ParsedResults[0].IsErroredOnProcessing) {
-		
-					// Get all the returned text
-		
-					var text = results.data.ParsedResults[0].ParsedText;
-		
-					// PARSE THE TEXT
-		
-					// Break it up into an array based on line breaks
-					parse = text.split("\n");
-		
-					for (var i = 0; i < parse.length; i++) {
-					// Replace random characters
-					parse[i] = parse[i].replace(/\t\r/g,'');
-					// Split the line by 'tabs'
-					parse[i] = parse[i].split("\t");
-					}
-					// Remove any lines that don't have more than one item (nearly all the food items end up having 2 children)
-					parse = parse.filter(item => item.length > 1);
-		
-					//Loop through the array and see if any item in that array contains a $. Keep it if it does.
-					var itemArray = [];
-		
-					for (var i = 0; i < parse.length; i++) {
-					var keep = false;
-					parse[i].forEach(item => {
-						if (item.includes('$')) {
-						keep = true;
-						}
-					});
-		
-					if (keep) itemArray.push(parse[i])
-		
-					}
-		
-					// Format the returned itemArray into object with name and price keys to match database, 
-					// parse out any non numerical characters from the price key
-					var receiptItems = []
-		
-					itemArray.forEach(item => {
-					receiptItems.push({
-						name: item[0],
-						price: item[1].replace(/[^.0-9]+/g,"")
-					});
-					});
-		
-					res.json({ receiptImagePath: livePath, receiptItems });
-		
-				}
-			})
-			.catch(err => res.json(err));
-      })
-    //   .catch(err => res.json(err));  
+		});
 
-    // });
-  });
+		if (keep) itemArray.push(parse[i])
+
+	}
+
+	// Format the returned itemArray into object with name and price keys to match database, 
+	// parse out any non numerical characters from the price key
+	var receiptItems = []
+
+	itemArray.forEach(item => {
+		receiptItems.push({
+			name: item[0],
+			price: item[1].replace(/[^.0-9]+/g,"")
+			});
+	});
+	
+	res.json(receiptItems);
+
+});
 
   //update receipt
   app.put("/api/receipts/:id", function (req, res) {

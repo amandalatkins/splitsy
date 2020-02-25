@@ -48,49 +48,86 @@ const NewReceiptModal = props => {
       formData.append('date', formState.date);
       formData.append('receiptImage',formState.receiptImage);
 
-      API.uploadImageAndOCR(formData)
-      .then(results => {
+      API.uploadImage(formData)
+      .then(imgResults => {
 
-          const { receiptImagePath, receiptItems } = results.data;
+          setUploadingState({ isUploading: true, message: "Scanning your receipt..." });
 
-          receipt.image = receiptImagePath;
+          const { imageUrl } = imgResults.data;
+
+          API.ocrImage({imageUrl})
+          .then(ocrResults => {
+
+            if (!ocrResults.error) {
+                setUploadingState({ isUploading: true, message: "Creating your receipt..." });
+                API.parseOcrData({ text: ocrResults.data[0].ParsedText })
+                .then(parseResults => {
+                  if (!parseResults.data.error) {
+                    API.createReceipt(receipt).then(res => {
+
+                        console.log("Created Receipt with items");
+            
+                        var receiptId = res.data.id;
+                        var receiptItems = parseResults.data
+            
+                        var receiptSubtotal = 0;
+            
+                        receiptItems.forEach((item, index) => {
+                          if (item.name.toLowerCase().includes('subtotal')) {
+                            receiptSubtotal = item.price;
+                            API.updateReceipt(receiptId, { subtotal: item.price })
+                            .then(done => console.log(done))
+                            .catch(err => console.log(err));
+                          } else if (item.name.toLowerCase().includes('total')) {
+                            API.updateReceipt(receiptId, { total: item.price })
+                            .then(done => console.log(done))
+                            .catch(err => console.log(err));
+                          } else if (item.name.toLowerCase().includes('tax')) {
+                            if (receiptSubtotal !== 0) {
+                              API.updateReceipt(receiptId, { tax: parseFloat(item.price / receiptSubtotal).toFixed(5) })
+                              .then(done => console.log(done))
+                              .catch(err => console.log(err));
+                            }
+                          } else {
+                            API.createItem({ ReceiptId: receiptId,  ...item })
+                            .then(done => console.log(done))
+                            .catch(err => console.log(err));
+                          }
+                          console.log(index + " = " + receiptItems.length - 1);
+                          if (index === receiptItems.length - 1) {
+                            window.location.href = "/receipt/" + receiptId + "/edit";
+                          }
+                        });
+                      });
+                  } else {
+                    setUploadingState({ isUploading: true, message: "Unable to read your receipt. Creating blank receipt..." });
+                    API.createReceipt(receipt).then(res => {
+                      window.location.href = "/receipt/" + res.data.id + "/edit";
+                    });
+                  }
+                })
+                .catch(err => console.log(err));
+            } else {
+                setUploadingState({ isUploading: true, message: "Unable to import your receipt. Creating blank receipt..." });
+                API.createReceipt(receipt).then(res => {
+                  window.location.href = "/receipt/" + res.data.id + "/edit";
+                });
+            }
+
+            // API.parseOcr
+            console.log(ocrResults);
+          })
+          .catch(err => console.log(err));
+
+          // console.log(results);
+
+          // const { receiptImagePath, receiptItems } = results.data;
+
+          // receipt.image = receiptImagePath;
 
           // Create the receipt and get the new receipt ID
-          API.createReceipt(receipt).then(res => {
-
-            console.log("Created Receipt");
-
-            var receiptId = res.data.id;
-
-            var receiptSubtotal = 0;
-
-            receiptItems.forEach((item, index) => {
-              if (item.name.toLowerCase().includes('subtotal')) {
-                receiptSubtotal = item.price;
-                API.updateReceipt(receiptId, { subtotal: item.price })
-                .then(done => console.log(done))
-                .catch(err => console.log(err));
-              } else if (item.name.toLowerCase().includes('total')) {
-                API.updateReceipt(receiptId, { total: item.price })
-                .then(done => console.log(done))
-                .catch(err => console.log(err));
-              } else if (item.name.toLowerCase().includes('tax')) {
-                if (receiptSubtotal !== 0) {
-                  API.updateReceipt(receiptId, { tax: parseFloat(item.price / receiptSubtotal).toFixed(5) })
-                  .then(done => console.log(done))
-                  .catch(err => console.log(err));
-                }
-              } else {
-                API.createItem({ ReceiptId: receiptId,  ...item })
-                .then(done => console.log(done))
-                .catch(err => console.log(err));
-              }
-              console.log(index + " = " + receiptItems.length - 1);
-              if (index === receiptItems.length - 1) {
-                window.location.href = "/receipt/" + receiptId + "/edit";
-              }
-            });
-          });
+          // 
+          // });
 
       })
       .catch(err => console.log(err));
