@@ -28,6 +28,11 @@ function App() {
                 path="/receipt/:id/:edit"
                 component={Receipt}
               />
+              <PrivateRoute
+                exact
+                path="/receipt/:id/:edit/:upload"
+                component={Receipt}
+              />
               <Route component={NoMatch} />
             </Switch>
             {/* <Footer /> */}

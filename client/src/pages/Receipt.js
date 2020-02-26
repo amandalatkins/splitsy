@@ -64,7 +64,6 @@ function Receipt(props) {
     loadPayers(receiptId);
   }
 
-  // Arman stuff
   function loadItems(receiptId) {
     API.getItemsForReceipt(receiptId).then(res => {
       itemStateDispatch({
@@ -131,11 +130,6 @@ function Receipt(props) {
       });
     });
   }
-  // enf arman stuff
-
-  // amanda stuff
-
-  // end amanda stuff
 
   function saveReceipt() {
     var isValid = validateTotals();
