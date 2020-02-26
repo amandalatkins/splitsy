@@ -104,7 +104,7 @@ app.post("/api/ocr", function({body},res) {
 	if (process.env.NODE_ENV === "production") {
 		imageUrl  = body.imageUrl;
 	} else {
-		imageUrl = "https://splitsy.herokuapp.com/api/image/ukiah_brewing_1582662739176.jpg";
+		imageUrl = "https://raindev.us/b_bar.jpg";
 	}
 
 	var params = {

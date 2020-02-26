@@ -30,8 +30,9 @@ function NavBar() {
   return (
     <nav className="navbar navbar-dark">
       <a className="navbar-brand" href="/home">
-        Splitsy
+        <img src="/assets/img/logo-white.png"/>
       </a>
+      
 
       {userAuth.isLoggedIn ? (
         window.location.pathname === "/dashboard" ? (
@@ -40,7 +41,7 @@ function NavBar() {
               <a href="/dashboard">
                 {userAuth.user.firstName
                   ? userAuth.user.firstName
-                  : userAuth.user.userName}
+                  : userAuth.user.username}
                 's Dashboard
               </a>
             </li>
