@@ -132,7 +132,7 @@ const RegisterModal = props => {
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>{" "}
-          <Button color="primary" onClick={handleFormSubmit}>
+          <Button color="primary" onClick={handleFormSubmit} className="btn-orange">
             Register{" "}
           </Button>
         </ModalFooter>
