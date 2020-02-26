@@ -32,7 +32,7 @@ const DropDown = props => {
             switchSort("none");
           }}
         >
-          None
+          Default
         </DropdownItem>
         <DropdownItem
           onClick={() => {
