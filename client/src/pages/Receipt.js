@@ -278,7 +278,7 @@ function Receipt(props) {
                 {isEditMode ? (
                   <span>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-orange"
                       onClick={() => saveReceipt()}
                     >
                       <i className="fas fa-save"></i>
@@ -344,9 +344,10 @@ function Receipt(props) {
                             />
                             <p className="mt-2">
                               <button
-                                className="btn btn-primary btn-sm mr-1"
+                                className="btn btn-orange btn-sm mr-1"
                                 onClick={() => addNewItem()}
                               >
+                                <i class="fas fa-save"></i>&nbsp;
                                 Save
                               </button>
                               <button

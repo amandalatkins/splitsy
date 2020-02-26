@@ -105,15 +105,17 @@ function ReceiptItemEdit(props) {
             {!isTotalItem ? (
               <p className="mt-2">
                 <button
-                  className="btn btn-secondary btn-sm mr-1"
+                  className="btn btn-orange btn-sm mr-1"
                   onClick={() => updateItem()}
                 >
+                  <i class="fas fa-save"></i>&nbsp;
                   Save
                 </button>
                 <button
-                  className="btn btn-danger btn-sm"
+                  className="btn btn-secondary btn-sm"
                   onClick={() => removeItem()}
                 >
+                  <i class="fas fa-times"></i>&nbsp;
                   Remove
                 </button>
               </p>
@@ -160,9 +162,10 @@ function ReceiptItemEdit(props) {
             )}
             {isTotalItem ? (
               <button
-                className="btn btn-secondary btn-sm"
+                className="btn btn-orange btn-sm"
                 onClick={() => updateTotalItem(item.name)}
               >
+                <i class="fas fa-save"></i>&nbsp;
                 Save
               </button>
             ) : null}
