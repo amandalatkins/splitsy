@@ -41,7 +41,7 @@ function NavBar() {
               <a href="/dashboard">
                 {userAuth.user.firstName
                   ? userAuth.user.firstName
-                  : userAuth.user.username}
+                  : userAuth.user.userName}
                 's Dashboard
               </a>
             </li>
