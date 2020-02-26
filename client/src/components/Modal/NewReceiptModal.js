@@ -115,7 +115,7 @@ const NewReceiptModal = props => {
                           console.log(index + " = " + receiptItems.length - 1);
                           if (index === receiptItems.length - 1) {
                             window.location.href =
-                              "/receipt/" + receiptId + "/edit/upload";
+                              "/receipt/" + receiptId + "/edit";
                           }
                         });
                       });
@@ -214,6 +214,11 @@ const NewReceiptModal = props => {
                 onChange={handleFileUploadChange}
               />
             </div>
+            <small>
+              Some items may not be detected. Be sure to check your receipt
+              after upload!
+            </small>
+
             <div
               className={
                 uploadingState.isUploading ? "alert alert-primary" : "d-none"

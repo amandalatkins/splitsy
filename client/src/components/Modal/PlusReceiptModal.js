@@ -210,6 +210,10 @@ const PlusReceiptModal = props => {
                 name="receiptImage"
                 onChange={handleFileUploadChange}
               />
+              <small>
+                Some items may not be detected. Be sure to check your receipt
+                after upload!
+              </small>
             </div>
             <div
               className={
