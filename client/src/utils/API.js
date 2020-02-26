@@ -87,5 +87,12 @@ export default {
   // Gets all Payers for a receipt
   getPayersForReceipt: function(receiptId) {
     return axios.get("/api/payers/receipt/" + receiptId);
+  },
+
+  // sorting receipt
+  getReceiptsForUserSort: function(userId, by, type) {
+    return axios.get(
+      "/api/receipts/userId/" + userId + "/by/" + by + "/type/" + type
+    );
   }
 };
