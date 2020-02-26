@@ -15,12 +15,13 @@ const Home = props => {
         <div className="row">
           <div className="col-12 text-center px-5">
             <h1 className="display-4">
-              Welcome to <em>Splitsy</em>
+              Welcome to <br/>
+              <img src="/assets/img/logo-dark.png" className="my-3" style={{width: "175px", height: "auto"}}/>
             </h1>
             <p className="lead my-3">
-              Splity is a web app that allows a user to easily divide up a
+              <em>Splitsy</em> allows you to divide up a
               recipt by simply uploading an image. <br />
-              Why waste time trying to do menial math, let us do the work for
+              Why waste time doing menial math? Let us do the work for
               you!
             </p>
             <div>

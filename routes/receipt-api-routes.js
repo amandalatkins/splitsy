@@ -213,7 +213,6 @@ module.exports = function(app) {
 
     res.json(receiptItems);
   });
-
   //update receipt
   app.put("/api/receipts/:id", function(req, res) {
     db.Receipt.update(req.body, {
