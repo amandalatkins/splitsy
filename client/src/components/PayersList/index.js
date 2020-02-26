@@ -136,7 +136,8 @@ function PayerList(props) {
               placeholder="Payer Name"
               ref={nameInput}
             />
-            <button type="submit" className="btn btn-sm btn-secondary">
+            <button type="submit" className="btn btn-sm btn-orange mt-1">
+              <i class="fas fa-save"></i>&nbsp;
               Save
             </button>
           </form>

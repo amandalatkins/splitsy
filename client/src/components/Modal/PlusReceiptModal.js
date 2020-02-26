@@ -126,7 +126,7 @@ const PlusReceiptModal = props => {
                           "Unable to read your receipt. Creating blank receipt..."
                       });
                       API.createReceipt(receipt).then(res => {
-                        // window.location.href = "/receipt/" + res.data.id + "/edit";
+                        window.location.href = "/receipt/" + res.data.id + "/edit";
                       });
                     }
                   })
@@ -138,7 +138,7 @@ const PlusReceiptModal = props => {
                     "Unable to import your receipt. Creating blank receipt..."
                 });
                 API.createReceipt(receipt).then(res => {
-                  // window.location.href = "/receipt/" + res.data.id + "/edit";
+                  window.location.href = "/receipt/" + res.data.id + "/edit";
                 });
               }
 
@@ -146,16 +146,6 @@ const PlusReceiptModal = props => {
               console.log(ocrResults);
             })
             .catch(err => console.log(err));
-
-          // console.log(results);
-
-          // const { receiptImagePath, receiptItems } = results.data;
-
-          // receipt.image = receiptImagePath;
-
-          // Create the receipt and get the new receipt ID
-          //
-          // });
         })
         .catch(err => console.log(err));
     } else {
@@ -208,6 +198,7 @@ const PlusReceiptModal = props => {
                 type="file"
                 className="form-control"
                 name="receiptImage"
+                style={{paddingBottom: "35px"}}
                 onChange={handleFileUploadChange}
               />
               <small>
@@ -235,7 +226,7 @@ const PlusReceiptModal = props => {
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
-          <Button color="primary" type="submit" form="newReceipt">
+          <Button color="primary" type="submit" form="newReceipt" className="btn-orange">
             Create Receipt{" "}
           </Button>{" "}
         </ModalFooter>

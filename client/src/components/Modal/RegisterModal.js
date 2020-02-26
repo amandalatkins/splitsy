@@ -66,7 +66,7 @@ const RegisterModal = props => {
 
   return (
     <div>
-      <Button className="bg-orange border-orange text-white" onClick={toggle}>
+      <Button className="btn-orange" onClick={toggle}>
         {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle}>

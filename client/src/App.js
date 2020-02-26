@@ -9,7 +9,7 @@ import Receipt from "./pages/Receipt";
 import NoMatch from "./pages/NoMatch";
 
 import NavBar from "./components/NavBar";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
               />
               <Route component={NoMatch} />
             </Switch>
-            {/* <Footer /> */}
+            <Footer />
           </div>
         </Router>
       </ReceiptProvider>

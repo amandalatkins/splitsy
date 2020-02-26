@@ -6,6 +6,14 @@ body {
   color: #343a40;
 }
 
+html,body{
+  height: 100%
+}
+
+#root {
+  min-height:100%
+}
+
 /* NAVBAR
 ========================================================= */
 
@@ -73,6 +81,18 @@ body {
 
 .bg-orange {
   background-color: #ff6444;
+}
+
+.btn-orange, .btn-orange:active, .btn-orange:focus {
+  background-color: #ff6444;
+  border-color: #ff6444;
+  color: #fff;
+}
+
+.btn-orange:hover {
+  background-color: #cc5036;
+  border-color: #cc5036;
+  color: #fff;
 }
 
 .border-orange {
@@ -153,8 +173,8 @@ body {
   border-radius: 100%;
   vertical-align: middle;
   font-size: 10px;
-  height: 20px;
-  width: 20px;
+  height: 21px;
+  width: 21px;
   display: inline-block;
   line-height: 20px;
   text-align: center;
@@ -394,6 +414,11 @@ body {
 
 footer {
   background-color: #474143;
-  padding: 2em 0;
   margin-top: 2em;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
 }

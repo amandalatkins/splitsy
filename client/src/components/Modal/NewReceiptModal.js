@@ -126,7 +126,7 @@ const NewReceiptModal = props => {
                           "Unable to read your receipt. Creating blank receipt..."
                       });
                       API.createReceipt(receipt).then(res => {
-                        // window.location.href = "/receipt/" + res.data.id + "/edit";
+                        window.location.href = "/receipt/" + res.data.id + "/edit";
                       });
                     }
                   })
@@ -138,7 +138,7 @@ const NewReceiptModal = props => {
                     "Unable to import your receipt. Creating blank receipt..."
                 });
                 API.createReceipt(receipt).then(res => {
-                  // window.location.href = "/receipt/" + res.data.id + "/edit";
+                  window.location.href = "/receipt/" + res.data.id + "/edit";
                 });
               }
 
@@ -147,15 +147,6 @@ const NewReceiptModal = props => {
             })
             .catch(err => console.log(err));
 
-          // console.log(results);
-
-          // const { receiptImagePath, receiptItems } = results.data;
-
-          // receipt.image = receiptImagePath;
-
-          // Create the receipt and get the new receipt ID
-          //
-          // });
         })
         .catch(err => console.log(err));
     } else {
@@ -176,7 +167,7 @@ const NewReceiptModal = props => {
   return (
     <div>
       <Button
-        className="btn bg-orange border-orange text-white"
+        className="btn btn-orange"
         onClick={toggle}
       >
         <i className="fas fa-plus"></i> {buttonLabel}
@@ -207,17 +198,19 @@ const NewReceiptModal = props => {
             </div>
             <div className="form-group">
               <label>Upload a receipt (optional):</label>
-              <input
-                type="file"
-                className="form-control"
-                name="receiptImage"
-                onChange={handleFileUploadChange}
-              />
-            </div>
-            <small>
-              Some items may not be detected. Be sure to check your receipt
+                <input
+                  type="file"
+                  className="form-control"
+                  style={{paddingBottom: "35px"}}
+                  name="receiptImage"
+                  onChange={handleFileUploadChange}
+                />
+                <small>
+                 Some items may not be detected -- check your receipt
               after upload!
-            </small>
+                </small>
+            </div>
+            
 
             <div
               className={
@@ -239,7 +232,7 @@ const NewReceiptModal = props => {
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
-          <Button color="primary" type="submit" form="newReceipt">
+          <Button color="primary" type="submit" form="newReceipt" className="btn-orange">
             Create Receipt{" "}
           </Button>{" "}
         </ModalFooter>
