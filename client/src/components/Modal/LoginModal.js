@@ -34,7 +34,10 @@ const LoginModal = props => {
           window.location.href = "/dashboard";
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        alert("Incorrect login credentials");
+      });
   };
   const toggle = () => {
     setModal(!modal);

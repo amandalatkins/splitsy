@@ -53,7 +53,10 @@ const RegisterModal = props => {
             window.location.href = "/dashboard";
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+          alert("That username is taken, try another.");
+        });
     });
   };
 
