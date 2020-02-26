@@ -6,21 +6,33 @@ import NewReceiptModal from "../components/Modal/NewReceiptModal";
 import PlusReceiptModal from "../components/Modal/PlusReceiptModal";
 import { useUserAuthContext } from "../utils/UserAuthState";
 import moment from "moment";
+import DropDown from "../components/Dropdown";
 
 const Dashboard = props => {
   const [receiptState, dispatchReceiptState] = useState({});
   const [userAuth] = useUserAuthContext();
+  const [sortState, setSortState] = useState(null);
 
   // load receipts upon page load
   useEffect(() => {
     loadReceipts();
-  }, []);
+  }, [sortState]);
 
-  // get user id from user state
+  // sorts receipts
   function loadReceipts() {
-    API.getReceiptsForUser(userAuth.user.id).then(results => {
-      dispatchReceiptState({ receipts: results.data });
-    });
+    if (sortState) {
+      API.getReceiptsForUserSort(
+        userAuth.user.id,
+        sortState.by,
+        sortState.type
+      ).then(results => {
+        dispatchReceiptState({ receipts: results.data });
+      });
+    } else {
+      API.getReceiptsForUser(userAuth.user.id).then(results => {
+        dispatchReceiptState({ receipts: results.data });
+      });
+    }
   }
 
   return (
@@ -32,16 +44,6 @@ const Dashboard = props => {
           </div>
           <div className="col-xs-12 col-md-6 text-right">
             <div className="dropdown float-right">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Sort
-              </button>
               <div
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
@@ -58,27 +60,7 @@ const Dashboard = props => {
               </div>
             </div>
             <div className="dropdown float-right mr-3">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Filter
-              </button>
-              <div
-                className="dropdown-menu"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <a className="dropdown-item" href="#">
-                  Paid
-                </a>
-                <a className="dropdown-item" href="#">
-                  Unpaid
-                </a>
-              </div>
+              <DropDown title="Sort" sort={setSortState}></DropDown>
             </div>
           </div>
 
