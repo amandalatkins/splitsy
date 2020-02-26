@@ -163,9 +163,18 @@ module.exports = function(app) {
       parse[i] = parse[i].split("\t");
     }
 
-    //Remove any lines that don't have more than one item OR a dollar sign (nearly all the food items end up having 2 children)
+    // checks to see if a line has only one item and the proceeding line also only has one item. then checks if proceeding line is a dollar amount, if so pushes to original item, mimic-ing an item and price
+    for (var i = 0; i < parse.length - 1; i++) {
+      if (parse[i].length === 1 && parse[i + 1].length === 1) {
+        if (parse[i + 1][0].includes("$")) {
+          parse[i].push(parse[i + 1][0]);
+        }
+      }
+    }
+
+    //Remove any lines that don't have more than one item (more than 3) OR a dollar sign (nearly all the food items end up having 2 children)
     parse = parse.filter(item => {
-      if (item.length > 1) {
+      if (item.length > 1 || item.length < 3) {
         return true;
       } else {
         return item.some(child => child.includes("$"));
@@ -178,7 +187,7 @@ module.exports = function(app) {
     for (var i = 0; i < parse.length; i++) {
       var keep = false;
       parse[i].forEach(item => {
-        if (item.includes("$")) {
+        if (item.includes("$") || item.includes(".")) {
           keep = true;
         }
       });
