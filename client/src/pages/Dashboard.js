@@ -11,14 +11,6 @@ const Dashboard = props => {
   const [receiptState, dispatchReceiptState] = useState({});
   const [userAuth] = useUserAuthContext();
 
-  // function newReceiptClick() {
-  //   console.log("hit");
-  //   API.createReceipt({}).then(res => {
-  //     console.log(res);
-  //     // window.location.href = "/receipt/" + res.;
-  //   });
-  // }
-
   // load receipts upon page load
   useEffect(() => {
     loadReceipts();
