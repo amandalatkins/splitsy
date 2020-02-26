@@ -415,11 +415,10 @@ html,body{
 footer {
   background-color: #474143;
   margin-top: 2em;
-  position: absolute;
-  bottom: 0;
   width: 100%;
   padding: 1.5em 0;
   text-align: center;
+  flex-shrink: none;
 }
 
 footer a {
@@ -428,4 +427,9 @@ footer a {
 
 footer small a {
   text-decoration: underline;
+}
+
+.page-content {
+  flex: 1 0 auto;
+  min-height: calc(100% - 128px);
 }

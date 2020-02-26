@@ -16,7 +16,7 @@ function App() {
     <UserAuthProvider>
       <ReceiptProvider>
         <Router>
-          <div>
+          <div className="page-content">
             <NavBar />
             <Switch>
               <Route exact path="/" component={Home} />
@@ -30,8 +30,9 @@ function App() {
               />
               <Route component={NoMatch} />
             </Switch>
-            <Footer />
           </div>
+            <Footer />
+          
         </Router>
       </ReceiptProvider>
     </UserAuthProvider>
