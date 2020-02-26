@@ -15,8 +15,10 @@ function Footer() {
   }
 
   return (
-    <footer className="mt-auto">
-        <a href="https://github.com/amandalatkins/splitsy" className="text-white">View on Github</a>
+    <footer className="mt-auto text-white">
+        <a href="https://github.com/amandalatkins/splitsy">View on Github</a>
+        <br/>
+        <small>Designed and developed by <a href="https://github.com/namrataffy" target="_blank">Arman Riahi</a> and <a href="https://github.com/amandalatkins" target="_blank">Amanda Atkins</a>.</small>
     </footer>
   );
 }
