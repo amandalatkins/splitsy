@@ -20,7 +20,7 @@ const Home = props => {
             </h1>
             <p className="lead my-3">
               <em>Splitsy</em> allows you to divide up a
-              recipt by simply uploading an image. <br />
+              receipt by simply uploading an image. <br />
               Why waste time doing menial math? Let us do the work for
               you!
             </p>
