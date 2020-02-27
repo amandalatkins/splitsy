@@ -17,6 +17,19 @@ module.exports = function(app) {
     });
   });
 
+  // get receipts and sort
+  app.get("/api/receipts/userId/:userId/by/:by/type/:type", function(req, res) {
+    db.Receipt.findAll({
+      where: {
+        UserId: req.params.userId
+      },
+      include: [db.Payer, db.Item, db.User],
+      order: [[req.params.by, req.params.type]]
+    }).then(function(dbReceipt) {
+      res.json(dbReceipt);
+    });
+  });
+
   //get all receipts for a user
   app.get("/api/receipts/userId/:userId", function(req, res) {
     db.Receipt.findAll({
