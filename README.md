@@ -1,10 +1,5 @@
 # Splitsy
 
-Restaurant bill splitting made easy.
-<br>
-
-# Summary
-
 A full stack web application that uses optical character recognition (OCR) technology to convert a user uploaded receipt image into a virtual receipt. Users can then easily add payers to the virtual receipt and assign items, simplifying the receipt “split up” process. Built with React, Node.js, Express, MySQL, Passport.js and OCR.space API.
 <br>
 
