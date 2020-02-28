@@ -21,11 +21,11 @@ const Home = props => {
             <p className="lead my-3">
               <em>Splitsy</em> allows you to divide up a
               receipt by simply uploading an image. <br />
-              Why waste time doing menial math? Let us do the work for
-              you!
+              Why waste time doing menial math? Let us do the work for you!
             </p>
+            <p className="my-3">Click Register or Login in the top right corner to get started.</p>
             <div>
-              <div>Insert Gif</div>
+              {/* <div>Insert Gif</div> */}
               {userAuth.isLoggedIn ? null : (
                 <RegisterModal buttonLabel="Register Now!" className="Register">
                   Register Now!
