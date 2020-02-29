@@ -25,7 +25,10 @@ const Home = props => {
             </p>
             <p className="my-3">Click Register or Login in the top right corner to get started.</p>
             <div>
-              {/* <div>Insert Gif</div> */}
+              <img src="/assets/img/step-1.png" style={{maxWidth: "80%"}}/>
+              <img src="/assets/img/step-2.png" style={{maxWidth: "80%"}}/>
+              <img src="/assets/img/step-3.png" style={{maxWidth: "80%"}}/>
+              <img src="/assets/img/step-4.png" style={{maxWidth: "80%"}}/>
               {userAuth.isLoggedIn ? null : (
                 <RegisterModal buttonLabel="Register Now!" className="Register">
                   Register Now!
