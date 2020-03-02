@@ -4,7 +4,7 @@ import API from "../../utils/API";
 import { useUserAuthContext } from "../../utils/UserAuthState";
 import moment from "moment";
 
-const PlusReceiptModal = props => {
+const NewReceiptModal = props => {
   const { className, children } = props;
 
   const [modal, setModal] = useState(false);
@@ -232,4 +232,4 @@ const PlusReceiptModal = props => {
   );
 };
 
-export default PlusReceiptModal;
+export default NewReceiptModal;
