@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useReceiptContext } from "../utils/ReceiptState";
 import API from "../utils/API";
 import ReceiptPreview from "../components/ReceiptPreview";
 import NewReceiptModal from "../components/Modal/NewReceiptModal";
-import PlusReceiptModal from "../components/Modal/PlusReceiptModal";
 import { useUserAuthContext } from "../utils/UserAuthState";
-import moment from "moment";
 import DropDown from "../components/Dropdown";
 
 const Dashboard = props => {
