@@ -40,7 +40,12 @@ const Dashboard = props => {
       <div className="container mt-5 clearfix">
         <div className="row">
           <div className="col-xs-12 col-md-6 text-left">
-            <NewReceiptModal buttonLabel="Add Receipt" className="Add" />
+            {/* <NewReceiptModal buttonLabel="Add Receipt" className="Add" /> */}
+            <NewReceiptModal>
+              <button className="btn btn-orange">
+                <i className="fas fa-plus"></i> Add Receipt
+              </button>
+            </NewReceiptModal>
           </div>
           <div className="col-xs-12 col-md-6 text-right">
             <div className="dropdown float-right">
@@ -67,7 +72,11 @@ const Dashboard = props => {
           <div className="container mt-5">
             <div className="row">
               <div className="d-none d-md-block col-md-6 col-lg-4 ">
-                <PlusReceiptModal></PlusReceiptModal>
+                <NewReceiptModal>
+                  <div className="add-receipt">
+                    <i className="fas fa-plus "></i>
+                  </div>
+                </NewReceiptModal>
               </div>
               {receiptState.receipts
                 ? receiptState.receipts.map(receipt => (

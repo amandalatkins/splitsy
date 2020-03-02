@@ -3,10 +3,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import API from "../../utils/API";
 import { useUserAuthContext } from "../../utils/UserAuthState";
 import moment from "moment";
-// import runJimp from "../../utils/runJimp";
 
 const NewReceiptModal = props => {
-  const { buttonLabel, className } = props;
+  const { className, children } = props;
 
   const [modal, setModal] = useState(false);
 
@@ -146,7 +145,6 @@ const NewReceiptModal = props => {
               console.log(ocrResults);
             })
             .catch(err => console.log(err));
-
         })
         .catch(err => console.log(err));
     } else {
@@ -165,13 +163,8 @@ const NewReceiptModal = props => {
   };
 
   return (
-    <div>
-      <Button
-        className="btn btn-orange"
-        onClick={toggle}
-      >
-        <i className="fas fa-plus"></i> {buttonLabel}
-      </Button>
+    <div onClick={toggle}>
+      {children}
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Add New Receipt</ModalHeader>
         <ModalBody>
@@ -198,20 +191,18 @@ const NewReceiptModal = props => {
             </div>
             <div className="form-group">
               <label>Upload a receipt (optional):</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  style={{paddingBottom: "35px"}}
-                  name="receiptImage"
-                  onChange={handleFileUploadChange}
-                />
-                <small>
-                 Some items may not be detected -- check your receipt
-              after upload!
-                </small>
+              <input
+                type="file"
+                className="form-control"
+                name="receiptImage"
+                style={{paddingBottom: "35px"}}
+                onChange={handleFileUploadChange}
+              />
+              <small>
+                Some items may not be detected. Be sure to check your receipt
+                after upload!
+              </small>
             </div>
-            
-
             <div
               className={
                 uploadingState.isUploading ? "alert alert-primary" : "d-none"
