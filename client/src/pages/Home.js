@@ -13,22 +13,24 @@ const Home = props => {
     <div>
       <div className="container mt-5 clearfix">
         <div className="row">
-          <div className="col-12 text-center px-5">
-            <h1 className="display-4">
-              Welcome to <br/>
-              <img src="/assets/img/logo-dark.png" className="my-3" style={{width: "175px", height: "auto"}}/>
-            </h1>
-            <p className="lead my-3">
-              <em>Splitsy</em> allows you to divide up a
-              receipt by simply uploading an image. <br />
-              Why waste time doing menial math? Let us do the work for you!
-            </p>
-            <p className="my-3">Click Register or Login in the top right corner to get started.</p>
+          <div className="col-12 text-center px-xs-auto px-md-5">
+            <div className="px-xs-5 px-md-auto">
+                <h1 className="display-4">
+                  Welcome to <br/>
+                  <img src="/assets/img/logo-dark.png" className="my-3" style={{width: "175px", height: "auto"}}/>
+                </h1>
+                <p className="lead my-3">
+                  <em>Splitsy</em> allows you to divide up a
+                  receipt by simply uploading an image. <br className="hide-on-mobile"/>
+                  Why waste time doing menial math? Let us do the work for you!
+                </p>
+                <p className="my-3">Click Register or Login in the top right corner to get started.</p>
+            </div>
             <div>
-              <img src="/assets/img/step-1.png" style={{maxWidth: "80%"}}/>
-              <img src="/assets/img/step-2.png" style={{maxWidth: "80%"}}/>
-              <img src="/assets/img/step-3.png" style={{maxWidth: "80%"}}/>
-              <img src="/assets/img/step-4.png" style={{maxWidth: "80%"}}/>
+              <img class="home-tutorial" src="/assets/img/step-1.png"/>
+              <img class="home-tutorial" src="/assets/img/step-2.png"/>
+              <img class="home-tutorial" src="/assets/img/step-3.png"/>
+              <img class="home-tutorial" src="/assets/img/step-4.png"/>
               {userAuth.isLoggedIn ? null : (
                 <RegisterModal buttonLabel="Register Now!" className="Register">
                   Register Now!

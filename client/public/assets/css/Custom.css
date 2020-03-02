@@ -59,10 +59,21 @@ html,body{
 .navbar .loginButtons div {
   float: right;
 }
-/* .navbar .nav-item:not(:last-child):after {
-  display: list-item;
-  content: '/'
-} */
+
+.home-tutorial {
+  max-width: 80%;
+}
+
+@media screen and (max-width: 767px) {
+  .home-tutorial {
+    max-width: 100%;
+  }
+
+  .hide-on-mobile {
+    display:none
+  }
+  
+}
 
 /* COLOR HELPERS
 ========================================================= */
