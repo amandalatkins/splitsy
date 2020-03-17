@@ -3,54 +3,45 @@
 A full stack web application that uses optical character recognition (OCR) technology to convert a user uploaded receipt image into a virtual receipt. Users can then easily add payers to the virtual receipt and assign items, simplifying the receipt “split up” process. Built with React, Node.js, Express, MySQL, Passport.js and OCR.space API.
 <br>
 
-# Demo
+## Demo
 
 ![Image](client/public/assets/img/splitsy.gif)
 <br>
 
-# Technologies
+## Technologies
 
-General
+### Front End
 
-- VScode
-- Git
-- GitHub
+* ReactJS
+  * React-Strap
+  * React-chartjs-2
+* Bootstrap
+* CSS
+* Moment.js
 
-<br>
-Front end
+### Back End
 
-- React
-- React-Strap
-- React-chartjs-2
-- Bootstrap
-- CSS
-- Moment.js
+* NodeJS
+* ExpressJS
+* MySQL
+* Sequelize
+* Multer
+* Jimp
+* OCR.space API
+* PassportJS
+* BcryptJS
+* Axios
 
-<br>
-Back End
-
-- Node
-- Express
-- MySQL
-- Sequelize
-- Multer
-- Jimp
-- OCR.space
-- Passport
-- Bcrypt
-- Axios
-  <br>
-
-# Models
+## Models
 
 ![Image](client/public/assets/img/models.png)
 <br>
 
-# OCR Flow
+## OCR Flow
 
 ![Image](client/public/assets/img/ocrFlow.png)
 
-# Authors
+## Authors
 
 [Arman Riahi](https://www.linkedin.com/in/arman-riahi/)
 </br>
@@ -58,11 +49,11 @@ Back End
 [Amanda Atkins](https://www.linkedin.com/in/amandalatkins/)
 <br>
 
-# Code Snippet
+## Code Snippet
 
 Code showing how JSON return from OCR.space API is parsed into receipt items:
 
-```
+```javascript
 // // Parses OCR response
   app.post("/api/parse", function(req, res) {
     var { text } = req.body;
