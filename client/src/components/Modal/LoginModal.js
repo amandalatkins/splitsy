@@ -59,7 +59,7 @@ const LoginModal = props => {
         <ModalBody>
           <form>
             <div className="form-group">
-              <label>Userame:</label>
+              <label>Username:</label>
               <input
                 type="text"
                 id="username"
