@@ -45,11 +45,11 @@ Begin splitting your restaurant bills today! Visit: [https://splitsy.herokuapp.c
 
 ## Authors
 
-###Arman Riahi
+### Arman Riahi
 * [LinkedIn](https://www.linkedin.com/in/arman-riahi/)
 * [GitHub](https://www.github.com/namrataffy)
 
-###Amanda Atkins
+### Amanda Atkins
 * [LinkedIn](https://www.linkedin.com/in/amandalatkins/)
 * [GitHub](https://www.github.com/amandalatkins)
 * [Portfolio](https://digitalrainstorm.com)
