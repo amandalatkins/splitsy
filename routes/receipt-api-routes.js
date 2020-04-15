@@ -157,6 +157,9 @@ module.exports = function(app) {
   // Returns an uploaded receipt image
   app.get("/api/image/:img", ({ params }, res) => {
     var { img } = params;
+
+    img = path.normalize(img).replace(/^(\.\.(\/|\\|$))+/, '');
+
     var imageUrl = path.join(__dirname, "../uploads/receipt_images/" + img);
     console.log(imageUrl);
     res.sendFile(imageUrl);
